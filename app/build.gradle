@@ -20,12 +20,6 @@ android {
         exclude 'META-INF/NOTICE'
     }
 
-    sourceSets {
-        androidTest {
-            setRoot('src/androidTest')
-        }
-    }
-
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
 
