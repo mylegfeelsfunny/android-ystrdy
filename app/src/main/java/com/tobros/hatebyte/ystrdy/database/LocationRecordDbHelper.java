@@ -21,7 +21,7 @@ public class LocationRecordDbHelper extends SQLiteOpenHelper {
     public static final int DATA_VERSION = 1;
 
     private static final String SQL_CREATE_RECORDS =
-                "CREATE TABLE" +
+                "CREATE TABLE " +
                 LocationRecordContract.LocationRecord.TABLE_NAME + " (" +
                 LocationRecordContract.LocationRecord._ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
                 LocationRecordContract.LocationRecord.COLUMN_LATITUDE + TYPE_FLOAT + COMMA_SEP +

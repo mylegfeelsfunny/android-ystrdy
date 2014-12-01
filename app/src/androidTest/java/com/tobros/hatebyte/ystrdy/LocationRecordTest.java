@@ -15,26 +15,33 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.shadows.ShadowLog;
 
 import java.util.Date;
+import java.util.InvalidPropertiesFormatException;
 
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.fest.assertions.api.Assertions.*;
 
 
-@Config(manifest = "./src/main/AndroidManifest.xml")
+@Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class LocationRecordTests {
+public class LocationRecordTest {
 
     LocationRecordsDbConnector dbConnector;
+    LocationRecordDbHelper databaseHelper;
 
     @Before
     public void setup() {
-        dbConnector = new LocationRecordsDbConnector(Robolectric.getShadowApplication().getApplicationContext(), "testLocationRecord.db");
+        ShadowLog.stream = System.out;
+
+        databaseHelper = new LocationRecordDbHelper(Robolectric.getShadowApplication().getApplicationContext(), "testLocationRecord.db");
+        dbConnector = new LocationRecordsDbConnector(databaseHelper);
     }
 
     @After
@@ -46,7 +53,6 @@ public class LocationRecordTests {
     @Test
     public void testOpen_createsDB() {
         dbConnector.open();
-
         assertTrue(dbConnector.database.isOpen());
     }
 
@@ -60,10 +66,10 @@ public class LocationRecordTests {
     @Test
     public void testInsert_throwsExceptionWithInvalidData() {
         try {
-            long recordId = dbConnector.insertLocationRecord(1.1f, 0, new Date());
+            long recordId = dbConnector.insertLocationRecord(1.1f, 0.0f, new Date());
             fail("Should fail with Exception");
-        } catch (Exception e) {
-            assertEquals(e.getCause().getClass().getName(), CoreMatchers.is(Exception.class.getName()));
+        } catch (Throwable expected) {
+            assertEquals(InvalidPropertiesFormatException.class, expected.getClass());
         }
     }
 

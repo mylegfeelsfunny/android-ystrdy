@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.Date;
+import java.util.InvalidPropertiesFormatException;
 
 /**
  * Created by scott on 11/26/14.
@@ -12,11 +13,12 @@ import java.util.Date;
 public class LocationRecordsDbConnector {
 
     private static final String TAG = "LocationRecordsDbConnector";
-    public LocationRecordDbHelper databaseHelper;
-    public SQLiteDatabase database;
 
-    public LocationRecordsDbConnector(Context context, String databaseName) {
-        databaseHelper = new LocationRecordDbHelper(context, databaseName);
+    public SQLiteDatabase database;
+    public LocationRecordDbHelper databaseHelper;
+
+    public LocationRecordsDbConnector(LocationRecordDbHelper dbHelper) {
+        databaseHelper = dbHelper;
     }
 
     public void open() {
@@ -34,9 +36,10 @@ public class LocationRecordsDbConnector {
         close();
     }
 
-    public long insertLocationRecord(float latitude, float longitude, Date date) throws Exception {
+    public long insertLocationRecord(float latitude, float longitude, Date date) throws InvalidPropertiesFormatException {
         if (latitude == 0 || longitude == 0 || date == null) {
-            throw new Exception();
+            InvalidPropertiesFormatException e = new InvalidPropertiesFormatException("Check your longitude, latitude and date properties");
+            throw e;
         }
 
         ContentValues values = new ContentValues();
