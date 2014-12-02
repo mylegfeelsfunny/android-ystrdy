@@ -29,7 +29,7 @@ public class LocationRecordDbHelper extends SQLiteOpenHelper {
                 LocationRecordContract.LocationRecord.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
                 LocationRecordContract.LocationRecord.COLUMN_REGION_NAME + TYPE_TEXT + COMMA_SEP +
                 LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE + TYPE_FLOAT + COMMA_SEP +
-                LocationRecordContract.LocationRecord.COLUMN_IS_FIRST + TYPE_BOOL + ")";
+                LocationRecordContract.LocationRecord.COLUMN_IS_FIRST + TYPE_INTEGER + ")";
     private static final String SQL_DELETE_RECORDS =
             "DROP TABLE IF EXISTS " + LocationRecordContract.LocationRecord.TABLE_NAME;
 
