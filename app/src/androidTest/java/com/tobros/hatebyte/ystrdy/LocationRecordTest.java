@@ -134,7 +134,6 @@ public class LocationRecordTest {
         assertThat(yr.regionName).isEqualTo(thirtyOneDaysAgoDate.toString());
     }
 
-
     public void insertLocationRecord(float latitude, float longitude, Date date, float temp, String region, Boolean isFirst) {
         try {
             dbConnector.insertLocationRecord(latitude, longitude, date, temp, region, isFirst);
