@@ -7,6 +7,7 @@ import android.util.Log;
 import com.tobros.hatebyte.ystrdy.database.LocationRecordDbHelper;
 import com.tobros.hatebyte.ystrdy.database.LocationRecordsDbConnector;
 import com.tobros.hatebyte.ystrdy.database.YstrRecord.YstrRecord;
+import com.tobros.hatebyte.ystrdy.date.YstrDate;
 
 import org.hamcrest.CoreMatchers;
 import org.junit.After;
@@ -66,14 +67,12 @@ public class LocationRecordTest {
     @Test
     public void testInsert_throwsExceptionWithInvalidDate() {
         try {
-            long recordId = dbConnector.insertLocationRecord(1.1f, 1.03f, null, 32.3f, "bridgewater",  false);
+            dbConnector.insertLocationRecord(1.1f, 1.03f, null, 32.3f, "bridgewater",  false);
             fail("Should fail with InvalidPropertiesFormatException");
         } catch (Throwable expected) {
             assertEquals(InvalidPropertiesFormatException.class, expected.getClass());
         }
     }
-
-
 
     @Test
     public void testRetrieve_dateClosestToADayAgo_24hours4Mins() {
@@ -103,21 +102,47 @@ public class LocationRecordTest {
         assertThat("23Hours56mins").isEqualTo(yr.regionName);
     }
 
-//    @Test
-//    public void testRetrieve_dateClosestToADayAgoBelow() {
-//        // populate db with a record, 23 hours and 55 mins ago
-//
-//    }
+    @Test
+    public void testRetrieve_dateClosestToADayAgoBelow() {
+        Date d = new Date();
+        long twentyFourHours5Mins = (24 * 60 * 60 + 1) * 1000;
+        d.setTime(d.getTime() - twentyFourHours5Mins);
+        populateDbWithBunchOfYstrDates();
+        try {
+            dbConnector.insertLocationRecord((float)0, (float)0, d, 32.3f, "nearest",  false);
+        } catch (InvalidPropertiesFormatException expected) {
+
+        }
+
+        YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
+        assertThat(0.0f).isEqualTo(yr.latitude);
+        assertThat(0.0f).isEqualTo(yr.longitude);
+        assertThat("nearest").isEqualTo(yr.regionName);
+    }
+
+    @Test
+    public void test_DbIsGreaterThan1DayOld_true() {
+        // insert record, date set to 18 hours old
+        // retrieve oldest record
+        // assert has more than 1 day of records == true
+    }
+
+    @Test
+    public void test_DbIsGreaterThan1DayOld_false() {
+        // insert record, date set to 17 hours old
+        // retrieve oldest record
+        // assert has more than 1 day of records == false
+    }
+
+
 
     public void populateDbWithBunchOfYstrDates() {
-        int x = 0;
-        for (int i = 0; i < 24; i++) {
+        for (int i = 1; i < 24; i++) {
             try {
-                dbConnector.insertLocationRecord(1.1f, 1.03f, new Date(), 32.3f, "bridgewater",  (x % 2 == 0));
-            } catch (Throwable expected) {
+                dbConnector.insertLocationRecord((float)i, (float)i, randomYstrDate((i % 2 == 0)), 32.3f, "bridgewater",  (i % 2 == 0));
+            } catch (InvalidPropertiesFormatException expected) {
 
             }
-            x++;
         }
     }
 
@@ -151,21 +176,22 @@ public class LocationRecordTest {
 
     public Date randomYstrDate(Boolean isBefore) {
         Date d = new Date();
-        int twentyFourHours = (24 * 60 * 60 + 1) * 1000;
-        int moreThanFiveMinutes = (5 * 60 + 1) * 1000;
+        long fourtyEightHours = (48 * 60 * 60 + 1) * 1000;
+        long moreThanFiveMinutes = (6 * 60 + 1) * 1000;
 
         // find a number 24 hours ago, but more than five minutes more or less
-        Random r = new Random();
-        int low = moreThanFiveMinutes;
-        int high = twentyFourHours;
-        int random = r.nextInt(high - low) + low;
+        long low = 0;
+        long high = 0;
         if (isBefore == false) {
-            random *= -1;
+            low = YstrDate.twentyFourHours() - (moreThanFiveMinutes);
+            high = d.getTime();
+        } else {
+            high = YstrDate.twentyFourHours() - (moreThanFiveMinutes);
+            low = fourtyEightHours;
         }
-
-        d.setTime(d.getTime() - (twentyFourHours + random));
+        long random = (long) Math.random() * (high - low) + low;
+        d.setTime(d.getTime() - (YstrDate.twentyFourHours() + random));
         return d;
     }
-
 
 }

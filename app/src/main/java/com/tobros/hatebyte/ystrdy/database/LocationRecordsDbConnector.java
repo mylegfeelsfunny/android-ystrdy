@@ -111,10 +111,7 @@ public class LocationRecordsDbConnector {
                 LocationRecordContract.LocationRecord._ID
         };
         String selectStatement = "abs("+ystrdy.getTime()+" - date) < " + twentyFourHours;
-
         String orderBy = "abs("+ystrdy.getTime()+" - date) ASC";
-
-
 
         open();
         Cursor c = database.query(
