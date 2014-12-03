@@ -75,44 +75,37 @@ public class LocationRecordTest {
     }
 
     @Test
-    public void testRetrieve_dateClosestToADayAgo_24hours4Mins() {
+    public void testQuery_dateClosestToADayAgo_24hours4Mins() {
         populateDbWithBunchOfYstrDates();
 
-        try {
-            dbConnector.insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
-            dbConnector.insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
-        } catch (InvalidPropertiesFormatException expected) {
-        }
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
+
         YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
         assertThat("24Hours4mins").isEqualTo(yr.regionName);
     }
 
     @Test
-    public void testRetrieve_dateClosestToADayAgo_23hours56Mins() {
+    public void testQuery_dateClosestToADayAgo_23hours56Mins() {
         populateDbWithBunchOfYstrDates();
 
-        try {
-            dbConnector.insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
-            dbConnector.insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
-            dbConnector.insertLocationRecord(1.1f, 1.03f, dateFrom23Hours56Mins(), 32.3f, "23Hours56mins",  false);
-            dbConnector.insertLocationRecord(1.1f, 1.03f, dateFrom23Hours55Mins(), 32.3f, "23Hours55mins",  false);
-        } catch (InvalidPropertiesFormatException expected) {
-        }
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours56Mins(), 32.3f, "23Hours56mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours55Mins(), 32.3f, "23Hours55mins",  false);
+
         YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
         assertThat("23Hours56mins").isEqualTo(yr.regionName);
     }
 
     @Test
-    public void testRetrieve_dateClosestToADayAgoBelow() {
+    public void testQuery_dateClosestToADayAgoBelow() {
         Date d = new Date();
         long twentyFourHours5Mins = (24 * 60 * 60 + 1) * 1000;
         d.setTime(d.getTime() - twentyFourHours5Mins);
         populateDbWithBunchOfYstrDates();
-        try {
-            dbConnector.insertLocationRecord((float)0, (float)0, d, 32.3f, "nearest",  false);
-        } catch (InvalidPropertiesFormatException expected) {
 
-        }
+        insertLocationRecord((float)0, (float)0, d, 32.3f, "nearest",  false);
 
         YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
         assertThat(0.0f).isEqualTo(yr.latitude);
@@ -121,28 +114,39 @@ public class LocationRecordTest {
     }
 
     @Test
-    public void test_DbIsGreaterThan1DayOld_true() {
-        // insert record, date set to 18 hours old
-        // retrieve oldest record
-        // assert has more than 1 day of records == true
+    public void testQuery_firstRecord() {
+        populateDbWithBunchOfYstrDates();
+
+        Date thirtyDaysAgoDate = new Date();
+        long thirtyDaysAgo = (long) 30 * ((24 * 60 * 60 + 1) * 1000);
+        thirtyDaysAgoDate.setTime(thirtyDaysAgoDate.getTime() - thirtyDaysAgo);
+
+        Date thirtyOneDaysAgoDate = new Date();
+        long thirtyOneDaysAgo = (long) 31 * ((24 * 60 * 60 + 1) * 1000);
+        thirtyOneDaysAgoDate.setTime(thirtyOneDaysAgoDate.getTime() - thirtyOneDaysAgo);
+
+        insertLocationRecord((float)0, (float)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  false);
+        insertLocationRecord((float)0, (float)0, thirtyOneDaysAgoDate, 32.3f, thirtyOneDaysAgoDate.toString(),  true);
+
+        YstrRecord yr = dbConnector.getEarliestRecord();
+
+        assertThat(yr.date).isEqualTo(thirtyOneDaysAgoDate);
+        assertThat(yr.regionName).isEqualTo(thirtyOneDaysAgoDate.toString());
     }
 
-    @Test
-    public void test_DbIsGreaterThan1DayOld_false() {
-        // insert record, date set to 17 hours old
-        // retrieve oldest record
-        // assert has more than 1 day of records == false
+
+    public void insertLocationRecord(float latitude, float longitude, Date date, float temp, String region, Boolean isFirst) {
+        try {
+            dbConnector.insertLocationRecord(latitude, longitude, date, temp, region, isFirst);
+        } catch (InvalidPropertiesFormatException expected) {
+
+        }
     }
-
-
 
     public void populateDbWithBunchOfYstrDates() {
         for (int i = 1; i < 24; i++) {
-            try {
-                dbConnector.insertLocationRecord((float)i, (float)i, randomYstrDate((i % 2 == 0)), 32.3f, "bridgewater",  (i % 2 == 0));
-            } catch (InvalidPropertiesFormatException expected) {
-
-            }
+            Date d = randomYstrDate((i % 2 == 0));
+            insertLocationRecord((float)i, (float)i, d, 32.3f, d.toString(),  (i % 2 == 0));
         }
     }
 

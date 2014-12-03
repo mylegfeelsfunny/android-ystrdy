@@ -95,7 +95,6 @@ public class LocationRecordsDbConnector {
         return ystrRecord;
     }
 
-
     public YstrRecord getClosestRecordFromYstrdy() {
         Date ystrdy = new Date();
         int twentyFourHours = (24 * 60 * 60 + 1) * 1000;
@@ -123,6 +122,36 @@ public class LocationRecordsDbConnector {
                 null,
                 orderBy
         );
+        c.moveToFirst();
+        YstrRecord ystrRecord = new YstrRecord(c);
+        close();
+        return ystrRecord;
+    }
+
+    public YstrRecord getEarliestRecord() {
+        String[] projection = {
+                LocationRecordContract.LocationRecord.COLUMN_LATITUDE,
+                LocationRecordContract.LocationRecord.COLUMN_LONGITUDE,
+                LocationRecordContract.LocationRecord.COLUMN_DATE,
+                LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE,
+                LocationRecordContract.LocationRecord.COLUMN_REGION_NAME,
+                LocationRecordContract.LocationRecord.COLUMN_IS_FIRST,
+                LocationRecordContract.LocationRecord._ID
+        };
+        String orderBy = "date ASC";
+
+        open();
+        Cursor c = database.query(
+                LocationRecordContract.LocationRecord.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                orderBy,
+                "1"
+        );
+
         c.moveToFirst();
         YstrRecord ystrRecord = new YstrRecord(c);
         close();
