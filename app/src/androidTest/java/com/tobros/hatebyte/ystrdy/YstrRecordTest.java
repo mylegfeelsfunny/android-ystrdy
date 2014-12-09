@@ -51,13 +51,13 @@ public class YstrRecordTest {
         Date rDate = new Date();
         long recordId = 0;
         try {
-            recordId = dbConnector.insertLocationRecord(1.1f, 1.03f, rDate, 32.3f, "bridgewater",  false);
+            recordId = dbConnector.insertLocationRecord(1.1, 1.03, rDate, 32.3f, "bridgewater",  false);
         } catch (Throwable expected) {
         }
 
         YstrRecord yr = dbConnector.getRecordById(recordId);
-        assertThat(1.1f).isEqualTo(yr.latitude);
-        assertThat(1.03f).isEqualTo(yr.longitude);
+        assertThat(1.1).isEqualTo(yr.latitude);
+        assertThat(1.03).isEqualTo(yr.longitude);
         assertThat(rDate.getTime()).isEqualTo(yr.date.getTime());
         assertThat(32.3f).isEqualTo(yr.temperature);
         assertThat("bridgewater").isEqualTo(yr.regionName);

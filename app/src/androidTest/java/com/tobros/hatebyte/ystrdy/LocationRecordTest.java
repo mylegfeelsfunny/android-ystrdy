@@ -27,6 +27,7 @@ import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 import static org.fest.assertions.api.Assertions.*;
@@ -75,11 +76,24 @@ public class LocationRecordTest {
     }
 
     @Test
+    public void testQuery_numRecords_0Records() {
+        int numrecords = dbConnector.numRecords();
+        assertThat(numrecords).isEqualTo(0);
+    }
+
+    @Test
+    public void testQuery_numRecords_23Records() {
+        populateDbWithBunchOfYstrDates();
+        int numrecords = dbConnector.numRecords();
+        assertThat(numrecords).isEqualTo(23);
+    }
+
+    @Test
     public void testQuery_dateClosestToADayAgo_24hours4Mins() {
         populateDbWithBunchOfYstrDates();
 
-        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
-        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
+        insertLocationRecord(1.1, 1.03, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
+        insertLocationRecord(1.1, 1.03, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
 
         YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
         assertThat("24Hours4mins").isEqualTo(yr.regionName);
@@ -89,10 +103,10 @@ public class LocationRecordTest {
     public void testQuery_dateClosestToADayAgo_23hours56Mins() {
         populateDbWithBunchOfYstrDates();
 
-        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
-        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
-        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours56Mins(), 32.3f, "23Hours56mins",  false);
-        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours55Mins(), 32.3f, "23Hours55mins",  false);
+        insertLocationRecord(1.1, 1.03, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
+        insertLocationRecord(1.1, 1.03, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
+        insertLocationRecord(1.1, 1.03, dateFrom23Hours56Mins(), 32.3f, "23Hours56mins",  false);
+        insertLocationRecord(1.1, 1.03, dateFrom23Hours55Mins(), 32.3f, "23Hours55mins",  false);
 
         YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
         assertThat("23Hours56mins").isEqualTo(yr.regionName);
@@ -108,9 +122,15 @@ public class LocationRecordTest {
         insertLocationRecord((float)0, (float)0, d, 32.3f, "nearest",  false);
 
         YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
-        assertThat(0.0f).isEqualTo(yr.latitude);
-        assertThat(0.0f).isEqualTo(yr.longitude);
+        assertThat(0.0).isEqualTo(yr.latitude);
+        assertThat(0.0).isEqualTo(yr.longitude);
         assertThat("nearest").isEqualTo(yr.regionName);
+    }
+
+    @Test
+    public void testQuery_firstRecord_new() {
+        YstrRecord yr = dbConnector.getEarliestRecord();
+        assertNull(yr);
     }
 
     @Test
@@ -125,8 +145,8 @@ public class LocationRecordTest {
         long thirtyOneDaysAgo = (long) 31 * ((24 * 60 * 60 + 1) * 1000);
         thirtyOneDaysAgoDate.setTime(thirtyOneDaysAgoDate.getTime() - thirtyOneDaysAgo);
 
-        insertLocationRecord((float)0, (float)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  false);
-        insertLocationRecord((float)0, (float)0, thirtyOneDaysAgoDate, 32.3f, thirtyOneDaysAgoDate.toString(),  true);
+        insertLocationRecord((double)0, (double)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  false);
+        insertLocationRecord((double)0, (double)0, thirtyOneDaysAgoDate, 32.3f, thirtyOneDaysAgoDate.toString(),  true);
 
         YstrRecord yr = dbConnector.getEarliestRecord();
 
@@ -134,7 +154,26 @@ public class LocationRecordTest {
         assertThat(yr.regionName).isEqualTo(thirtyOneDaysAgoDate.toString());
     }
 
-    public void insertLocationRecord(float latitude, float longitude, Date date, float temp, String region, Boolean isFirst) {
+    @Test
+    public void testDelete_oldRecords() {
+        populateDbWithBunchOfYstrDates();
+
+        Date thirtyDaysAgoDate = new Date();
+        long thirtyDaysAgo = (long) 30 * ((24 * 60 * 60 + 1) * 1000);
+        thirtyDaysAgoDate.setTime(thirtyDaysAgoDate.getTime() - thirtyDaysAgo);
+        insertLocationRecord((double)0, (double)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  true);
+
+        int numrecords = dbConnector.numRecords();
+
+        assertThat(numrecords).isEqualTo(24);
+
+        dbConnector.deleteExpiredRecords();
+
+        int newnumrecords = dbConnector.numRecords();
+        assertThat(newnumrecords).isEqualTo(23);
+    }
+
+    public void insertLocationRecord(double latitude, double longitude, Date date, float temp, String region, Boolean isFirst) {
         try {
             dbConnector.insertLocationRecord(latitude, longitude, date, temp, region, isFirst);
         } catch (InvalidPropertiesFormatException expected) {
@@ -145,7 +184,7 @@ public class LocationRecordTest {
     public void populateDbWithBunchOfYstrDates() {
         for (int i = 1; i < 24; i++) {
             Date d = randomYstrDate((i % 2 == 0));
-            insertLocationRecord((float)i, (float)i, d, 32.3f, d.toString(),  (i % 2 == 0));
+            insertLocationRecord((double)i, (double)i, d, 32.3f, d.toString(),  (i % 2 == 0));
         }
     }
 

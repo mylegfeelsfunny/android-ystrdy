@@ -41,7 +41,7 @@ public class LocationRecordsDbConnector {
         close();
     }
 
-    public long insertLocationRecord(float latitude, float longitude, Date date, float temp, String region, Boolean isFirst) throws InvalidPropertiesFormatException {
+    public long insertLocationRecord(double latitude, double longitude, Date date, float temp, String region, Boolean isFirst) throws InvalidPropertiesFormatException {
         if (date == null) {
             InvalidPropertiesFormatException e = new InvalidPropertiesFormatException("Check your longitude, latitude and date properties");
             throw e;
@@ -151,11 +151,42 @@ public class LocationRecordsDbConnector {
                 orderBy,
                 "1"
         );
-
-        c.moveToFirst();
-        YstrRecord ystrRecord = new YstrRecord(c);
+        YstrRecord ystrRecord;
+        if (c.getCount()== 0) {
+            ystrRecord = null;
+        } else {
+            c.moveToFirst();
+            ystrRecord = new YstrRecord(c);
+        }
         close();
         return ystrRecord;
+    }
+
+    public int numRecords() {
+        String[] projection = {
+                LocationRecordContract.LocationRecord._ID
+        };
+        open();
+        Cursor c = database.query(
+                LocationRecordContract.LocationRecord.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        int count = c.getCount();
+        close();
+        return count;
+    }
+
+    public void deleteExpiredRecords() {
+        open();
+        Date now = new Date();
+        String whereString = YstrDate.threeDayTime() + " + date < " + now.getTime();
+        database.delete(LocationRecordContract.LocationRecord.TABLE_NAME, whereString, null);
+        close();
     }
 
 }

@@ -11,16 +11,16 @@ import java.util.Date;
  */
 public class YstrRecord {
 
-    public float latitude;
-    public float longitude;
+    public double latitude;
+    public double longitude;
     public Date date;
     public float temperature;
     public boolean isFirst;
     public String regionName;
 
     public YstrRecord(Cursor c) {
-        latitude = c.getFloat(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_LATITUDE));
-        longitude = c.getFloat(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_LONGITUDE));
+        latitude = c.getDouble(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_LATITUDE));
+        longitude = c.getDouble(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_LONGITUDE));
         temperature = c.getFloat(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE));
         regionName = c.getString(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_REGION_NAME));
         date = new Date(c.getLong(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_DATE)));

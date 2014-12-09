@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.2'
         classpath 'org.robolectric:robolectric-gradle-plugin:0.13.+'
+
     }
 }
 
@@ -20,7 +21,7 @@ android {
         exclude 'META-INF/NOTICE'
     }
 
-    compileSdkVersion 19
+    compileSdkVersion 18
     buildToolsVersion "19.1.0"
 
     defaultConfig {
@@ -39,6 +40,7 @@ android {
 }
 
 dependencies {
+    compile 'com.mcxiaoke.volley:library-aar:1.0.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('junit:junit:4.11') {
         exclude module: 'hamcrest-core'
@@ -60,11 +62,9 @@ dependencies {
         exclude module: 'wagon-http-lightweight'
         exclude module: 'wagon-provider-api'
     }
-
     androidTestCompile 'org.easytesting:fest-assert:1.4'
     androidTestCompile 'com.squareup:fest-android:1.0.+'
     androidTestCompile 'org.mockito:mockito-all:1.9.5'
-
 }
 
 robolectric {

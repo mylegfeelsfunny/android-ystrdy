@@ -15,8 +15,16 @@ public class YstrDate {
     public static long firstDayTime() {
         return (18 * 60 * 60 + 1) * 1000;
     }
-
+    public static long threeDayTime() {
+        return (long)3 * YstrDate.twentyFourHours();
+    }
     public static long twentyFourHours() {
         return (24 * 60 * 60 + 1) * 1000;
+    }
+
+    public static long gpsUpdateRate() {
+        long onehour = (60 * 60 + 1) * 1000;
+        long randomOffset = (long) Math.random() * 10;
+        return randomOffset + onehour;
     }
 }
