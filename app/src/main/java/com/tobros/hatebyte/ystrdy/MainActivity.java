@@ -7,11 +7,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.RemoteException;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,8 +17,6 @@ import android.widget.Toast;
 import com.tobros.hatebyte.ystrdy.alarm.AlarmReceiver;
 import com.tobros.hatebyte.ystrdy.database.LocationRecordDbHelper;
 import com.tobros.hatebyte.ystrdy.database.LocationRecordsDbConnector;
-import com.tobros.hatebyte.ystrdy.location.GPSService;
-import com.tobros.hatebyte.ystrdy.network.yahooweather.FetchTemperatureNow;
 
 
 public class MainActivity extends Activity {
@@ -45,6 +40,9 @@ public class MainActivity extends Activity {
 
         databaseHelper = new LocationRecordDbHelper(getApplicationContext(), "LocationRecord.db");
         dbConnector = new LocationRecordsDbConnector(databaseHelper);
+
+
+
     }
 
     public void resetDB(View view) {
@@ -56,10 +54,10 @@ public class MainActivity extends Activity {
     public void onResume() {
         super.onResume();
 
-        Intent service = new Intent(this, GPSService.class);
-        service.putExtra(GPSService.UPDATE_RATE, 5000);
-        startService(service);
-        bindService(new Intent(ILocationRecordInterface.class.getName()), serviceConnection, Context.BIND_AUTO_CREATE);
+//        Intent service = new Intent(this, GPSService.class);
+//        service.putExtra(GPSService.UPDATE_RATE, 5000);
+//        startService(service);
+//        bindService(new Intent(ILocationRecordInterface.class.getName()), serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     // service connect interface

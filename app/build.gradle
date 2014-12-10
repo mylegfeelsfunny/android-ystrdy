@@ -6,7 +6,6 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.2'
         classpath 'org.robolectric:robolectric-gradle-plugin:0.13.+'
-
     }
 }
 
@@ -40,7 +39,10 @@ android {
 }
 
 dependencies {
-    compile 'com.mcxiaoke.volley:library-aar:1.0.0'
+    compile 'com.mcxiaoke.volley:library:1.0.6@aar'
+    compile 'com.survivingwithandroid:weatherlib:1.5.2'
+    compile 'com.survivingwithandroid:weatherlib_volleyclient:1.5.2'
+
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('junit:junit:4.11') {
         exclude module: 'hamcrest-core'

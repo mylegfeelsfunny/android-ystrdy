@@ -41,7 +41,7 @@ public class LocationRecordsDbConnector {
         close();
     }
 
-    public long insertLocationRecord(double latitude, double longitude, Date date, float temp, String region, Boolean isFirst) throws InvalidPropertiesFormatException {
+    public long insertLocationRecord(double latitude, double longitude, Date date, float temp, String region, String city, String woeid, Boolean isFirst) throws InvalidPropertiesFormatException {
         if (date == null) {
             InvalidPropertiesFormatException e = new InvalidPropertiesFormatException("Check your longitude, latitude and date properties");
             throw e;
@@ -53,6 +53,8 @@ public class LocationRecordsDbConnector {
         values.put(LocationRecordContract.LocationRecord.COLUMN_DATE, date.getTime());
         values.put(LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE, temp);
         values.put(LocationRecordContract.LocationRecord.COLUMN_REGION_NAME, region);
+        values.put(LocationRecordContract.LocationRecord.COLUMN_CITY_NAME, city);
+        values.put(LocationRecordContract.LocationRecord.COLUMN_WOEID, woeid);
         values.put(LocationRecordContract.LocationRecord.COLUMN_IS_FIRST, ((isFirst) ? 1 : 0));
 
         open();
@@ -73,6 +75,8 @@ public class LocationRecordsDbConnector {
                 LocationRecordContract.LocationRecord.COLUMN_DATE,
                 LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE,
                 LocationRecordContract.LocationRecord.COLUMN_REGION_NAME,
+                LocationRecordContract.LocationRecord.COLUMN_CITY_NAME,
+                LocationRecordContract.LocationRecord.COLUMN_WOEID,
                 LocationRecordContract.LocationRecord.COLUMN_IS_FIRST,
                 LocationRecordContract.LocationRecord._ID
         };
@@ -106,6 +110,8 @@ public class LocationRecordsDbConnector {
                 LocationRecordContract.LocationRecord.COLUMN_DATE,
                 LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE,
                 LocationRecordContract.LocationRecord.COLUMN_REGION_NAME,
+                LocationRecordContract.LocationRecord.COLUMN_CITY_NAME,
+                LocationRecordContract.LocationRecord.COLUMN_WOEID,
                 LocationRecordContract.LocationRecord.COLUMN_IS_FIRST,
                 LocationRecordContract.LocationRecord._ID
         };
@@ -135,6 +141,8 @@ public class LocationRecordsDbConnector {
                 LocationRecordContract.LocationRecord.COLUMN_DATE,
                 LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE,
                 LocationRecordContract.LocationRecord.COLUMN_REGION_NAME,
+                LocationRecordContract.LocationRecord.COLUMN_CITY_NAME,
+                LocationRecordContract.LocationRecord.COLUMN_WOEID,
                 LocationRecordContract.LocationRecord.COLUMN_IS_FIRST,
                 LocationRecordContract.LocationRecord._ID
         };

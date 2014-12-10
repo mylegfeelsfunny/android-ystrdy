@@ -16,6 +16,8 @@ public class LocationRecordContract {
         public static final String COLUMN_TEMPERATURE                   = "temperature";
         public static final String COLUMN_IS_FIRST                      = "is_first";
         public static final String COLUMN_REGION_NAME                   = "region_name";
+        public static final String COLUMN_CITY_NAME                     = "city_name";
+        public static final String COLUMN_WOEID                         = "woeid";
 
     }
 

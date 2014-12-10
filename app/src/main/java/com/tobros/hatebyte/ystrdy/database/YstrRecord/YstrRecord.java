@@ -17,12 +17,16 @@ public class YstrRecord {
     public float temperature;
     public boolean isFirst;
     public String regionName;
+    public String woeid;
+    public String cityName;
 
     public YstrRecord(Cursor c) {
         latitude = c.getDouble(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_LATITUDE));
         longitude = c.getDouble(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_LONGITUDE));
         temperature = c.getFloat(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE));
         regionName = c.getString(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_REGION_NAME));
+        cityName = c.getString(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_CITY_NAME));
+        woeid = c.getString(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_WOEID));
         date = new Date(c.getLong(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_DATE)));
         int isFirstInt = c.getInt(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_IS_FIRST));
         isFirst = (isFirstInt == 1);

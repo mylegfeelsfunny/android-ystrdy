@@ -68,7 +68,7 @@ public class LocationRecordTest {
     @Test
     public void testInsert_throwsExceptionWithInvalidDate() {
         try {
-            dbConnector.insertLocationRecord(1.1f, 1.03f, null, 32.3f, "bridgewater",  false);
+            dbConnector.insertLocationRecord(1.1f, 1.03f, null, 32.3f, "bridgewater", "", "",  false);
             fail("Should fail with InvalidPropertiesFormatException");
         } catch (Throwable expected) {
             assertEquals(InvalidPropertiesFormatException.class, expected.getClass());
@@ -175,7 +175,7 @@ public class LocationRecordTest {
 
     public void insertLocationRecord(double latitude, double longitude, Date date, float temp, String region, Boolean isFirst) {
         try {
-            dbConnector.insertLocationRecord(latitude, longitude, date, temp, region, isFirst);
+            dbConnector.insertLocationRecord(latitude, longitude, date, temp, region, "", "", isFirst);
         } catch (InvalidPropertiesFormatException expected) {
 
         }

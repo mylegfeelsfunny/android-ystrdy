@@ -51,7 +51,7 @@ public class YstrRecordTest {
         Date rDate = new Date();
         long recordId = 0;
         try {
-            recordId = dbConnector.insertLocationRecord(1.1, 1.03, rDate, 32.3f, "bridgewater",  false);
+            recordId = dbConnector.insertLocationRecord(1.1, 1.03, rDate, 32.3f, "bridgewater", "", "", false);
         } catch (Throwable expected) {
         }
 
