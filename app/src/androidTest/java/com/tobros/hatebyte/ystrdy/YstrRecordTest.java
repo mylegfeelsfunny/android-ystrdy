@@ -1,9 +1,7 @@
 package com.tobros.hatebyte.ystrdy;
 
-import android.database.Cursor;
-
-import com.tobros.hatebyte.ystrdy.database.LocationRecordDbHelper;
-import com.tobros.hatebyte.ystrdy.database.LocationRecordsDbConnector;
+import com.tobros.hatebyte.ystrdy.database.NowRecordDbHelper;
+import com.tobros.hatebyte.ystrdy.database.NowRecordsDbConnector;
 import com.tobros.hatebyte.ystrdy.database.YstrRecord.YstrRecord;
 
 import org.junit.After;
@@ -15,29 +13,25 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.Date;
-import java.util.InvalidPropertiesFormatException;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
-import static org.fest.assertions.api.Assertions.*;
 
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
 public class YstrRecordTest {
 
-    LocationRecordsDbConnector dbConnector;
-    LocationRecordDbHelper databaseHelper;
+    NowRecordsDbConnector dbConnector;
+    NowRecordDbHelper databaseHelper;
 
     @Before
     public void setup() {
-        databaseHelper = new LocationRecordDbHelper(Robolectric.getShadowApplication().getApplicationContext(), "testLocationRecord.db");
-        dbConnector = new LocationRecordsDbConnector(databaseHelper);
+        databaseHelper = new NowRecordDbHelper(Robolectric.getShadowApplication().getApplicationContext(), "testLocationRecord.db");
+        dbConnector = new NowRecordsDbConnector(databaseHelper);
     }
 
     @After

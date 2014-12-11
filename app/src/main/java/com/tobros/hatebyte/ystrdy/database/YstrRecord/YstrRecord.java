@@ -2,7 +2,7 @@ package com.tobros.hatebyte.ystrdy.database.YstrRecord;
 
 import android.database.Cursor;
 
-import com.tobros.hatebyte.ystrdy.database.LocationRecordContract;
+import com.tobros.hatebyte.ystrdy.database.NowRecordContract;
 
 import java.util.Date;
 
@@ -21,14 +21,19 @@ public class YstrRecord {
     public String cityName;
 
     public YstrRecord(Cursor c) {
-        latitude = c.getDouble(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_LATITUDE));
-        longitude = c.getDouble(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_LONGITUDE));
-        temperature = c.getFloat(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE));
-        regionName = c.getString(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_REGION_NAME));
-        cityName = c.getString(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_CITY_NAME));
-        woeid = c.getString(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_WOEID));
-        date = new Date(c.getLong(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_DATE)));
-        int isFirstInt = c.getInt(c.getColumnIndex(LocationRecordContract.LocationRecord.COLUMN_IS_FIRST));
+        latitude = c.getDouble(c.getColumnIndex(NowRecordContract.NowRecord.COLUMN_LATITUDE));
+        longitude = c.getDouble(c.getColumnIndex(NowRecordContract.NowRecord.COLUMN_LONGITUDE));
+        temperature = c.getFloat(c.getColumnIndex(NowRecordContract.NowRecord.COLUMN_TEMPERATURE));
+        regionName = c.getString(c.getColumnIndex(NowRecordContract.NowRecord.COLUMN_REGION_NAME));
+        cityName = c.getString(c.getColumnIndex(NowRecordContract.NowRecord.COLUMN_CITY_NAME));
+        woeid = c.getString(c.getColumnIndex(NowRecordContract.NowRecord.COLUMN_WOEID));
+        date = new Date(c.getLong(c.getColumnIndex(NowRecordContract.NowRecord.COLUMN_DATE)));
+        int isFirstInt = c.getInt(c.getColumnIndex(NowRecordContract.NowRecord.COLUMN_IS_FIRST));
         isFirst = (isFirstInt == 1);
     }
+
+    public YstrRecord() {
+
+    }
+
 }

@@ -40,7 +40,7 @@ android {
 
 dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.6@aar'
-    compile 'com.survivingwithandroid:weatherlib:1.5.2'
+    compile 'com.survivingwithandroid:weatherlib:1.5.3'
     compile 'com.survivingwithandroid:weatherlib_volleyclient:1.5.2'
 
     compile fileTree(dir: 'libs', include: ['*.jar'])

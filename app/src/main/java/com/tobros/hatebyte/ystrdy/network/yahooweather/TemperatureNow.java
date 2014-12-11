@@ -1,13 +1,22 @@
 package com.tobros.hatebyte.ystrdy.network.yahooweather;
 
 import android.content.Context;
+import android.database.DatabaseErrorHandler;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.webkit.WebView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.WeatherConfig;
 import com.survivingwithandroid.weather.lib.exception.LocationProviderNotFoundException;
@@ -15,10 +24,16 @@ import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
 import com.survivingwithandroid.weather.lib.model.City;
 import com.survivingwithandroid.weather.lib.client.volley.WeatherClientDefault;
 import com.survivingwithandroid.weather.lib.model.CurrentWeather;
+import com.survivingwithandroid.weather.lib.model.HistoricalWeather;
+import com.survivingwithandroid.weather.lib.provider.forecastio.ForecastIOProviderType;
 import com.survivingwithandroid.weather.lib.provider.openweathermap.OpenweathermapProviderType;
 import com.survivingwithandroid.weather.lib.provider.yahooweather.YahooProviderType;
 import com.survivingwithandroid.weather.lib.request.WeatherRequest;
+import com.tobros.hatebyte.ystrdy.database.YstrRecord.YstrRecord;
+import com.tobros.hatebyte.ystrdy.date.YstrDate;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
@@ -33,6 +48,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -42,42 +58,46 @@ import java.util.List;
 public class TemperatureNow {
 
     public interface TemperaturNowDelegate {
-        public void onCurrentTemperatureRecieved(float temperature, String id, String city, String region);
+        public void onCurrentTemperatureRecieved(YstrRecord record);
         public void onCurrentTemperatureError();
     }
 
-    private static final String YAHOO_APP_ID = "dj0yJmk9YnhCTWNBcU1YUG53JmQ9WVdrOVZYZzFPSEpETTJNbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Mw--";
+    private TemperaturNowDelegate delegate = null;
+    private YstrRecord record = null;
+    private static final String YAHOO_API_KEY = "dj0yJmk9YnhCTWNBcU1YUG53JmQ9WVdrOVZYZzFPSEpETTJNbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Mw--";
     private static final String TAG = "FetchTemperatureNow";
     private String weatherYQL = "http://query.yahooapis.com/v1/public/yql?q=QUERY&format=json&callback=?";
 
-    final WeatherConfig config = new WeatherConfig();
-    WeatherClient client = null;
+    final WeatherConfig yahooConfig = new WeatherConfig();
+    private LocationManager locationManager;
+    WeatherClient yahooClient = null;
 
     private Context context = null;
     private City city = null;
-    private float temperature;
-    private TemperaturNowDelegate delegate = null;
 
     public TemperatureNow(Context c, TemperaturNowDelegate d) {
         super();
         context = c;
         delegate = d;
-        config.ApiKey = YAHOO_APP_ID;
-        config.unitSystem = WeatherConfig.UNIT_SYSTEM.I;
 
         try {
-            client = (new WeatherClient.ClientBuilder())
+            yahooConfig.ApiKey = YAHOO_API_KEY;
+            yahooConfig.unitSystem = WeatherConfig.UNIT_SYSTEM.I;
+            yahooClient = (new WeatherClient.ClientBuilder())
                     .attach(context)
-                    .config(config)
+                    .config(yahooConfig)
                     .provider(new YahooProviderType())
                     .httpClient(WeatherClientDefault.class)
                     .build();
+
         } catch (Throwable throwable) {
             Log.i(TAG, "Throwable : "+throwable);
         }
     }
 
-    public void request() {
+    public void request()
+    {
+        record = null;
         getLocationId();
     }
 
@@ -87,15 +107,17 @@ public class TemperatureNow {
 //        Log.i(TAG, query);
 
         try {
-            Criteria criteria = new Criteria();
-            criteria.setPowerRequirement(Criteria.POWER_LOW);
-            criteria.setAccuracy(Criteria.ACCURACY_COARSE);
-            criteria.setCostAllowed(false);
-            client.searchCityByLocation(criteria, new WeatherClient.CityEventListener() {
+
+            locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+            final Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+            yahooClient.searchCity(location.getLatitude(), location.getLongitude(), new WeatherClient.CityEventListener() {
                 @Override
                 public void onCityListRetrieved(List<City> cityList) {
                     // Here your logic when the data is available
-                    city= (City) cityList.get(cityList.size()-1);
+                    city = cityList.get(cityList.size() - 1);
+                    record.latitude = (float) location.getLatitude();
+                    record.longitude = (float) location.getLongitude();
                     getTemperature(city.getId());
                 }
 
@@ -110,8 +132,6 @@ public class TemperatureNow {
                 }
             });
 
-        } catch(LocationProviderNotFoundException lpnfe) {
-            Log.i(TAG, "LocationProviderNotFoundException : "+lpnfe);
         } catch (Throwable throwable) {
             Log.i(TAG, "Throwablen : "+throwable);
         }
@@ -120,11 +140,18 @@ public class TemperatureNow {
     private void getTemperature(String locationId) {
 
         try {
-            client.getCurrentCondition(new WeatherRequest(locationId), new WeatherClient.WeatherEventListener() {
+
+            yahooClient.getCurrentCondition(new WeatherRequest(locationId), new WeatherClient.WeatherEventListener() {
                 @Override
                 public void onWeatherRetrieved(CurrentWeather currentWeather) {
-                    float currentTemp = currentWeather.weather.temperature.getTemp();
-                    delegate.onCurrentTemperatureRecieved(currentTemp, city.getId(), city.getName(), city.getRegion());
+
+                    record.cityName = city.getName();
+                    record.regionName = city.getRegion();
+                    record.temperature = currentWeather.weather.temperature.getTemp();
+                    record.woeid = city.getId();
+                    record.date = new Date();
+
+                    delegate.onCurrentTemperatureRecieved(record);
                 }
 
                 @Override
@@ -139,6 +166,36 @@ public class TemperatureNow {
                     throwable.printStackTrace();
                 }
             });
+
+
+
+
+
+
+
+
+//            WeatherRequest wr = new WeatherRequest((float)location.getLatitude(), (float)location.getLongitude());
+//            forcastioClient.getHistoricalWeather(wr, yesterday, yesterdayPlus, new WeatherClient.HistoricalWeatherEventListener() {
+//                @Override
+//                public void onWeatherRetrieved(HistoricalWeather historicalWeather) {
+//                    float currentTemp = historicalWeather.getHistoricalHourWeather(0).weather.temperature.getTemp();
+//                    String toastMess = "City["+ city +"]  HISTORY temperature["+temperature+"]";
+//                    Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
+//                }
+//
+//                @Override
+//                public void onWeatherError(WeatherLibException e) {
+//                    Log.d("WL", "Weather Error - parsing data");
+//                    e.printStackTrace();
+//                }
+//
+//                @Override
+//                public void onConnectionError(Throwable throwable) {
+//                    Log.d("WL", "Connection error");
+//                    throwable.printStackTrace();
+//                }
+//            });
+
         }
         catch (Throwable t) {
             t.printStackTrace();

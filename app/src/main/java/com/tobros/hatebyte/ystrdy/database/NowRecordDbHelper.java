@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by scott on 11/26/14.
  */
-public class LocationRecordDbHelper extends SQLiteOpenHelper {
+public class NowRecordDbHelper extends SQLiteOpenHelper {
 
     private static final String TYPE_TEXT = " TEXT";
     private static final String TYPE_INTEGER = " integer";
@@ -23,20 +23,20 @@ public class LocationRecordDbHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_RECORDS =
                 "CREATE TABLE " +
-                LocationRecordContract.LocationRecord.TABLE_NAME + " (" +
-                LocationRecordContract.LocationRecord._ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
-                LocationRecordContract.LocationRecord.COLUMN_LATITUDE + TYPE_DOUBLE + COMMA_SEP +
-                LocationRecordContract.LocationRecord.COLUMN_LONGITUDE + TYPE_DOUBLE + COMMA_SEP +
-                LocationRecordContract.LocationRecord.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
-                LocationRecordContract.LocationRecord.COLUMN_REGION_NAME + TYPE_TEXT + COMMA_SEP +
-                LocationRecordContract.LocationRecord.COLUMN_CITY_NAME + TYPE_TEXT + COMMA_SEP +
-                LocationRecordContract.LocationRecord.COLUMN_WOEID + TYPE_TEXT + COMMA_SEP +
-                LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE + TYPE_FLOAT + COMMA_SEP +
-                LocationRecordContract.LocationRecord.COLUMN_IS_FIRST + TYPE_INTEGER + ")";
+                NowRecordContract.NowRecord.TABLE_NAME + " (" +
+                NowRecordContract.NowRecord._ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
+                NowRecordContract.NowRecord.COLUMN_LATITUDE + TYPE_DOUBLE + COMMA_SEP +
+                NowRecordContract.NowRecord.COLUMN_LONGITUDE + TYPE_DOUBLE + COMMA_SEP +
+                NowRecordContract.NowRecord.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
+                NowRecordContract.NowRecord.COLUMN_REGION_NAME + TYPE_TEXT + COMMA_SEP +
+                NowRecordContract.NowRecord.COLUMN_CITY_NAME + TYPE_TEXT + COMMA_SEP +
+                NowRecordContract.NowRecord.COLUMN_WOEID + TYPE_TEXT + COMMA_SEP +
+                NowRecordContract.NowRecord.COLUMN_TEMPERATURE + TYPE_FLOAT + COMMA_SEP +
+                NowRecordContract.NowRecord.COLUMN_IS_FIRST + TYPE_INTEGER + ")";
     private static final String SQL_DELETE_RECORDS =
-                "DROP TABLE IF EXISTS " + LocationRecordContract.LocationRecord.TABLE_NAME;
+                "DROP TABLE IF EXISTS " + NowRecordContract.NowRecord.TABLE_NAME;
 
-    public LocationRecordDbHelper(Context context, String databaseName) {
+    public NowRecordDbHelper(Context context, String databaseName) {
         super(context, databaseName, null, DATA_VERSION);
     }
 
@@ -57,3 +57,5 @@ public class LocationRecordDbHelper extends SQLiteOpenHelper {
     }
 
 }
+
+

@@ -79,6 +79,8 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/symbols" />
       <excludeFolder url="file://$MODULE_DIR$/build/outputs" />
       <excludeFolder url="file://$MODULE_DIR$/build/test-classes" />
+      <excludeFolder url="file://$MODULE_DIR$/build/test-report" />
+      <excludeFolder url="file://$MODULE_DIR$/build/test-results" />
       <excludeFolder url="file://$MODULE_DIR$/build/tmp" />
     </content>
     <orderEntry type="jdk" jdkName="Android API 18 Platform" jdkType="Android SDK" />
@@ -97,8 +99,8 @@
     <orderEntry type="library" exported="" scope="TEST" name="asm-tree-5.0.1" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="fest-assert-core-2.0M10" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="asm-analysis-5.0.1" level="project" />
+    <orderEntry type="library" exported="" name="weatherlib-1.5.3" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="mockito-all-1.9.5" level="project" />
-    <orderEntry type="library" exported="" name="weatherlib-1.5.2" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="fest-util-1.2.5" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="ant-1.8.0" level="project" />
     <orderEntry type="library" exported="" scope="TEST" name="fest-android-1.0.8" level="project" />

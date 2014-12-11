@@ -1,15 +1,10 @@
 package com.tobros.hatebyte.ystrdy;
 
-import android.app.Activity;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
-import com.tobros.hatebyte.ystrdy.database.LocationRecordDbHelper;
-import com.tobros.hatebyte.ystrdy.database.LocationRecordsDbConnector;
+import com.tobros.hatebyte.ystrdy.database.NowRecordDbHelper;
+import com.tobros.hatebyte.ystrdy.database.NowRecordsDbConnector;
 import com.tobros.hatebyte.ystrdy.database.YstrRecord.YstrRecord;
 import com.tobros.hatebyte.ystrdy.date.YstrDate;
 
-import org.hamcrest.CoreMatchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,33 +12,29 @@ import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
-import org.robolectric.shadows.ShadowLog;
 
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
-import java.util.Random;
 
-import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
 import static org.fest.assertions.api.Assertions.*;
 
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class LocationRecordTest {
+public class NowRecordTest {
 
-    LocationRecordsDbConnector dbConnector;
-    LocationRecordDbHelper databaseHelper;
+    NowRecordsDbConnector dbConnector;
+    NowRecordDbHelper databaseHelper;
 
     @Before
     public void setup() {
-        databaseHelper = new LocationRecordDbHelper(Robolectric.getShadowApplication().getApplicationContext(), "testLocationRecord.db");
-        dbConnector = new LocationRecordsDbConnector(databaseHelper);
+        databaseHelper = new NowRecordDbHelper(Robolectric.getShadowApplication().getApplicationContext(), "testLocationRecord.db");
+        dbConnector = new NowRecordsDbConnector(databaseHelper);
     }
 
     @After

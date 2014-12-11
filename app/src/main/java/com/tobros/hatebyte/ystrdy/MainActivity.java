@@ -15,8 +15,8 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.tobros.hatebyte.ystrdy.alarm.AlarmReceiver;
-import com.tobros.hatebyte.ystrdy.database.LocationRecordDbHelper;
-import com.tobros.hatebyte.ystrdy.database.LocationRecordsDbConnector;
+import com.tobros.hatebyte.ystrdy.database.NowRecordDbHelper;
+import com.tobros.hatebyte.ystrdy.database.NowRecordsDbConnector;
 
 
 public class MainActivity extends Activity {
@@ -24,8 +24,8 @@ public class MainActivity extends Activity {
 
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
-    LocationRecordsDbConnector dbConnector;
-    LocationRecordDbHelper databaseHelper;
+    NowRecordsDbConnector dbConnector;
+    NowRecordDbHelper databaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,8 @@ public class MainActivity extends Activity {
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10000, pendingIntent);
 
-        databaseHelper = new LocationRecordDbHelper(getApplicationContext(), "LocationRecord.db");
-        dbConnector = new LocationRecordsDbConnector(databaseHelper);
+        databaseHelper = new NowRecordDbHelper(getApplicationContext(), "LocationRecord.db");
+        dbConnector = new NowRecordsDbConnector(databaseHelper);
 
 
 

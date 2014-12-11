@@ -1,28 +1,26 @@
 package com.tobros.hatebyte.ystrdy.database;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.tobros.hatebyte.ystrdy.database.YstrRecord.YstrRecord;
 import com.tobros.hatebyte.ystrdy.date.YstrDate;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 
 /**
  * Created by scott on 11/26/14.
  */
-public class LocationRecordsDbConnector {
+public class NowRecordsDbConnector {
 
     private static final String TAG = "LocationRecordsDbConnector";
 
     public SQLiteDatabase database;
-    public LocationRecordDbHelper databaseHelper;
+    public NowRecordDbHelper databaseHelper;
 
-    public LocationRecordsDbConnector(LocationRecordDbHelper dbHelper) {
+    public NowRecordsDbConnector(NowRecordDbHelper dbHelper) {
         databaseHelper = dbHelper;
     }
 
@@ -37,7 +35,7 @@ public class LocationRecordsDbConnector {
 
     public  void clearDatabase() {
         open();
-        databaseHelper.onDowngrade(database, LocationRecordDbHelper.DATA_VERSION, LocationRecordDbHelper.DATA_VERSION+1);
+        databaseHelper.onDowngrade(database, NowRecordDbHelper.DATA_VERSION, NowRecordDbHelper.DATA_VERSION+1);
         close();
     }
 
@@ -48,18 +46,18 @@ public class LocationRecordsDbConnector {
         }
 
         ContentValues values = new ContentValues();
-        values.put(LocationRecordContract.LocationRecord.COLUMN_LATITUDE, latitude);
-        values.put(LocationRecordContract.LocationRecord.COLUMN_LONGITUDE, longitude);
-        values.put(LocationRecordContract.LocationRecord.COLUMN_DATE, date.getTime());
-        values.put(LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE, temp);
-        values.put(LocationRecordContract.LocationRecord.COLUMN_REGION_NAME, region);
-        values.put(LocationRecordContract.LocationRecord.COLUMN_CITY_NAME, city);
-        values.put(LocationRecordContract.LocationRecord.COLUMN_WOEID, woeid);
-        values.put(LocationRecordContract.LocationRecord.COLUMN_IS_FIRST, ((isFirst) ? 1 : 0));
+        values.put(NowRecordContract.NowRecord.COLUMN_LATITUDE, latitude);
+        values.put(NowRecordContract.NowRecord.COLUMN_LONGITUDE, longitude);
+        values.put(NowRecordContract.NowRecord.COLUMN_DATE, date.getTime());
+        values.put(NowRecordContract.NowRecord.COLUMN_TEMPERATURE, temp);
+        values.put(NowRecordContract.NowRecord.COLUMN_REGION_NAME, region);
+        values.put(NowRecordContract.NowRecord.COLUMN_CITY_NAME, city);
+        values.put(NowRecordContract.NowRecord.COLUMN_WOEID, woeid);
+        values.put(NowRecordContract.NowRecord.COLUMN_IS_FIRST, ((isFirst) ? 1 : 0));
 
         open();
         long newRowId = database.insert(
-                LocationRecordContract.LocationRecord.TABLE_NAME,
+                NowRecordContract.NowRecord.TABLE_NAME,
                 null,
                 values
         );
@@ -70,22 +68,22 @@ public class LocationRecordsDbConnector {
 
     public YstrRecord getRecordById(long id) {
         String[] projection = {
-                LocationRecordContract.LocationRecord.COLUMN_LATITUDE,
-                LocationRecordContract.LocationRecord.COLUMN_LONGITUDE,
-                LocationRecordContract.LocationRecord.COLUMN_DATE,
-                LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE,
-                LocationRecordContract.LocationRecord.COLUMN_REGION_NAME,
-                LocationRecordContract.LocationRecord.COLUMN_CITY_NAME,
-                LocationRecordContract.LocationRecord.COLUMN_WOEID,
-                LocationRecordContract.LocationRecord.COLUMN_IS_FIRST,
-                LocationRecordContract.LocationRecord._ID
+                NowRecordContract.NowRecord.COLUMN_LATITUDE,
+                NowRecordContract.NowRecord.COLUMN_LONGITUDE,
+                NowRecordContract.NowRecord.COLUMN_DATE,
+                NowRecordContract.NowRecord.COLUMN_TEMPERATURE,
+                NowRecordContract.NowRecord.COLUMN_REGION_NAME,
+                NowRecordContract.NowRecord.COLUMN_CITY_NAME,
+                NowRecordContract.NowRecord.COLUMN_WOEID,
+                NowRecordContract.NowRecord.COLUMN_IS_FIRST,
+                NowRecordContract.NowRecord._ID
         };
-        String selectStatement = LocationRecordContract.LocationRecord._ID + " = ?";
+        String selectStatement = NowRecordContract.NowRecord._ID + " = ?";
         String[] selectArgs = { id + "" };
 
         open();
         Cursor c = database.query(
-                LocationRecordContract.LocationRecord.TABLE_NAME,
+                NowRecordContract.NowRecord.TABLE_NAME,
                 projection,
                 selectStatement,
                 selectArgs,
@@ -105,22 +103,22 @@ public class LocationRecordsDbConnector {
         ystrdy.setTime(ystrdy.getTime() - twentyFourHours);
 
         String[] projection = {
-                LocationRecordContract.LocationRecord.COLUMN_LATITUDE,
-                LocationRecordContract.LocationRecord.COLUMN_LONGITUDE,
-                LocationRecordContract.LocationRecord.COLUMN_DATE,
-                LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE,
-                LocationRecordContract.LocationRecord.COLUMN_REGION_NAME,
-                LocationRecordContract.LocationRecord.COLUMN_CITY_NAME,
-                LocationRecordContract.LocationRecord.COLUMN_WOEID,
-                LocationRecordContract.LocationRecord.COLUMN_IS_FIRST,
-                LocationRecordContract.LocationRecord._ID
+                NowRecordContract.NowRecord.COLUMN_LATITUDE,
+                NowRecordContract.NowRecord.COLUMN_LONGITUDE,
+                NowRecordContract.NowRecord.COLUMN_DATE,
+                NowRecordContract.NowRecord.COLUMN_TEMPERATURE,
+                NowRecordContract.NowRecord.COLUMN_REGION_NAME,
+                NowRecordContract.NowRecord.COLUMN_CITY_NAME,
+                NowRecordContract.NowRecord.COLUMN_WOEID,
+                NowRecordContract.NowRecord.COLUMN_IS_FIRST,
+                NowRecordContract.NowRecord._ID
         };
         String selectStatement = "abs("+ystrdy.getTime()+" - date) < " + twentyFourHours;
         String orderBy = "abs("+ystrdy.getTime()+" - date) ASC";
 
         open();
         Cursor c = database.query(
-                LocationRecordContract.LocationRecord.TABLE_NAME,
+                NowRecordContract.NowRecord.TABLE_NAME,
                 projection,
                 selectStatement,
                 null,
@@ -136,21 +134,21 @@ public class LocationRecordsDbConnector {
 
     public YstrRecord getEarliestRecord() {
         String[] projection = {
-                LocationRecordContract.LocationRecord.COLUMN_LATITUDE,
-                LocationRecordContract.LocationRecord.COLUMN_LONGITUDE,
-                LocationRecordContract.LocationRecord.COLUMN_DATE,
-                LocationRecordContract.LocationRecord.COLUMN_TEMPERATURE,
-                LocationRecordContract.LocationRecord.COLUMN_REGION_NAME,
-                LocationRecordContract.LocationRecord.COLUMN_CITY_NAME,
-                LocationRecordContract.LocationRecord.COLUMN_WOEID,
-                LocationRecordContract.LocationRecord.COLUMN_IS_FIRST,
-                LocationRecordContract.LocationRecord._ID
+                NowRecordContract.NowRecord.COLUMN_LATITUDE,
+                NowRecordContract.NowRecord.COLUMN_LONGITUDE,
+                NowRecordContract.NowRecord.COLUMN_DATE,
+                NowRecordContract.NowRecord.COLUMN_TEMPERATURE,
+                NowRecordContract.NowRecord.COLUMN_REGION_NAME,
+                NowRecordContract.NowRecord.COLUMN_CITY_NAME,
+                NowRecordContract.NowRecord.COLUMN_WOEID,
+                NowRecordContract.NowRecord.COLUMN_IS_FIRST,
+                NowRecordContract.NowRecord._ID
         };
         String orderBy = "date ASC";
 
         open();
         Cursor c = database.query(
-                LocationRecordContract.LocationRecord.TABLE_NAME,
+                NowRecordContract.NowRecord.TABLE_NAME,
                 projection,
                 null,
                 null,
@@ -172,11 +170,11 @@ public class LocationRecordsDbConnector {
 
     public int numRecords() {
         String[] projection = {
-                LocationRecordContract.LocationRecord._ID
+                NowRecordContract.NowRecord._ID
         };
         open();
         Cursor c = database.query(
-                LocationRecordContract.LocationRecord.TABLE_NAME,
+                NowRecordContract.NowRecord.TABLE_NAME,
                 projection,
                 null,
                 null,
@@ -193,7 +191,7 @@ public class LocationRecordsDbConnector {
         open();
         Date now = new Date();
         String whereString = YstrDate.threeDayTime() + " + date < " + now.getTime();
-        database.delete(LocationRecordContract.LocationRecord.TABLE_NAME, whereString, null);
+        database.delete(NowRecordContract.NowRecord.TABLE_NAME, whereString, null);
         close();
     }
 

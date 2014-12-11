@@ -5,9 +5,9 @@ import android.provider.BaseColumns;
 /**
  * Created by scott on 11/26/14.
  */
-public class LocationRecordContract {
+public class NowRecordContract {
 
-    public static abstract class LocationRecord implements BaseColumns {
+    public static abstract class NowRecord implements BaseColumns {
 
         public static final String TABLE_NAME                           = "locationrecords";
         public static final String COLUMN_LATITUDE                      = "latitude";
