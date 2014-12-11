@@ -1,8 +1,10 @@
 package com.tobros.hatebyte.ystrdy;
 
-import com.tobros.hatebyte.ystrdy.database.NowRecordDbHelper;
-import com.tobros.hatebyte.ystrdy.database.NowRecordsDbConnector;
-import com.tobros.hatebyte.ystrdy.database.YstrRecord.YstrRecord;
+import android.content.Context;
+
+import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDatabase;
+import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordEGI;
+import com.tobros.hatebyte.ystrdy.weatherrecords.entity.NowRecordEntity;
 import com.tobros.hatebyte.ystrdy.date.YstrDate;
 
 import org.junit.After;
@@ -16,6 +18,7 @@ import org.robolectric.annotation.Config;
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 
+import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -26,40 +29,51 @@ import static org.fest.assertions.api.Assertions.*;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class NowRecordTest {
+public class NowRecordEGITest {
 
-    NowRecordsDbConnector dbConnector;
-    NowRecordDbHelper databaseHelper;
+    RecordEGI recordEGI;
 
     @Before
     public void setup() {
-        databaseHelper = new NowRecordDbHelper(Robolectric.getShadowApplication().getApplicationContext(), "testLocationRecord.db");
-        dbConnector = new NowRecordsDbConnector(databaseHelper);
+        Context context = Robolectric.getShadowApplication().getApplicationContext();
+        RecordDatabase recordDatabase = new RecordDatabase(context, "testLocationRecord.db");
+        recordEGI = new RecordEGI(recordDatabase);
+
+//        recordEGI = mock(RecordEGI.class);
+//        when(recordEGI.getContext()).thenReturn(context);
+//        when(recordEGI.getDatabaseName()).thenReturn("testLocationRecord.db");
+//        recordEGI.dbConnector = recordEGI.getDbConnector();
     }
 
     @After
     public void teardown() {
-        dbConnector.clearDatabase();
-        dbConnector = null;
+        recordEGI.clearDatabase();
+        recordEGI = null;
     }
 
-    @Test
-    public void testOpen_createsDB() {
-        dbConnector.open();
-        assertTrue(dbConnector.database.isOpen());
-    }
-
-    @Test
-    public void testClose_closesDB() {
-        dbConnector.open();
-        dbConnector.close();
-        assertFalse(dbConnector.database.isOpen());
-    }
-
+//    @Test
+//    public void testOpen_createsDB() {
+//        dbConnector.open();
+//        assertTrue(dbConnector.database.isOpen());
+//    }
+//
+//    @Test
+//    public void testClose_closesDB() {
+//        dbConnector.open();
+//        dbConnector.close();
+//        assertFalse(dbConnector.database.isOpen());
+//    }
+//
     @Test
     public void testInsert_throwsExceptionWithInvalidDate() {
+        NowRecordEntity record = new NowRecordEntity();
+        record.latitude = 1.1f;
+        record.longitude = 1.03f;
+        record.temperature = 32.3f;
+        record.regionName = "bridgewater";
+        record.isFirst = false;
         try {
-            dbConnector.insertLocationRecord(1.1f, 1.03f, null, 32.3f, "bridgewater", "", "",  false);
+            recordEGI.insertNowRecord(record);
             fail("Should fail with InvalidPropertiesFormatException");
         } catch (Throwable expected) {
             assertEquals(InvalidPropertiesFormatException.class, expected.getClass());
@@ -68,14 +82,14 @@ public class NowRecordTest {
 
     @Test
     public void testQuery_numRecords_0Records() {
-        int numrecords = dbConnector.numRecords();
+        int numrecords = recordEGI.numNowRecords();
         assertThat(numrecords).isEqualTo(0);
     }
 
     @Test
     public void testQuery_numRecords_23Records() {
         populateDbWithBunchOfYstrDates();
-        int numrecords = dbConnector.numRecords();
+        int numrecords = recordEGI.numNowRecords();
         assertThat(numrecords).isEqualTo(23);
     }
 
@@ -83,10 +97,10 @@ public class NowRecordTest {
     public void testQuery_dateClosestToADayAgo_24hours4Mins() {
         populateDbWithBunchOfYstrDates();
 
-        insertLocationRecord(1.1, 1.03, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
-        insertLocationRecord(1.1, 1.03, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
 
-        YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
+        NowRecordEntity yr = recordEGI.getClosestNowRecordFromYstrdy();
         assertThat("24Hours4mins").isEqualTo(yr.regionName);
     }
 
@@ -94,12 +108,12 @@ public class NowRecordTest {
     public void testQuery_dateClosestToADayAgo_23hours56Mins() {
         populateDbWithBunchOfYstrDates();
 
-        insertLocationRecord(1.1, 1.03, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
-        insertLocationRecord(1.1, 1.03, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
-        insertLocationRecord(1.1, 1.03, dateFrom23Hours56Mins(), 32.3f, "23Hours56mins",  false);
-        insertLocationRecord(1.1, 1.03, dateFrom23Hours55Mins(), 32.3f, "23Hours55mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours56Mins(), 32.3f, "23Hours56mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours55Mins(), 32.3f, "23Hours55mins",  false);
 
-        YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
+        NowRecordEntity yr = recordEGI.getClosestNowRecordFromYstrdy();
         assertThat("23Hours56mins").isEqualTo(yr.regionName);
     }
 
@@ -112,7 +126,7 @@ public class NowRecordTest {
 
         insertLocationRecord((float)0, (float)0, d, 32.3f, "nearest",  false);
 
-        YstrRecord yr = dbConnector.getClosestRecordFromYstrdy();
+        NowRecordEntity yr = recordEGI.getClosestNowRecordFromYstrdy();
         assertThat(0.0).isEqualTo(yr.latitude);
         assertThat(0.0).isEqualTo(yr.longitude);
         assertThat("nearest").isEqualTo(yr.regionName);
@@ -120,7 +134,7 @@ public class NowRecordTest {
 
     @Test
     public void testQuery_firstRecord_new() {
-        YstrRecord yr = dbConnector.getEarliestRecord();
+        NowRecordEntity yr = recordEGI.getEarliestNowRecord();
         assertNull(yr);
     }
 
@@ -136,10 +150,10 @@ public class NowRecordTest {
         long thirtyOneDaysAgo = (long) 31 * ((24 * 60 * 60 + 1) * 1000);
         thirtyOneDaysAgoDate.setTime(thirtyOneDaysAgoDate.getTime() - thirtyOneDaysAgo);
 
-        insertLocationRecord((double)0, (double)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  false);
-        insertLocationRecord((double)0, (double)0, thirtyOneDaysAgoDate, 32.3f, thirtyOneDaysAgoDate.toString(),  true);
+        insertLocationRecord((float)0, (float)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  false);
+        insertLocationRecord((float)0, (float)0, thirtyOneDaysAgoDate, 32.3f, thirtyOneDaysAgoDate.toString(),  true);
 
-        YstrRecord yr = dbConnector.getEarliestRecord();
+        NowRecordEntity yr = recordEGI.getEarliestNowRecord();
 
         assertThat(yr.date).isEqualTo(thirtyOneDaysAgoDate);
         assertThat(yr.regionName).isEqualTo(thirtyOneDaysAgoDate.toString());
@@ -152,21 +166,28 @@ public class NowRecordTest {
         Date thirtyDaysAgoDate = new Date();
         long thirtyDaysAgo = (long) 30 * ((24 * 60 * 60 + 1) * 1000);
         thirtyDaysAgoDate.setTime(thirtyDaysAgoDate.getTime() - thirtyDaysAgo);
-        insertLocationRecord((double)0, (double)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  true);
+        insertLocationRecord((float)0, (float)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  true);
 
-        int numrecords = dbConnector.numRecords();
+        int numrecords = recordEGI.numNowRecords();
 
         assertThat(numrecords).isEqualTo(24);
+        recordEGI.deleteExpiredNowRecords();
 
-        dbConnector.deleteExpiredRecords();
-
-        int newnumrecords = dbConnector.numRecords();
+        int newnumrecords = recordEGI.numNowRecords();
         assertThat(newnumrecords).isEqualTo(23);
     }
 
-    public void insertLocationRecord(double latitude, double longitude, Date date, float temp, String region, Boolean isFirst) {
+    public void insertLocationRecord(float latitude, float longitude, Date date, float temp, String region, Boolean isFirst) {
+        NowRecordEntity record = new NowRecordEntity();
+        record.latitude = latitude;
+        record.longitude = longitude;
+        record.date = date;
+        record.temperature = temp;
+        record.regionName = region;
+        record.isFirst = isFirst;
+
         try {
-            dbConnector.insertLocationRecord(latitude, longitude, date, temp, region, "", "", isFirst);
+            recordEGI.insertNowRecord(record);
         } catch (InvalidPropertiesFormatException expected) {
 
         }
@@ -175,7 +196,7 @@ public class NowRecordTest {
     public void populateDbWithBunchOfYstrDates() {
         for (int i = 1; i < 24; i++) {
             Date d = randomYstrDate((i % 2 == 0));
-            insertLocationRecord((double)i, (double)i, d, 32.3f, d.toString(),  (i % 2 == 0));
+            insertLocationRecord((float)i, (float)i, d, 32.3f, d.toString(),  (i % 2 == 0));
         }
     }
 

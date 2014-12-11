@@ -8,9 +8,8 @@ import android.location.LocationManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.tobros.hatebyte.ystrdy.database.NowRecordDbHelper;
-import com.tobros.hatebyte.ystrdy.database.NowRecordsDbConnector;
-import com.tobros.hatebyte.ystrdy.database.YstrRecord.YstrRecord;
+import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDatabaseAPI;
+import com.tobros.hatebyte.ystrdy.weatherrecords.gateway.NowRecordEG;
 import com.tobros.hatebyte.ystrdy.date.YstrDate;
 import com.tobros.hatebyte.ystrdy.network.yahooweather.TemperatureNow;
 import com.tobros.hatebyte.ystrdy.network.yahooweather.TemperatureYstrdy;
@@ -26,8 +25,8 @@ public class AlarmReceiver extends BroadcastReceiver implements
 
     private static final String TAG = "AlarmReceiver";
 
-    NowRecordsDbConnector dbConnector;
-    NowRecordDbHelper databaseHelper;
+    RecordDatabaseAPI dbConnector;
+    RecordDatabaseAPI databaseHelper;
     private LocationManager locationManager;
     private Context context = null;
     TemperatureNow temperatureNow = null;
@@ -36,8 +35,8 @@ public class AlarmReceiver extends BroadcastReceiver implements
     @Override
     public void onReceive(Context c, Intent intent) {
         context = c;
-        databaseHelper = new NowRecordDbHelper(context.getApplicationContext(), "LocationRecord.db");
-        dbConnector = new NowRecordsDbConnector(databaseHelper);
+//        databaseHelper = new RecordDatabaseAPI(context.getApplicationContext(), "LocationRecord.db");
+//        dbConnector = new RecordDatabaseAPI(databaseHelper);
 
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -53,15 +52,15 @@ public class AlarmReceiver extends BroadcastReceiver implements
 
 
 //        try {
-//            dbConnector.insertLocationRecord(location.getLatitude(), location.getLongitude(), new Date(), 32.3f, "bridgewater",  false);
+//            dbConnector.insertNowRecord(location.getLatitude(), location.getLongitude(), new Date(), 32.3f, "bridgewater",  false);
 //        } catch (InvalidPropertiesFormatException e) {
 //            Log.e(TAG, "InvalidPropertiesFormatException : " + e);
 //        }
     }
 
-    public void onCurrentTemperatureRecieved(YstrRecord record) {
-        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
-        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
+    public void onCurrentTemperatureRecieved(NowRecordEG record) {
+//        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
+//        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
     }
 
     public void onCurrentTemperatureError() {
@@ -69,9 +68,9 @@ public class AlarmReceiver extends BroadcastReceiver implements
     }
 
 
-    public void onYstrdyTemperatureRecieved(YstrRecord record) {
-        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
-        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
+    public void onYstrdyTemperatureRecieved(NowRecordEG record) {
+//        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
+//        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
     }
 
     public void onYstrdytTemperatureError() {

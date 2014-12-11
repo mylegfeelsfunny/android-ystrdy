@@ -1,53 +1,20 @@
 package com.tobros.hatebyte.ystrdy.network.yahooweather;
 
 import android.content.Context;
-import android.database.DatabaseErrorHandler;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
-import android.os.AsyncTask;
-import android.util.JsonWriter;
 import android.util.Log;
-import android.webkit.WebView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.Volley;
 import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.WeatherConfig;
-import com.survivingwithandroid.weather.lib.exception.LocationProviderNotFoundException;
 import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
 import com.survivingwithandroid.weather.lib.model.City;
 import com.survivingwithandroid.weather.lib.client.volley.WeatherClientDefault;
 import com.survivingwithandroid.weather.lib.model.CurrentWeather;
-import com.survivingwithandroid.weather.lib.model.HistoricalWeather;
-import com.survivingwithandroid.weather.lib.provider.forecastio.ForecastIOProviderType;
-import com.survivingwithandroid.weather.lib.provider.openweathermap.OpenweathermapProviderType;
 import com.survivingwithandroid.weather.lib.provider.yahooweather.YahooProviderType;
 import com.survivingwithandroid.weather.lib.request.WeatherRequest;
-import com.tobros.hatebyte.ystrdy.database.YstrRecord.YstrRecord;
-import com.tobros.hatebyte.ystrdy.date.YstrDate;
+import com.tobros.hatebyte.ystrdy.weatherrecords.gateway.NowRecordEG;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -58,12 +25,12 @@ import java.util.List;
 public class TemperatureNow {
 
     public interface TemperaturNowDelegate {
-        public void onCurrentTemperatureRecieved(YstrRecord record);
+        public void onCurrentTemperatureRecieved(NowRecordEG record);
         public void onCurrentTemperatureError();
     }
 
     private TemperaturNowDelegate delegate = null;
-    private YstrRecord record = null;
+    private NowRecordEG record = null;
     private static final String YAHOO_API_KEY = "dj0yJmk9YnhCTWNBcU1YUG53JmQ9WVdrOVZYZzFPSEpETTJNbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Mw--";
     private static final String TAG = "FetchTemperatureNow";
     private String weatherYQL = "http://query.yahooapis.com/v1/public/yql?q=QUERY&format=json&callback=?";
@@ -116,8 +83,8 @@ public class TemperatureNow {
                 public void onCityListRetrieved(List<City> cityList) {
                     // Here your logic when the data is available
                     city = cityList.get(cityList.size() - 1);
-                    record.latitude = (float) location.getLatitude();
-                    record.longitude = (float) location.getLongitude();
+//                    record.latitude = (float) location.getLatitude();
+//                    record.longitude = (float) location.getLongitude();
                     getTemperature(city.getId());
                 }
 
@@ -145,11 +112,11 @@ public class TemperatureNow {
                 @Override
                 public void onWeatherRetrieved(CurrentWeather currentWeather) {
 
-                    record.cityName = city.getName();
-                    record.regionName = city.getRegion();
-                    record.temperature = currentWeather.weather.temperature.getTemp();
-                    record.woeid = city.getId();
-                    record.date = new Date();
+//                    record.cityName = city.getName();
+//                    record.regionName = city.getRegion();
+//                    record.temperature = currentWeather.weather.temperature.getTemp();
+//                    record.woeid = city.getId();
+//                    record.date = new Date();
 
                     delegate.onCurrentTemperatureRecieved(record);
                 }

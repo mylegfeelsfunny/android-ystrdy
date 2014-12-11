@@ -15,8 +15,9 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.tobros.hatebyte.ystrdy.alarm.AlarmReceiver;
-import com.tobros.hatebyte.ystrdy.database.NowRecordDbHelper;
-import com.tobros.hatebyte.ystrdy.database.NowRecordsDbConnector;
+import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDatabase;
+import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDatabaseAPI;
+import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordEGI;
 
 
 public class MainActivity extends Activity {
@@ -24,8 +25,7 @@ public class MainActivity extends Activity {
 
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
-    NowRecordsDbConnector dbConnector;
-    NowRecordDbHelper databaseHelper;
+    RecordEGI recordEGI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,16 +38,18 @@ public class MainActivity extends Activity {
         pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 10000, pendingIntent);
 
-        databaseHelper = new NowRecordDbHelper(getApplicationContext(), "LocationRecord.db");
-        dbConnector = new NowRecordsDbConnector(databaseHelper);
+        RecordDatabase recordDatabase = new RecordDatabase(getApplicationContext(), "testLocationRecord.db");
+
+//        mockRecordEGI = mock(RecordEGI.class);
+        recordEGI = new RecordEGI(recordDatabase);
 
 
 
     }
 
     public void resetDB(View view) {
-        dbConnector.clearDatabase();
-        Toast.makeText(this, "I'm running. + \n" + dbConnector.numRecords() + " records", Toast.LENGTH_SHORT).show();
+        recordEGI.clearDatabase();
+        Toast.makeText(this, "I'm running. + \n" + recordEGI.numNowRecords() + " records", Toast.LENGTH_SHORT).show();
     }
 
     @Override

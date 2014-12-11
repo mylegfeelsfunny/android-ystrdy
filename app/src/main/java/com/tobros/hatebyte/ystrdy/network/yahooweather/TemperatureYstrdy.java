@@ -11,7 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.tobros.hatebyte.ystrdy.database.YstrRecord.YstrRecord;
+import com.tobros.hatebyte.ystrdy.weatherrecords.gateway.NowRecordEG;
 import com.tobros.hatebyte.ystrdy.date.YstrDate;
 
 import org.json.JSONException;
@@ -25,7 +25,7 @@ import java.util.Date;
 public class TemperatureYstrdy {
 
     public interface TemperaturYstrdyDelegate {
-        public void onYstrdyTemperatureRecieved(YstrRecord record);
+        public void onYstrdyTemperatureRecieved(NowRecordEG record);
         public void onYstrdytTemperatureError();
     }
 
