@@ -1,7 +1,5 @@
 package com.tobros.hatebyte.ystrdy.weatherrecords.database;
 
-import android.content.Context;
-
 import com.tobros.hatebyte.ystrdy.weatherrecords.entity.NowRecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherrecords.entity.YstrdyRecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherrecords.gateway.NowRecordEG;
@@ -14,59 +12,56 @@ import java.util.InvalidPropertiesFormatException;
  */
 public class RecordEGI {
 
-    public RecordDatabaseAPI dbConnector;
+    private static final String TAG = " RecordEGI";
+
+    public RecordDatabaseAPI databaseAPI;
 
     public RecordEGI() {
 
     }
 
     public RecordEGI(RecordDatabase recordDatabase) {
-        dbConnector = new RecordDatabaseAPI(recordDatabase);
+        databaseAPI = new RecordDatabaseAPI(recordDatabase);
     }
 
     public void clearDatabase() {
-        dbConnector.clearDatabase();
+        databaseAPI.clearDatabase();
     }
 
     public long insertNowRecord(NowRecordEntity nowRecordEntity) throws InvalidPropertiesFormatException {
-        if (nowRecordEntity.date == null) {
-            throw new InvalidPropertiesFormatException("Check your date property");
-        }
-
         NowRecordEG nowRecordEG = new NowRecordEG();
-        nowRecordEG.record = nowRecordEntity;
-        return dbConnector.insertNowRecord(nowRecordEG);
+        nowRecordEG.setEntity(nowRecordEntity);
+        return databaseAPI.insertNowRecord(nowRecordEG);
     }
 
     public long insertYstrdyRecord(YstrdyRecordEntity ystrdyRecordEntity) throws InvalidPropertiesFormatException {
-        if (ystrdyRecordEntity.date == null) {
-            InvalidPropertiesFormatException e = new InvalidPropertiesFormatException("Check your date property");
-            throw e;
-        }
-
         YstrdyRecordEG ystrdyRecordEG = new YstrdyRecordEG();
-        ystrdyRecordEG.record = ystrdyRecordEntity;
-        return dbConnector.insertYstrdyRecord(ystrdyRecordEG);
+        ystrdyRecordEG.setEntity(ystrdyRecordEntity);
+        return databaseAPI.insertYstrdyRecord(ystrdyRecordEG);
     }
 
     public NowRecordEntity getNowRecordById(long id) {
-        return dbConnector.getNowRecordById(id).record;
+        return databaseAPI.getNowRecordById(id).getEntity();
     }
 
     public NowRecordEntity getClosestNowRecordFromYstrdy() {
-        return dbConnector.getClosestNowRecordFromYstrdy().record;
+        return databaseAPI.getClosestNowRecordFromYstrdy().getEntity();
     }
 
     public NowRecordEntity getEarliestNowRecord() {
-        return dbConnector.getEarliestNowRecord().record;
+        return databaseAPI.getEarliestNowRecord().getEntity();
+    }
+
+    public YstrdyRecordEntity getEarliestYstrdyRecord() {
+        return databaseAPI.getEarliestYstrdyRecord().getEntity();
     }
 
     public int numNowRecords() {
-        return dbConnector.numNowRecords();
+        return databaseAPI.numNowRecords();
     }
 
     public void deleteExpiredNowRecords() {
-        dbConnector.deleteExpiredNowRecords();
+        databaseAPI.deleteExpiredNowRecords();
     }
 
 }

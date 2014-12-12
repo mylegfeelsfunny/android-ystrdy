@@ -10,7 +10,7 @@ import java.util.Date;
 public class YstrdyRecordEntity {
 
     public float difference;
-    public int nowRecordId;
+    public long nowRecordId;
     public Date date;
     public NowRecordEG nowRecordGateway;
 

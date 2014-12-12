@@ -36,7 +36,7 @@ public class AlarmReceiver extends BroadcastReceiver implements
     public void onReceive(Context c, Intent intent) {
         context = c;
 //        databaseHelper = new RecordDatabaseAPI(context.getApplicationContext(), "LocationRecord.db");
-//        dbConnector = new RecordDatabaseAPI(databaseHelper);
+//        databaseAPI = new RecordDatabaseAPI(databaseHelper);
 
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -52,7 +52,7 @@ public class AlarmReceiver extends BroadcastReceiver implements
 
 
 //        try {
-//            dbConnector.insertNowRecord(location.getLatitude(), location.getLongitude(), new Date(), 32.3f, "bridgewater",  false);
+//            databaseAPI.insertNowRecord(location.getLatitude(), location.getLongitude(), new Date(), 32.3f, "bridgewater",  false);
 //        } catch (InvalidPropertiesFormatException e) {
 //            Log.e(TAG, "InvalidPropertiesFormatException : " + e);
 //        }

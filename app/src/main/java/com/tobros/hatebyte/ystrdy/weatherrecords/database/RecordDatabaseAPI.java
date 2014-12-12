@@ -17,7 +17,7 @@ import java.util.InvalidPropertiesFormatException;
  */
 public class RecordDatabaseAPI {
 
-    private static final String TAG = "LocationRecordsDbConnector";
+    private static final String TAG = " RecordDatabaseAPI";
 
     public SQLiteDatabase database;
     public RecordDatabase databaseHelper;
@@ -127,6 +127,26 @@ public class RecordDatabaseAPI {
         close();
         return ystrRecord;
     }
+
+    public YstrdyRecordEG getEarliestYstrdyRecord() {
+        String orderBy = "date ASC";
+
+        open();
+        Cursor c = database.query(
+                RecordDescription.YstrdayRecord.TABLE_NAME,
+                YstrdyRecordEG.projection(),
+                null,
+                null,
+                null,
+                null,
+                orderBy,
+                "1"
+        );
+        YstrdyRecordEG ystrRecord = new YstrdyRecordEG(c);
+        close();
+        return ystrRecord;
+    }
+
 
     public int numNowRecords() {
         String[] projection = {

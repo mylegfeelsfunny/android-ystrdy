@@ -37,9 +37,10 @@ public class RecordDatabase extends SQLiteOpenHelper {
     private static final String SQL_CREATE_YSTRDY_RECORDS =
                 "CREATE TABLE " +
                 RecordDescription.YstrdayRecord.TABLE_NAME + " (" +
+                RecordDescription.YstrdayRecord._ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
                 RecordDescription.YstrdayRecord.COLUMN_DIFFERENCE + TYPE_FLOAT + COMMA_SEP +
                 RecordDescription.YstrdayRecord.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
-                RecordDescription.YstrdayRecord.COLUMN_NOW_RECORD_ID + TYPE_INTEGER + ")";
+                RecordDescription.YstrdayRecord.COLUMN_NOW_RECORD_ID + TYPE_LONG + ")";
     private static final String SQL_DELETE_YSTRDY_RECORDS =
                 "DROP TABLE IF EXISTS " + RecordDescription.YstrdayRecord.TABLE_NAME;
 

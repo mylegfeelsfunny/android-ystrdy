@@ -4,29 +4,50 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDescription;
+import com.tobros.hatebyte.ystrdy.weatherrecords.entity.NowRecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherrecords.entity.YstrdyRecordEntity;
 
 import java.util.Date;
+import java.util.InvalidPropertiesFormatException;
 
 /**
  * Created by scott on 12/11/14.
  */
 public class YstrdyRecordEG {
 
-    public YstrdyRecordEntity record;
+    private YstrdyRecordEntity entity;
     public YstrdyRecordEG() {}
     public YstrdyRecordEG(Cursor c) {
-        record = new YstrdyRecordEntity();
-        record.difference = c.getFloat(c.getColumnIndex(RecordDescription.YstrdayRecord.COLUMN_DIFFERENCE));
-        record.date = new Date(c.getLong(c.getColumnIndex(RecordDescription.YstrdayRecord.COLUMN_DATE)));
-        record.nowRecordId = c.getInt(c.getColumnIndex(RecordDescription.YstrdayRecord.COLUMN_NOW_RECORD_ID));
+        if (c.getCount()== 0) {
+            return;
+        }
+        c.moveToFirst();
+
+        entity = new YstrdyRecordEntity();
+        entity.difference = c.getFloat(c.getColumnIndex(RecordDescription.YstrdayRecord.COLUMN_DIFFERENCE));
+        entity.date = new Date(c.getLong(c.getColumnIndex(RecordDescription.YstrdayRecord.COLUMN_DATE)));
+        entity.nowRecordId = c.getInt(c.getColumnIndex(RecordDescription.YstrdayRecord.COLUMN_NOW_RECORD_ID));
+    }
+
+    public void setEntity(YstrdyRecordEntity r) throws InvalidPropertiesFormatException {
+        if (r.date == null) {
+            throw new InvalidPropertiesFormatException("There is no date associated with this YstrdyRecordEntity");
+        }
+        if (r.nowRecordId <= 0) {
+            throw new InvalidPropertiesFormatException("There is no nowRecord associated with this YstrdyRecordEntity");
+        }
+        entity = r;
+    }
+
+    public YstrdyRecordEntity getEntity() {
+        return entity;
     }
 
     public ContentValues contentValues() {
         ContentValues values = new ContentValues();
-        values.put(RecordDescription.YstrdayRecord.COLUMN_DIFFERENCE, record.difference);
-        values.put(RecordDescription.YstrdayRecord.COLUMN_NOW_RECORD_ID, record.nowRecordId);
-        values.put(RecordDescription.YstrdayRecord.COLUMN_DATE, record.date.getTime());
+        values.put(RecordDescription.YstrdayRecord.COLUMN_DIFFERENCE, entity.difference);
+        values.put(RecordDescription.YstrdayRecord.COLUMN_NOW_RECORD_ID, entity.nowRecordId);
+        values.put(RecordDescription.YstrdayRecord.COLUMN_DATE, entity.date.getTime());
         return values;
     }
 

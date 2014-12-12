@@ -42,7 +42,7 @@ public class NowRecordEGITest {
 //        recordEGI = mock(RecordEGI.class);
 //        when(recordEGI.getContext()).thenReturn(context);
 //        when(recordEGI.getDatabaseName()).thenReturn("testLocationRecord.db");
-//        recordEGI.dbConnector = recordEGI.getDbConnector();
+//        recordEGI.databaseAPI = recordEGI.getDbConnector();
     }
 
     @After
@@ -53,15 +53,15 @@ public class NowRecordEGITest {
 
 //    @Test
 //    public void testOpen_createsDB() {
-//        dbConnector.open();
-//        assertTrue(dbConnector.database.isOpen());
+//        databaseAPI.open();
+//        assertTrue(databaseAPI.database.isOpen());
 //    }
 //
 //    @Test
 //    public void testClose_closesDB() {
-//        dbConnector.open();
-//        dbConnector.close();
-//        assertFalse(dbConnector.database.isOpen());
+//        databaseAPI.open();
+//        databaseAPI.close();
+//        assertFalse(databaseAPI.database.isOpen());
 //    }
 //
     @Test

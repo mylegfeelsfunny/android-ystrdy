@@ -7,41 +7,55 @@ import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDescription;
 import com.tobros.hatebyte.ystrdy.weatherrecords.entity.NowRecordEntity;
 
 import java.util.Date;
+import java.util.InvalidPropertiesFormatException;
 
 /**
  * Created by scott on 12/1/14.
  */
 public class NowRecordEG {
 
-    public NowRecordEntity record;
+    private NowRecordEntity entity;
     public NowRecordEG() {}
+
     public NowRecordEG(Cursor c) {
         if (c.getCount()== 0) {
             return;
         }
         c.moveToFirst();
-        record = new NowRecordEntity();
-        record.latitude = c.getFloat(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_LATITUDE));
-        record.longitude = c.getFloat(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_LONGITUDE));
-        record.temperature = c.getFloat(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_TEMPERATURE));
-        record.regionName = c.getString(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_REGION_NAME));
-        record.cityName = c.getString(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_CITY_NAME));
-        record.woeid = c.getString(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_WOEID));
-        record.date = new Date(c.getLong(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_DATE)));
+
+        entity = new NowRecordEntity();
+        entity.latitude = c.getFloat(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_LATITUDE));
+        entity.longitude = c.getFloat(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_LONGITUDE));
+        entity.temperature = c.getFloat(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_TEMPERATURE));
+        entity.regionName = c.getString(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_REGION_NAME));
+        entity.cityName = c.getString(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_CITY_NAME));
+        entity.woeid = c.getString(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_WOEID));
+        entity.date = new Date(c.getLong(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_DATE)));
         int isFirstInt = c.getInt(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_IS_FIRST));
-        record.isFirst = (isFirstInt == 1);
+        entity.isFirst = (isFirstInt == 1);
+    }
+
+    public void setEntity(NowRecordEntity r) throws InvalidPropertiesFormatException{
+        if (r.date == null) {
+            throw new InvalidPropertiesFormatException("There is no date associated with this NowRecordEntity");
+        }
+        entity = r;
+    }
+
+    public NowRecordEntity getEntity() {
+        return entity;
     }
 
     public ContentValues contentValues() {
         ContentValues values = new ContentValues();
-        values.put(RecordDescription.NowRecord.COLUMN_LATITUDE, record.latitude);
-        values.put(RecordDescription.NowRecord.COLUMN_LONGITUDE, record.longitude);
-        values.put(RecordDescription.NowRecord.COLUMN_TEMPERATURE, record.temperature);
-        values.put(RecordDescription.NowRecord.COLUMN_REGION_NAME, record.regionName);
-        values.put(RecordDescription.NowRecord.COLUMN_CITY_NAME, record.cityName);
-        values.put(RecordDescription.NowRecord.COLUMN_WOEID, record.woeid);
-        values.put(RecordDescription.NowRecord.COLUMN_DATE, record.date.getTime());
-        values.put(RecordDescription.NowRecord.COLUMN_IS_FIRST, ((record.isFirst) ? 1 : 0));
+        values.put(RecordDescription.NowRecord.COLUMN_LATITUDE, entity.latitude);
+        values.put(RecordDescription.NowRecord.COLUMN_LONGITUDE, entity.longitude);
+        values.put(RecordDescription.NowRecord.COLUMN_TEMPERATURE, entity.temperature);
+        values.put(RecordDescription.NowRecord.COLUMN_REGION_NAME, entity.regionName);
+        values.put(RecordDescription.NowRecord.COLUMN_CITY_NAME, entity.cityName);
+        values.put(RecordDescription.NowRecord.COLUMN_WOEID, entity.woeid);
+        values.put(RecordDescription.NowRecord.COLUMN_DATE, entity.date.getTime());
+        values.put(RecordDescription.NowRecord.COLUMN_IS_FIRST, ((entity.isFirst) ? 1 : 0));
         return values;
     }
 
