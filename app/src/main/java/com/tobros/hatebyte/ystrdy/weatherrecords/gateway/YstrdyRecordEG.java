@@ -4,13 +4,13 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDescription;
-import com.tobros.hatebyte.ystrdy.weatherrecords.entity.NowRecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherrecords.entity.YstrdyRecordEntity;
 
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 
 /**
+ * YstrdyRecordEntityGateway
  * Created by scott on 12/11/14.
  */
 public class YstrdyRecordEG {
@@ -34,9 +34,6 @@ public class YstrdyRecordEG {
         if (r.date == null) {
             throw new InvalidPropertiesFormatException("There is no date associated with this YstrdyRecordEntity");
         }
-//        if (r.nowRecordId <= 0) {
-//            throw new InvalidPropertiesFormatException("There is no nowRecord associated with this YstrdyRecordEntity");
-//        }
         entity = r;
     }
 

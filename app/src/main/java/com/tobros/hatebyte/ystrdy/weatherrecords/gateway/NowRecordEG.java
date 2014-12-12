@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 
 /**
+ * NowRecordEntityGateway
  * Created by scott on 12/1/14.
  */
 public class NowRecordEG {

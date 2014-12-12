@@ -188,8 +188,6 @@ public class RecordDatabaseAPI {
         return count;
     }
 
-
-
     public void deleteExpiredNowRecords() {
         open();
         Date now = new Date();

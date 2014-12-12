@@ -8,11 +8,12 @@ import com.tobros.hatebyte.ystrdy.weatherrecords.gateway.YstrdyRecordEG;
 import java.util.InvalidPropertiesFormatException;
 
 /**
+ * RecordEntityGatewayImplementation
  * Created by scott on 12/11/14.
  */
 public class RecordEGI {
 
-    private static final String TAG = " RecordEGI";
+    private static final String TAG = " RecordEntityGatewayImplementation";
 
     public RecordDatabaseAPI databaseAPI;
 
