@@ -52,12 +52,16 @@ public class RecordEGI {
         return databaseAPI.getEarliestNowRecord().getEntity();
     }
 
-    public YstrdyRecordEntity getEarliestYstrdyRecord() {
-        return databaseAPI.getEarliestYstrdyRecord().getEntity();
+    public YstrdyRecordEntity getLatestYstrdyRecord() {
+        return databaseAPI.getLatestYstrdyRecord().getEntity();
     }
 
     public int numNowRecords() {
         return databaseAPI.numNowRecords();
+    }
+
+    public int numYstrdyRecords() {
+        return databaseAPI.numYstrdyRecords();
     }
 
     public void deleteExpiredNowRecords() {

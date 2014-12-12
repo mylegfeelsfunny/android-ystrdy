@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.tobros.hatebyte.ystrdy.alarm.AlarmReceiver;
 import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDatabase;
-import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDatabaseAPI;
 import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordEGI;
 
 

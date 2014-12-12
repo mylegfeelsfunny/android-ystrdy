@@ -1,7 +1,9 @@
 package com.tobros.hatebyte.ystrdy.weatherrecords.database;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 
 import com.tobros.hatebyte.ystrdy.weatherrecords.entity.NowRecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherrecords.entity.YstrdyRecordEntity;
@@ -128,8 +130,8 @@ public class RecordDatabaseAPI {
         return ystrRecord;
     }
 
-    public YstrdyRecordEG getEarliestYstrdyRecord() {
-        String orderBy = "date ASC";
+    public YstrdyRecordEG getLatestYstrdyRecord() {
+        String orderBy = "date DESC";
 
         open();
         Cursor c = database.query(
@@ -167,6 +169,27 @@ public class RecordDatabaseAPI {
         return count;
     }
 
+    public int numYstrdyRecords() {
+        String[] projection = {
+                RecordDescription.YstrdayRecord._ID
+        };
+        open();
+        Cursor c = database.query(
+                RecordDescription.YstrdayRecord.TABLE_NAME,
+                projection,
+                null,
+                null,
+                null,
+                null,
+                null
+        );
+        int count = c.getCount();
+        close();
+        return count;
+    }
+
+
+
     public void deleteExpiredNowRecords() {
         open();
         Date now = new Date();
@@ -174,5 +197,12 @@ public class RecordDatabaseAPI {
         database.delete(RecordDescription.NowRecord.TABLE_NAME, whereString, null);
         close();
     }
+
+
+
+
+
+
+
 
 }

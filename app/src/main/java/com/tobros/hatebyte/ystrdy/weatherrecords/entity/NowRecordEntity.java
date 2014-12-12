@@ -11,9 +11,9 @@ public class NowRecordEntity {
     public float longitude;
     public Date date;
     public float temperature;
-    public boolean isFirst;
     public String regionName;
     public String woeid;
     public String cityName;
+    public Integer id;
 
 }

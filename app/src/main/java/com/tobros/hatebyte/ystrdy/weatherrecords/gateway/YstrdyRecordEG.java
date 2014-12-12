@@ -27,15 +27,16 @@ public class YstrdyRecordEG {
         entity.difference = c.getFloat(c.getColumnIndex(RecordDescription.YstrdayRecord.COLUMN_DIFFERENCE));
         entity.date = new Date(c.getLong(c.getColumnIndex(RecordDescription.YstrdayRecord.COLUMN_DATE)));
         entity.nowRecordId = c.getInt(c.getColumnIndex(RecordDescription.YstrdayRecord.COLUMN_NOW_RECORD_ID));
+        entity.id = c.getInt(c.getColumnIndex(RecordDescription.YstrdayRecord._ID));
     }
 
     public void setEntity(YstrdyRecordEntity r) throws InvalidPropertiesFormatException {
         if (r.date == null) {
             throw new InvalidPropertiesFormatException("There is no date associated with this YstrdyRecordEntity");
         }
-        if (r.nowRecordId <= 0) {
-            throw new InvalidPropertiesFormatException("There is no nowRecord associated with this YstrdyRecordEntity");
-        }
+//        if (r.nowRecordId <= 0) {
+//            throw new InvalidPropertiesFormatException("There is no nowRecord associated with this YstrdyRecordEntity");
+//        }
         entity = r;
     }
 
@@ -55,6 +56,7 @@ public class YstrdyRecordEG {
         return new String[]{
             RecordDescription.YstrdayRecord.COLUMN_DIFFERENCE,
             RecordDescription.YstrdayRecord.COLUMN_DATE,
+            RecordDescription.YstrdayRecord.COLUMN_NOW_RECORD_ID,
             RecordDescription.YstrdayRecord._ID
         };
     }

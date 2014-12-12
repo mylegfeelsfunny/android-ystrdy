@@ -14,7 +14,6 @@ public class RecordDescription {
         public static final String COLUMN_LONGITUDE                     = "longitude";
         public static final String COLUMN_DATE                          = "date";
         public static final String COLUMN_TEMPERATURE                   = "temperature";
-        public static final String COLUMN_IS_FIRST                      = "is_first";
         public static final String COLUMN_REGION_NAME                   = "region_name";
         public static final String COLUMN_CITY_NAME                     = "city_name";
         public static final String COLUMN_WOEID                         = "woeid";

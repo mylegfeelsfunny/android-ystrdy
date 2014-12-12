@@ -47,12 +47,58 @@ public class YstrdyRecordEGITest {
     }
 
     @Test
-    public void testQuery_lastYstrdyRecordReturnsNull() {
-        YstrdyRecordEntity recordEntity = recordEGI.getEarliestYstrdyRecord();
+    public void testInsert_ystrdyRecord() {
+        long nowId = insertYstrdyRecord(20.0f, new Date(), 0);
+        assertThat(nowId).isGreaterThan(0);
+    }
+
+    @Test
+    public void testQuery_lastYstrdyRecordReturnsNullWithNoRecord() {
+        YstrdyRecordEntity recordEntity = recordEGI.getLatestYstrdyRecord();
         assertThat(recordEntity).isNull();
     }
 
+    @Test
+    public void testQuery_lastYstrdyRecordReturnsLatestDate() {
+        Date date = new Date();
+        long delay = ((30) * 60 * 60 + 1) * 1000;
+        date.setTime(date.getTime() - delay);
 
+        insertYstrdyRecord(5.0f, date, 0);
+
+        for (int i = 0; i < 12; i++) {
+            delay = ((24 - i) * 60 * 60 + 1) * 1000;
+            date.setTime(date.getTime() - delay);
+            insertYstrdyRecord(20.0f, date, 0);
+        }
+
+        YstrdyRecordEntity recordEntity = recordEGI.getLatestYstrdyRecord();
+        assertThat(recordEntity.difference).isEqualTo(5.0f);
+    }
+
+    @Test
+    public void testQuery_numYstrdyRecordsReturnsZero() {
+        long numYstrdyRecords = recordEGI.numYstrdyRecords();
+        assertThat(numYstrdyRecords).isEqualTo(0);
+    }
+
+    @Test
+    public void testQuery_numYstrdyRecordsReturns12() {
+        for (int i=0; i<12; i++) {
+            insertYstrdyRecord(20.0f, new Date(), 0);
+        }
+        int numYstrdyRecords = recordEGI.numYstrdyRecords();
+        assertThat(numYstrdyRecords).isEqualTo(12);
+    }
+
+    @Test
+    public void testQuery_lastYstrdyRecordReturnsRecord() {
+        long nowId = insertYstrdyRecord(20.0f, new Date(), 0);
+        Integer nowIdInteger = Integer.parseInt(String.valueOf(nowId));
+
+        YstrdyRecordEntity recordEntity = recordEGI.getLatestYstrdyRecord();
+        assertThat(nowId).isEqualTo(recordEntity.id);
+    }
 
 
     public long insertYstrdyRecord(float difference, Date date, long nowId) {
@@ -61,7 +107,7 @@ public class YstrdyRecordEGITest {
         record.difference = difference;
         record.nowRecordId = nowId;
 
-        long recordId = 0;
+        long recordId = -1;
         try {
             recordId = recordEGI.insertYstrdyRecord(record);
         } catch (InvalidPropertiesFormatException expected) {
@@ -70,14 +116,13 @@ public class YstrdyRecordEGITest {
         return recordId;
     }
 
-    public long insertLocationRecord(float latitude, float longitude, Date date, float temp, String region, Boolean isFirst) {
+    public long insertLocationRecord(float latitude, float longitude, Date date, float temp, String region) {
         NowRecordEntity record = new NowRecordEntity();
         record.latitude = latitude;
         record.longitude = longitude;
         record.date = date;
         record.temperature = temp;
         record.regionName = region;
-        record.isFirst = isFirst;
 
         long recordId = 0;
         try {

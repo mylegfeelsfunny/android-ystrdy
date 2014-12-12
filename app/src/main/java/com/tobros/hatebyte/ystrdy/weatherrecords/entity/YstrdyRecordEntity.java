@@ -13,5 +13,6 @@ public class YstrdyRecordEntity {
     public long nowRecordId;
     public Date date;
     public NowRecordEG nowRecordGateway;
+    public Integer id;
 
 }

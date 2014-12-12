@@ -31,8 +31,7 @@ public class NowRecordEG {
         entity.cityName = c.getString(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_CITY_NAME));
         entity.woeid = c.getString(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_WOEID));
         entity.date = new Date(c.getLong(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_DATE)));
-        int isFirstInt = c.getInt(c.getColumnIndex(RecordDescription.NowRecord.COLUMN_IS_FIRST));
-        entity.isFirst = (isFirstInt == 1);
+        entity.id = c.getInt(c.getColumnIndex(RecordDescription.NowRecord._ID));
     }
 
     public void setEntity(NowRecordEntity r) throws InvalidPropertiesFormatException{
@@ -55,7 +54,6 @@ public class NowRecordEG {
         values.put(RecordDescription.NowRecord.COLUMN_CITY_NAME, entity.cityName);
         values.put(RecordDescription.NowRecord.COLUMN_WOEID, entity.woeid);
         values.put(RecordDescription.NowRecord.COLUMN_DATE, entity.date.getTime());
-        values.put(RecordDescription.NowRecord.COLUMN_IS_FIRST, ((entity.isFirst) ? 1 : 0));
         return values;
     }
 
@@ -68,7 +66,6 @@ public class NowRecordEG {
             RecordDescription.NowRecord.COLUMN_REGION_NAME,
             RecordDescription.NowRecord.COLUMN_CITY_NAME,
             RecordDescription.NowRecord.COLUMN_WOEID,
-            RecordDescription.NowRecord.COLUMN_IS_FIRST,
             RecordDescription.NowRecord._ID
         };
     }

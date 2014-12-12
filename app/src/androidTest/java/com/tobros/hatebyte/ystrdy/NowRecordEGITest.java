@@ -71,7 +71,6 @@ public class NowRecordEGITest {
         record.longitude = 1.03f;
         record.temperature = 32.3f;
         record.regionName = "bridgewater";
-        record.isFirst = false;
         try {
             recordEGI.insertNowRecord(record);
             fail("Should fail with InvalidPropertiesFormatException");
@@ -97,8 +96,8 @@ public class NowRecordEGITest {
     public void testQuery_dateClosestToADayAgo_24hours4Mins() {
         populateDbWithBunchOfYstrDates();
 
-        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
-        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins");
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins");
 
         NowRecordEntity yr = recordEGI.getClosestNowRecordFromYstrdy();
         assertThat("24Hours4mins").isEqualTo(yr.regionName);
@@ -108,10 +107,10 @@ public class NowRecordEGITest {
     public void testQuery_dateClosestToADayAgo_23hours56Mins() {
         populateDbWithBunchOfYstrDates();
 
-        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins",  false);
-        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins",  false);
-        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours56Mins(), 32.3f, "23Hours56mins",  false);
-        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours55Mins(), 32.3f, "23Hours55mins",  false);
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours5Mins(), 32.3f, "24Hours5mins");
+        insertLocationRecord(1.1f, 1.03f, dateFrom24Hours4Mins(), 32.3f, "24Hours4mins");
+        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours56Mins(), 32.3f, "23Hours56mins");
+        insertLocationRecord(1.1f, 1.03f, dateFrom23Hours55Mins(), 32.3f, "23Hours55mins");
 
         NowRecordEntity yr = recordEGI.getClosestNowRecordFromYstrdy();
         assertThat("23Hours56mins").isEqualTo(yr.regionName);
@@ -124,7 +123,7 @@ public class NowRecordEGITest {
         d.setTime(d.getTime() - twentyFourHours5Mins);
         populateDbWithBunchOfYstrDates();
 
-        insertLocationRecord((float)0, (float)0, d, 32.3f, "nearest",  false);
+        insertLocationRecord((float)0, (float)0, d, 32.3f, "nearest");
 
         NowRecordEntity yr = recordEGI.getClosestNowRecordFromYstrdy();
         assertThat(0.0).isEqualTo(yr.latitude);
@@ -150,8 +149,8 @@ public class NowRecordEGITest {
         long thirtyOneDaysAgo = (long) 31 * ((24 * 60 * 60 + 1) * 1000);
         thirtyOneDaysAgoDate.setTime(thirtyOneDaysAgoDate.getTime() - thirtyOneDaysAgo);
 
-        insertLocationRecord((float)0, (float)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  false);
-        insertLocationRecord((float)0, (float)0, thirtyOneDaysAgoDate, 32.3f, thirtyOneDaysAgoDate.toString(),  true);
+        insertLocationRecord((float)0, (float)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString());
+        insertLocationRecord((float)0, (float)0, thirtyOneDaysAgoDate, 32.3f, thirtyOneDaysAgoDate.toString());
 
         NowRecordEntity yr = recordEGI.getEarliestNowRecord();
 
@@ -166,7 +165,7 @@ public class NowRecordEGITest {
         Date thirtyDaysAgoDate = new Date();
         long thirtyDaysAgo = (long) 30 * ((24 * 60 * 60 + 1) * 1000);
         thirtyDaysAgoDate.setTime(thirtyDaysAgoDate.getTime() - thirtyDaysAgo);
-        insertLocationRecord((float)0, (float)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString(),  true);
+        insertLocationRecord((float)0, (float)0, thirtyDaysAgoDate, 32.3f, thirtyDaysAgoDate.toString());
 
         int numrecords = recordEGI.numNowRecords();
 
@@ -177,14 +176,13 @@ public class NowRecordEGITest {
         assertThat(newnumrecords).isEqualTo(23);
     }
 
-    public void insertLocationRecord(float latitude, float longitude, Date date, float temp, String region, Boolean isFirst) {
+    public void insertLocationRecord(float latitude, float longitude, Date date, float temp, String region) {
         NowRecordEntity record = new NowRecordEntity();
         record.latitude = latitude;
         record.longitude = longitude;
         record.date = date;
         record.temperature = temp;
         record.regionName = region;
-        record.isFirst = isFirst;
 
         try {
             recordEGI.insertNowRecord(record);
@@ -196,7 +194,7 @@ public class NowRecordEGITest {
     public void populateDbWithBunchOfYstrDates() {
         for (int i = 1; i < 24; i++) {
             Date d = randomYstrDate((i % 2 == 0));
-            insertLocationRecord((float)i, (float)i, d, 32.3f, d.toString(),  (i % 2 == 0));
+            insertLocationRecord((float)i, (float)i, d, 32.3f, d.toString());
         }
     }
 
