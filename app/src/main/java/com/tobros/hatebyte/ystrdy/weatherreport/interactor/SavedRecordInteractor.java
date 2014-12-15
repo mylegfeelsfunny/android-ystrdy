@@ -16,7 +16,7 @@ import java.util.Date;
 /**
  * Created by scott on 12/12/14.
  */
-public abstract class RecordInteractor {
+public abstract class SavedRecordInteractor {
 
     abstract void onWeatherResponse(WeatherResponseModel weatherResponseModel);
     abstract void onWeatherResponseFailed();
@@ -26,7 +26,7 @@ public abstract class RecordInteractor {
 
     RecordEGI recordEGI;
 
-    public RecordInteractor() {}
+    public SavedRecordInteractor() {}
 
     public void getReport(WeatherRequestModel wr) {
         weatherRequest = wr;
@@ -44,7 +44,7 @@ public abstract class RecordInteractor {
     }
 
     private void fetchCityWithLocation(RecordEntity recordEntity) {
-        if (RecordInteractor.isValidTimeFrame(recordEntity.date)) {
+        if (SavedRecordInteractor.isValidTimeFrame(recordEntity.date)) {
             // fetch from yahoo
             yahooAPI = new RecordYahooAPI();
             yahooAPI.configure(YstrdyApp.getContext());

@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import com.tobros.hatebyte.ystrdy.YstrdyApp;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.DifferenceEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherRequestModel;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherResponseModel;
@@ -17,7 +16,7 @@ import java.util.Date;
 /**
  * Created by scott on 12/12/14.
  */
-public abstract class DifferenceDataInteractor {
+public abstract class RecentDifferenceInteractor {
 
     abstract void onWeatherResponse(WeatherResponseModel weatherResponseModel);
     abstract void onWeatherResponseFailed();
@@ -26,7 +25,7 @@ public abstract class DifferenceDataInteractor {
     RecordEGI recordEGI;
     DifferenceEGI differenceEGI;
 
-    public DifferenceDataInteractor() {}
+    public RecentDifferenceInteractor() {}
 
     public void getReport(WeatherRequestModel wr) {
         recordEGI = new RecordEGI();
@@ -34,7 +33,7 @@ public abstract class DifferenceDataInteractor {
     }
 
     public void completeRequest(DifferenceEntity differenceEntity) {
-        if (DifferenceDataInteractor.isDifferenceYoungEnoughToRepeat(differenceEntity.date)) {
+        if (RecentDifferenceInteractor.isDifferenceYoungEnoughToRepeat(differenceEntity.date)) {
             WeatherResponseModel responseModel  = new WeatherResponseModel();
             responseModel.difference            = differenceEntity.difference;
             onWeatherResponse(responseModel);
