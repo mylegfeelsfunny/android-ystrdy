@@ -6,31 +6,25 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.tobros.hatebyte.ystrdy.weatherrecords.database.RecordDatabaseAPI;
-import com.tobros.hatebyte.ystrdy.weatherrecords.gateway.NowRecordEG;
-import com.tobros.hatebyte.ystrdy.date.YstrDate;
-import com.tobros.hatebyte.ystrdy.network.yahooweather.TemperatureNow;
-import com.tobros.hatebyte.ystrdy.network.yahooweather.TemperatureYstrdy;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.forcastio.ForcastioAPI;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.yahooweather.YahooAPI;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
 
 import java.util.Date;
 
 /**
  * Created by scott on 12/8/14.
  */
-public class AlarmReceiver extends BroadcastReceiver implements
-        TemperatureNow.TemperaturNowDelegate,
-        TemperatureYstrdy.TemperaturYstrdyDelegate {
+public class AlarmReceiver extends BroadcastReceiver {
 
     private static final String TAG = "AlarmReceiver";
 
-    RecordDatabaseAPI dbConnector;
-    RecordDatabaseAPI databaseHelper;
     private LocationManager locationManager;
     private Context context = null;
-    TemperatureNow temperatureNow = null;
-    TemperatureYstrdy temperatureYstrdy = null;
+    YahooAPI temperatureNow = null;
+    ForcastioAPI temperatureYstrdy = null;
 
     @Override
     public void onReceive(Context c, Intent intent) {
@@ -44,21 +38,21 @@ public class AlarmReceiver extends BroadcastReceiver implements
         yesterday.setTime(yesterday.getTime() - YstrDate.twentyFourHours());
         Log.i(TAG, location.getLatitude()+","+location.getLongitude()+","+yesterday.getTime()/1000);
 
-        temperatureNow = new TemperatureNow(context, this);
+//        temperatureNow = new YahooAPI(context, this);
         //temperatureNow.request();
 
-        temperatureYstrdy = new TemperatureYstrdy(context, this);
-        temperatureYstrdy.request();
+//        temperatureYstrdy = new ForcastioAPI(context, this);
+//        temperatureYstrdy.request();
 
 
 //        try {
-//            databaseAPI.insertNowRecord(location.getLatitude(), location.getLongitude(), new Date(), 32.3f, "bridgewater",  false);
+//            databaseAPI.insertRecord(location.getLatitude(), location.getLongitude(), new Date(), 32.3f, "bridgewater",  false);
 //        } catch (InvalidPropertiesFormatException e) {
 //            Log.e(TAG, "InvalidPropertiesFormatException : " + e);
 //        }
     }
 
-    public void onCurrentTemperatureRecieved(NowRecordEG record) {
+    public void onCurrentTemperatureRecieved(RecordEG record) {
 //        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
 //        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
     }
@@ -68,7 +62,7 @@ public class AlarmReceiver extends BroadcastReceiver implements
     }
 
 
-    public void onYstrdyTemperatureRecieved(NowRecordEG record) {
+    public void onYstrdyTemperatureRecieved(RecordEG record) {
 //        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
 //        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
     }
