@@ -3,8 +3,10 @@ package com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygatew
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
 
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
@@ -15,14 +17,21 @@ import java.util.InvalidPropertiesFormatException;
  */
 public class DifferenceEG extends AbstractEntityGateway {
 
-    public static final String TABLE_NAME                           = "ystrdyrecords";
-    public static final String COLUMN_NOW_RECORD_ID                 = "recordId";
-    public static final String COLUMN_DIFFERENCE                    = "difference";
-    public static final String COLUMN_DATE                          = "date";
-    public static final String COLUMN_ID                            = "_id";
+    public static String[] projectionMap = new String[]{
+                DifferenceEntity.COLUMN_DIFFERENCE,
+                DifferenceEntity.COLUMN_DATE,
+                DifferenceEntity.COLUMN_NOW_RECORD_ID,
+                DifferenceEntity.COLUMN_ID
+    };
 
     private DifferenceEntity entity;
-    public DifferenceEG() {}
+
+    public DifferenceEG() {
+        tableName = DifferenceEntity.TABLE_NAME;
+        projection = DifferenceEG.projectionMap;
+        entityGatewayImplementation = new EntityGatewayImplementation();
+    }
+
     public DifferenceEG(Cursor c) {
         mapFromCursor(c);
     }
@@ -32,21 +41,17 @@ public class DifferenceEG extends AbstractEntityGateway {
         if (c.getCount() == 0) {
             return;
         }
-        c.moveToFirst();
-
         entity = new DifferenceEntity();
-        entity.difference = c.getFloat(c.getColumnIndex(DifferenceEG.COLUMN_DIFFERENCE));
-        entity.date = new Date(c.getLong(c.getColumnIndex(DifferenceEG.COLUMN_DATE)));
-        entity.recordId = c.getInt(c.getColumnIndex(DifferenceEG.COLUMN_NOW_RECORD_ID));
-        entity.id = c.getInt(c.getColumnIndex(DifferenceEG.COLUMN_ID));
+        entity.difference = c.getFloat(c.getColumnIndex(DifferenceEntity.COLUMN_DIFFERENCE));
+        entity.date = new Date(c.getLong(c.getColumnIndex(DifferenceEntity.COLUMN_DATE)));
+        entity.recordId = c.getInt(c.getColumnIndex(DifferenceEntity.COLUMN_NOW_RECORD_ID));
+        entity.id = c.getInt(c.getColumnIndex(DifferenceEntity.COLUMN_ID));
     }
 
     @Override
-    public void setEntity(Object e) throws InvalidPropertiesFormatException {
-        DifferenceEntity re = (DifferenceEntity)e;
-        if (re.date == null) {
-            throw new InvalidPropertiesFormatException("There is no date associated with this YstrdyRecordEntity");
-        }
+    public void setEntity(Object e)  {
+        assert(e.getClass().isInstance(DifferenceEntity.class) || e instanceof DifferenceEntity);
+        DifferenceEntity re = (DifferenceEntity) e;
         entity = re;
     }
 
@@ -58,19 +63,64 @@ public class DifferenceEG extends AbstractEntityGateway {
     @Override
     public ContentValues contentValues() {
         ContentValues values = new ContentValues();
-        values.put(DifferenceEG.COLUMN_DIFFERENCE, entity.difference);
-        values.put(DifferenceEG.COLUMN_NOW_RECORD_ID, entity.recordId);
-        values.put(DifferenceEG.COLUMN_DATE, entity.date.getTime());
+        values.put(DifferenceEntity.COLUMN_DIFFERENCE, entity.difference);
+        values.put(DifferenceEntity.COLUMN_NOW_RECORD_ID, entity.recordId);
+        values.put(DifferenceEntity.COLUMN_DATE, entity.date.getTime());
         return values;
     }
 
-    public static String[] projection() {
-        return new String[]{
-                DifferenceEG.COLUMN_DIFFERENCE,
-                DifferenceEG.COLUMN_DATE,
-                DifferenceEG.COLUMN_NOW_RECORD_ID,
-                DifferenceEG.COLUMN_ID
-        };
+    @Override
+    public Boolean isValid() {
+        if (entity == null) {
+            return false;
+        }
+        if (entity.date == null) {
+            return false;
+        }
+        return true;
     }
 
+//    public long insertDifferenceRecord(AbstractEntityGateway entityGateway) throws InvalidPropertiesFormatException {
+//        getDatabaseAPI().open();
+//
+//        long id = databaseAPI.insert(entityGateway.tableName(), entityGateway.contentValues());
+//        databaseAPI.close();
+//        return  id;
+//    }
+//
+//    public DifferenceEG getLatestDifferenceRecord() {
+//        String orderBy = "date DESC";
+//
+//        getDatabaseAPI().open();
+//        Cursor c = databaseAPI.get(
+//                DifferenceEntity.TABLE_NAME,
+//                DifferenceEG.projection,
+//                null,
+//                orderBy,
+//                "1"
+//        );
+//        DifferenceEG ystrRecord = new DifferenceEG(c);
+//        databaseAPI.close();
+//        return ystrRecord;
+//    }
+//
+//    public int numDifferenceRecords() {
+//        getDatabaseAPI().open();
+//        String[] projection = {
+//                DifferenceEntity.COLUMN_ID
+//        };
+//
+//        Cursor c = databaseAPI.get(DifferenceEntity.TABLE_NAME, projection, null, null, null);
+//        int num = c.getCount();
+//        databaseAPI.close();
+//        return num;
+//    }
+//
+//    public void deleteExpiredDifferenceRecords() {
+//        getDatabaseAPI().open();
+//        Date now = new Date();
+//        String whereString = YstrDate.threeDayTime() + " + date < " + now.getTime();
+//        databaseAPI.delete(DifferenceEntity.TABLE_NAME, whereString);
+//        databaseAPI.close();
+//    }
 }

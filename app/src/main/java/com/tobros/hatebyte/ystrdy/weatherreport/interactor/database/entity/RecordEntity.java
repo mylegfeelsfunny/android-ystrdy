@@ -7,6 +7,16 @@ import java.util.Date;
  */
 public class RecordEntity {
 
+    public static final String TABLE_NAME                           = "record";
+    public static final String COLUMN_LATITUDE                      = "latitude";
+    public static final String COLUMN_LONGITUDE                     = "longitude";
+    public static final String COLUMN_DATE                          = "date";
+    public static final String COLUMN_TEMPERATURE                   = "temperature";
+    public static final String COLUMN_REGION_NAME                   = "region_name";
+    public static final String COLUMN_CITY_NAME                     = "city_name";
+    public static final String COLUMN_WOEID                         = "woeid";
+    public static final String COLUMN_ID                            = "_id";
+
     public float latitude;
     public float longitude;
     public Date date;

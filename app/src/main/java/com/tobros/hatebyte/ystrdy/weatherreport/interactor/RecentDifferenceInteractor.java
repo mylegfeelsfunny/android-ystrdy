@@ -5,6 +5,9 @@ import android.os.AsyncTask;
 import com.tobros.hatebyte.ystrdy.YstrdyApp;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.DifferenceEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.DifferenceEG;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherRequestModel;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherResponseModel;
@@ -21,14 +24,11 @@ public abstract class RecentDifferenceInteractor {
     abstract void onWeatherResponse(WeatherResponseModel weatherResponseModel);
     abstract void onWeatherResponseFailed();
 
-    private WeatherRequestModel weatherRequest;
-    RecordEGI recordEGI;
-    DifferenceEGI differenceEGI;
+    DifferenceEG differenceEG;
 
     public RecentDifferenceInteractor() {}
 
-    public void getReport(WeatherRequestModel wr) {
-        recordEGI = new RecordEGI();
+    public void getReport() {
         new GetLatestDifferenceRecord().execute((Object[]) null);
     }
 
@@ -42,10 +42,6 @@ public abstract class RecentDifferenceInteractor {
         }
     }
 
-    public YstrdyDatabaseAPI getRecordDatabase() {
-        return new YstrdyDatabaseAPI(YstrdyApp.getContext(), YstrdyDatabaseAPI.DATABASE_NAME);
-    }
-
     public static Boolean isDifferenceYoungEnoughToRepeat(Date date) {
         return YstrDate.isWithinTwoHoursOfNow(date);
     }
@@ -53,7 +49,7 @@ public abstract class RecentDifferenceInteractor {
     private class GetLatestDifferenceRecord extends AsyncTask<Object, Object, DifferenceEntity> {
         @Override
         protected DifferenceEntity doInBackground(Object... params) {
-            return differenceEGI.getLatestDifferenceRecord().getEntity();
+            return null;//DifferenceEG.getLatestDifferenceRecord();
         }
         @Override
         protected void onPostExecute(DifferenceEntity differenceEntity) {

@@ -31,8 +31,8 @@ public abstract class SavedRecordInteractor {
     public void getReport(WeatherRequestModel wr) {
         weatherRequest = wr;
         weatherResponseModel = new WeatherResponseModel();
-        recordEGI = new RecordEGI();
-        new GetRecordFromYstrdy().execute((Object[]) null);
+//        recordEGI = new RecordEGI();
+//        new GetRecordFromYstrdy().execute((Object[]) null);
     }
 
     public YstrdyDatabaseAPI getRecordDatabase() {
@@ -67,7 +67,7 @@ public abstract class SavedRecordInteractor {
     private class GetRecordFromYstrdy extends AsyncTask<Object, Object, RecordEntity> {
         @Override
         protected RecordEntity doInBackground(Object... params) {
-            return recordEGI.getClosestRecordFromYstrdy().getEntity();
+            return null;//recordEGI.getClosestRecordFromYstrdy().getEntity();
         }
         @Override
         protected void onPostExecute(RecordEntity recordEntity) {

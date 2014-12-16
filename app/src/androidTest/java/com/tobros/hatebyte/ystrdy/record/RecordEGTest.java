@@ -1,6 +1,8 @@
 package com.tobros.hatebyte.ystrdy.record;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.content.Context;
 import android.database.CharArrayBuffer;
 import android.database.ContentObserver;
 import android.database.Cursor;
@@ -8,14 +10,20 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 
+import com.tobros.hatebyte.ystrdy.EGI.mock.TestRecordEG;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+
+import java.util.Date;
 
 import static org.fest.assertions.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
@@ -28,49 +36,86 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public class RecordEGTest {
 
+    YstrdyDatabaseAPI ystrdyDatabaseAPI;
 
     @Before
     public void setup() {
+        Context context = Robolectric.getShadowApplication().getApplicationContext();
+        ystrdyDatabaseAPI = new YstrdyDatabaseAPI(context, "testLocationRecord.db");
+        ystrdyDatabaseAPI.open();
     }
 
     @After
     public void teardown() {
+        ystrdyDatabaseAPI.close();
+        ystrdyDatabaseAPI.clear();
+        ystrdyDatabaseAPI = null;
     }
 
     @Test
-    public void test_true() {
-        assertThat(true);
+    public void test_defaultProperties() {
+        TestRecordEG recordEG = new TestRecordEG();
+        assertThat(recordEG.hasDatabase()).isTrue();
+        assertThat(recordEG.tableName()).isEqualTo("record");
+        assertThat(recordEG.projection()).isEqualTo(RecordEG.projectionMap);
     }
 
-//    @Test
-//    public void test_YstrRecordInitsWithCursor() {
-//        Date rDate = new Date();
-//        long recordId = 0;
-//        RecordEntity record = new RecordEntity();
-//        record.latitude = 1.1f;
-//        record.longitude = 1.03f;
-//        record.date = rDate;
-//        record.temperature = 32.3f;
-//        record.regionName = "bridgewater";
-//
-//        try {
-//            recordId = recordEGI.insertRecord(record);
-//        } catch (Throwable expected) {
-//
-//        }
-//
-//        RecordEntity yr = recordEGI.getRecordById(recordId);
-//        assertThat(1.1f).isEqualTo(yr.latitude);
-//        assertThat(1.03f).isEqualTo(yr.longitude);
-//        assertThat(rDate.getTime()).isEqualTo(yr.date.getTime());
-//        assertThat(32.3f).isEqualTo(yr.temperature);
-//        assertThat("bridgewater").isEqualTo(yr.regionName);
-//    }
-
     @Test
-    public void test_notEntityIfNoRowsInCursor() {
-        RecordEG recordEG = new RecordEG(emptyCursor);
+    public void test_mapFromCursorWithEmptyCursor() {
+        RecordEG recordEG = new RecordEG();
+        recordEG.mapFromCursor(emptyCursor);
         assertThat(recordEG.getEntity()).isNull();
+    }
+
+    @Test
+    public void test_mapFromCursorWithPopulatedCursor() {
+        // add a record
+        insertRecord();
+
+        RecordEG recordEG = new RecordEG();
+        Cursor c = ystrdyDatabaseAPI.get("record", recordEG.projection(), null, null, "1");
+        c.moveToFirst();
+        recordEG.mapFromCursor(c);
+        assertThat(recordEG.getEntity()).isNotNull();
+    }
+
+    @Test
+    public void test_isNotValidWhenEntityIsNull() {
+        RecordEG recordEG = new RecordEG();
+        assertThat(recordEG.isValid()).isFalse();
+    }
+
+    @Test
+    public void test_isNotValidWhenEntityDateNull() {
+        RecordEG recordEG = new RecordEG();
+        RecordEntity recordEntity = new RecordEntity();
+        recordEG.setEntity(recordEntity);
+        assertThat(recordEG.isValid()).isFalse();
+    }
+
+    @Test
+    public void test_isValid() {
+        RecordEG recordEG = new RecordEG();
+        RecordEntity recordEntity = new RecordEntity();
+        recordEntity.date = new Date();
+        recordEG.setEntity(recordEntity);
+        assertThat(recordEG.isValid()).isTrue();
+    }
+
+    public void insertRecord() {
+        ystrdyDatabaseAPI.insert("record", recordValues());
+    }
+
+    public ContentValues recordValues() {
+        ContentValues values = new ContentValues();
+        values.put("latitude", 0.1f);
+        values.put("longitude", 0.2f);
+        values.put("temperature", 0.3f);
+        values.put("region_name", "region");
+        values.put("city_name", "scottville");
+        values.put("woeid", "woeid");
+        values.put("date", new Date().getTime());
+        return values;
     }
 
     private Cursor emptyCursor = new Cursor() {

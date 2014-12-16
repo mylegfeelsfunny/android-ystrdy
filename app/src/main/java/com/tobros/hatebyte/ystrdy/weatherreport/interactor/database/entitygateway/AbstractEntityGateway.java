@@ -3,20 +3,46 @@ package com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygatew
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
 
 import java.util.InvalidPropertiesFormatException;
 
 /**
  * Created by scott on 12/14/14.
  */
-public abstract class AbstractEntityGateway {
+public abstract class AbstractEntityGateway implements EntityGatewayImplementation.IEntityGateway {
 
-    abstract public void mapFromCursor(Cursor c);
-    abstract public ContentValues contentValues();
-    abstract public void setEntity(Object e) throws InvalidPropertiesFormatException;
+    protected EntityGatewayImplementation entityGatewayImplementation;
+
+    protected String tableName;
+    protected String[] projection;
+    protected String orderBy;
+    protected String limit;
+    protected String selectString;
+    protected ContentValues contentValues;
+
+    abstract public void setEntity(Object e);
     abstract public Object getEntity();
+    abstract public void mapFromCursor(Cursor c);
+    abstract public Boolean isValid();
 
-    public static String[] projection;
+    public String tableName() {
+        return tableName;
+    }
+    public String[] projection() {
+        return projection;
+    }
+    public String orderBy() {
+        return orderBy;
+    }
+    public String limit() {
+        return limit;
+    }
+    public String selectString() {
+        return selectString;
+    }
+    public ContentValues contentValues() {
+        return contentValues;
+    }
 
 }

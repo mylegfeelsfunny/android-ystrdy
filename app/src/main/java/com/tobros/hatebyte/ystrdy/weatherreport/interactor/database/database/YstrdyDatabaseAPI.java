@@ -7,13 +7,15 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.tobros.hatebyte.ystrdy.YstrdyApp;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.DifferenceEG;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 
 /**
  * Created by scott on 12/12/14.
  */
-public class YstrdyDatabaseAPI extends SQLiteOpenHelper {
+public class YstrdyDatabaseAPI extends SQLiteOpenHelper implements IDatabaseAPI {
 
     private static final String TYPE_TEXT = " TEXT";
     private static final String TYPE_INTEGER = " integer";
@@ -27,27 +29,27 @@ public class YstrdyDatabaseAPI extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_NOW_RECORDS =
             "CREATE TABLE " +
-                    RecordEG.TABLE_NAME + " (" +
-                    RecordEG.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
-                    RecordEG.COLUMN_LATITUDE + TYPE_FLOAT + COMMA_SEP +
-                    RecordEG.COLUMN_LONGITUDE + TYPE_FLOAT + COMMA_SEP +
-                    RecordEG.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
-                    RecordEG.COLUMN_REGION_NAME + TYPE_TEXT + COMMA_SEP +
-                    RecordEG.COLUMN_CITY_NAME + TYPE_TEXT + COMMA_SEP +
-                    RecordEG.COLUMN_WOEID + TYPE_TEXT + COMMA_SEP +
-                    RecordEG.COLUMN_TEMPERATURE + TYPE_FLOAT + ")";
+                    RecordEntity.TABLE_NAME + " (" +
+                    RecordEntity.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
+                    RecordEntity.COLUMN_LATITUDE + TYPE_FLOAT + COMMA_SEP +
+                    RecordEntity.COLUMN_LONGITUDE + TYPE_FLOAT + COMMA_SEP +
+                    RecordEntity.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
+                    RecordEntity.COLUMN_REGION_NAME + TYPE_TEXT + COMMA_SEP +
+                    RecordEntity.COLUMN_CITY_NAME + TYPE_TEXT + COMMA_SEP +
+                    RecordEntity.COLUMN_WOEID + TYPE_TEXT + COMMA_SEP +
+                    RecordEntity.COLUMN_TEMPERATURE + TYPE_FLOAT + ")";
     private static final String SQL_DELETE_NOW_RECORDS =
-            "DROP TABLE IF EXISTS " + RecordEG.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + RecordEntity.TABLE_NAME;
 
     private static final String SQL_CREATE_YSTRDY_RECORDS =
             "CREATE TABLE " +
-                    DifferenceEG.TABLE_NAME + " (" +
-                    DifferenceEG.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
-                    DifferenceEG.COLUMN_DIFFERENCE + TYPE_FLOAT + COMMA_SEP +
-                    DifferenceEG.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
-                    DifferenceEG.COLUMN_NOW_RECORD_ID + TYPE_INTEGER + ")";
+                    DifferenceEntity.TABLE_NAME + " (" +
+                    DifferenceEntity.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
+                    DifferenceEntity.COLUMN_DIFFERENCE + TYPE_FLOAT + COMMA_SEP +
+                    DifferenceEntity.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
+                    DifferenceEntity.COLUMN_NOW_RECORD_ID + TYPE_INTEGER + ")";
     private static final String SQL_DELETE_YSTRDY_RECORDS =
-            "DROP TABLE IF EXISTS " + DifferenceEG.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + DifferenceEntity.TABLE_NAME;
 
     public SQLiteDatabase database;
 
@@ -76,9 +78,6 @@ public class YstrdyDatabaseAPI extends SQLiteOpenHelper {
     public void open() {
         database = getWritableDatabase();
     }
-    public void close() {
-        database.close();
-    }
 
     public long insert(String tableName, ContentValues contentValues) {
         long newRowId = database.insert(
@@ -100,7 +99,7 @@ public class YstrdyDatabaseAPI extends SQLiteOpenHelper {
                 orderBy,
                 limit
         );
-        return  c;
+        return c;
     }
 
     public void delete(String tableName, String where) {

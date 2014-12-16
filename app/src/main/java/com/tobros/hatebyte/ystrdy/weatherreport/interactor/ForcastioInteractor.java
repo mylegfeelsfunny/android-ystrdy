@@ -21,7 +21,7 @@ public abstract class ForcastioInteractor {
     }
 
     public void getReport(WeatherRequestModel wr) {
-        recordEGI                               = new RecordEGI();
+//        recordEGI                               = new RecordEGI();
     }
 
     public YstrdyDatabaseAPI getRecordDatabase() {
