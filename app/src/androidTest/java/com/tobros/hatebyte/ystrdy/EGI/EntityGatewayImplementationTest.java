@@ -78,7 +78,7 @@ public class EntityGatewayImplementationTest {
         assertThat(retrieveRecord.getSelectStringWasCalled).isTrue();
         assertThat(retrieveRecord.getOrderByWasCalled).isTrue();
         assertThat(retrieveRecord.getLimitWasCalled).isTrue();
-        assertThat(retrieveRecord.mapFromCursorWasCalled).isTrue();
+//        assertThat(retrieveRecord.mapFromCursorWasCalled).isTrue();
     }
 
     @Test

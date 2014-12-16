@@ -52,7 +52,7 @@ public class RecordEG extends AbstractEntityGateway {
 
     @Override
     public void mapFromCursor(Cursor c) {
-        if (c.getCount()== 0) {
+        if (c.getColumnCount() == 0) {
             return;
         }
 
@@ -91,10 +91,54 @@ public class RecordEG extends AbstractEntityGateway {
         return true;
     }
 
+    private void reset() {
+        orderBy = null;
+        selectString = null;
+        limit = null;
+        projection = null;
+    }
+
     public long save() throws InvalidPropertiesFormatException {
+        reset();
         long id = entityGatewayImplementation.insert(this);
         return id;
     }
+
+    public int numRecords() {
+        reset();
+        projection = new String[]{
+            RecordEntity.COLUMN_ID
+        };
+
+        int count = entityGatewayImplementation.count(this);
+        return count;
+    }
+
+    public RecordEntity getClosestRecordFromYstrdy() {
+        reset();
+        Date ystrdy = new Date();
+        int twentyFourHours = (24 * 60 * 60 + 1) * 1000;
+        ystrdy.setTime(ystrdy.getTime() - twentyFourHours);
+
+        projection = RecordEG.projectionMap;
+        selectString = "abs("+ystrdy.getTime()+" - date) < " + twentyFourHours;
+        orderBy = "abs("+ystrdy.getTime()+" - date) ASC";
+
+        return (RecordEntity) entityGatewayImplementation.get(this).getEntity();
+    }
+
+    public RecordEntity getEarliestRecord() {
+//        if (numRecords() == 0) {
+//            return null;
+//        }
+        reset();
+        projection = RecordEG.projectionMap;
+        orderBy = "date ASC";
+        limit = "1";
+
+        return (RecordEntity) entityGatewayImplementation.get(this).getEntity();
+    }
+
 //
 //    public RecordEG getRecordById(long id) {
 //        getDatabaseAPI().open();
@@ -107,51 +151,10 @@ public class RecordEG extends AbstractEntityGateway {
 //        return recordEG;
 //    }
 //
-//    public RecordEG getClosestRecordFromYstrdy() {
-//        databaseAPI.open();
-//        Date ystrdy = new Date();
-//        int twentyFourHours = (24 * 60 * 60 + 1) * 1000;
-//        ystrdy.setTime(ystrdy.getTime() - twentyFourHours);
-//
-//        String selectStatement = "abs("+ystrdy.getTime()+" - date) < " + twentyFourHours;
-//        String orderBy = "abs("+ystrdy.getTime()+" - date) ASC";
-//
-//        Cursor c = databaseAPI.get(RecordEntity.TABLE_NAME, RecordEG.projection, selectStatement, orderBy, null);
-//        RecordEG recordEG = new RecordEG(c);
-//        databaseAPI.close();
-//        return recordEG;
-//    }
-//
-//    public RecordEG getEarliestRecord() {
-//        getDatabaseAPI().open();
-//        String orderBy = "date ASC";
-//
-//        Cursor c = databaseAPI.get(RecordEntity.TABLE_NAME, RecordEG.projection, null, orderBy, "1");
-//        RecordEG recordEG = new RecordEG(c);
-//        databaseAPI.close();
-//        return recordEG;
-//    }
-//
-//    public int numRecords() {
-//        getDatabaseAPI().open();
-//        String[] projection = {
-//                RecordEntity.COLUMN_ID
-//        };
-//
-//        Cursor c = databaseAPI.get(RecordEntity.TABLE_NAME, projection, null, null, null);
-//        int num = c.getCount();
-//        databaseAPI.close();
-//        return num;
-//    }
-//
-//    public void deleteExpiredRecords() {
-//        getDatabaseAPI().open();
-//        Date now = new Date();
-//        String whereString = YstrDate.threeDayTime() + " + date < " + now.getTime();
-//        databaseAPI.delete(RecordEntity.TABLE_NAME, whereString);
-//        databaseAPI.close();
-//    }
-
-
+    public void deleteExpiredRecords() {
+        Date now = new Date();
+        selectString = YstrDate.threeDayTime() + " + date < " + now.getTime();
+        entityGatewayImplementation.delete(this);
+    }
 
 }

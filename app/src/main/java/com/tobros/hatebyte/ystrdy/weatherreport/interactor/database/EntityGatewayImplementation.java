@@ -30,6 +30,9 @@ public class EntityGatewayImplementation {
         public ContentValues contentValues();
         public Boolean isValid();
         public void mapFromCursor(Cursor c);
+
+        public void setEntity(Object e);
+        public Object getEntity();
     }
 
     public IDatabaseAPI databaseAPI;
@@ -73,7 +76,10 @@ public class EntityGatewayImplementation {
                 entityGateway.orderBy(),
                 entityGateway.limit()
         );
-        entityGateway.mapFromCursor(c);
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            entityGateway.mapFromCursor(c);
+        }
         databaseAPI.close();
         return entityGateway;
     }

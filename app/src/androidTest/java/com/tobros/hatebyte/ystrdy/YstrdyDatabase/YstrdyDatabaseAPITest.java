@@ -118,6 +118,12 @@ public class YstrdyDatabaseAPITest {
     }
 
     @Test
+    public void test_getRecordModelFromEmptyDB() {
+        Cursor c = ystrdyDatabaseAPI.get("record", recordProjection, null, "date ASC", "1");
+        assertThat(c.getCount()).isEqualTo(0);
+    }
+
+    @Test
     public void test_getRecordModel() {
         long rowid = insertRecord();
 

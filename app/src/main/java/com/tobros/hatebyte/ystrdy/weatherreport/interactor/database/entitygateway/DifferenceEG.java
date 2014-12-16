@@ -38,7 +38,7 @@ public class DifferenceEG extends AbstractEntityGateway {
 
     @Override
     public void mapFromCursor(Cursor c) {
-        if (c.getCount() == 0) {
+        if (c.getColumnCount() == 0) {
             return;
         }
         entity = new DifferenceEntity();
