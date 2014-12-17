@@ -19,6 +19,6 @@ public class DifferenceEntity {
     public long recordId;
     public Date date;
     public RecordEG nowRecordGateway;
-    public Integer id;
+    public int id;
 
 }

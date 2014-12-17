@@ -20,7 +20,6 @@ import com.tobros.hatebyte.ystrdy.weatherreport.boundary.IWeatherReportBoundary;
 import com.tobros.hatebyte.ystrdy.weatherreport.boundary.WeatherReportBoundary;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherRequestModel;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherResponseModel;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.RecordEGI;
 
 import java.util.Date;
 
@@ -31,7 +30,6 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
     private LocationManager locationManager;
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
-    RecordEGI recordEGI;
     WeatherReportBoundary weatherReportBoundary;
 
     @Override
@@ -41,7 +39,7 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
 
         // getTempDifference
             // is there a record less than 2 hours -> YES -> fetch YstrdyRecord -> return YstrdyRecord
-                // is there a record older than 24 hours -> YES - fetch hNowRecord from 24 hours -> hit Yahoo -> save Yahoo NowRecord -> create YstrdyRecord -> return YstrdyRecord
+                // is there a record older than 24 hours -> YES - fetch NowRecord from 24 hours -> hit Yahoo -> save Yahoo NowRecord -> create YstrdyRecord -> return YstrdyRecord
                     // hit Yahoo -> -> save Yahoo NowRecord -> hit forcast.io -> create forcast.io NowRecord -> YstrdyRecord -> return YstrdyRecord
 
 

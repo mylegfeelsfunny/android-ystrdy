@@ -91,13 +91,6 @@ public class RecordEG extends AbstractEntityGateway {
         return true;
     }
 
-    private void reset() {
-        orderBy = null;
-        selectString = null;
-        limit = null;
-        projection = null;
-    }
-
     public long save() throws InvalidPropertiesFormatException {
         reset();
         long id = entityGatewayImplementation.insert(this);
@@ -110,8 +103,7 @@ public class RecordEG extends AbstractEntityGateway {
             RecordEntity.COLUMN_ID
         };
 
-        int count = entityGatewayImplementation.count(this);
-        return count;
+        return entityGatewayImplementation.count(this);
     }
 
     public RecordEntity getClosestRecordFromYstrdy() {
@@ -128,9 +120,6 @@ public class RecordEG extends AbstractEntityGateway {
     }
 
     public RecordEntity getEarliestRecord() {
-//        if (numRecords() == 0) {
-//            return null;
-//        }
         reset();
         projection = RecordEG.projectionMap;
         orderBy = "date ASC";

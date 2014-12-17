@@ -1,21 +1,16 @@
 package com.tobros.hatebyte.ystrdy.difference;
 
 import android.content.ContentValues;
-import android.content.Context;
 
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.DifferenceEGI;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.RecordEGI;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
+import com.tobros.hatebyte.ystrdy.EGI.mock.TestDifferenceEG;
+import com.tobros.hatebyte.ystrdy.EGI.mock.TestEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.DifferenceEG;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
@@ -23,6 +18,8 @@ import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.fail;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -32,24 +29,20 @@ import static org.mockito.Mockito.mock;
 @RunWith(RobolectricTestRunner.class)
 public class DifferenceEGUseCasesTest {
 
-    DifferenceEGI differenceEGI;
-    RecordEGI recordEGI;
+    TestDifferenceEG differenceEG;
+    TestEGI testEGI;
 
     @Before
     public void setup() {
-//        Context context = Robolectric.getShadowApplication().getApplicationContext();
-//        YstrdyDatabaseAPI ystrdyDatabaseAPI = new YstrdyDatabaseAPI(context, "testLocationRecord.db");
-//        differenceEGI = new DifferenceEGI();
-//        differenceEGI.databaseAPI = ystrdyDatabaseAPI;
-//
-//        recordEGI = new RecordEGI();
-//        recordEGI.databaseAPI = ystrdyDatabaseAPI;
+        differenceEG = new TestDifferenceEG();
+        testEGI = new TestEGI();
+        differenceEG.setEntityGatewayImplementation(testEGI);
     }
 
     @After
     public void teardown() {
-//        differenceEGI.databaseAPI.clear();
-//        differenceEGI = null;
+        testEGI.getDatabaseAPI().clear();
+        differenceEG = null;
     }
 
     public ContentValues recordValues() {
@@ -65,88 +58,102 @@ public class DifferenceEGUseCasesTest {
     }
 
     @Test
-    public void test_avoid() {
-        assertThat(true).isTrue();
+    public void testInsert_throwsExceptionWithInvalidDate() {
+        DifferenceEntity difference = new DifferenceEntity();
+        difference.difference = 1.1f;
+        difference.recordId = 1;
+//        difference.date = new Date();
+
+        differenceEG.setEntity(difference);
+        try {
+            differenceEG.save();
+            fail("Should fail with InvalidPropertiesFormatException");
+        } catch (Throwable expected) {
+            assertEquals(InvalidPropertiesFormatException.class, expected.getClass());
+        }
     }
 
-//    @Test
-//    public void testInsert_ystrdyRecord() {
-//        long nowId = insertYstrdyRecord(20.0f, new Date(), 0);
-//        assertThat(nowId).isGreaterThan(0);
-//    }
-//
-//    @Test
-//    public void testQuery_lastYstrdyRecordReturnsNullWithNoRecord() {
-//
-//        DifferenceEG differenceEG = differenceEGI.getLatestDifferenceRecord();
-//        DifferenceEntity recordEntity = differenceEG.getEntity();
-//
-//        assertThat(recordEntity).isNull();
-//    }
-//
-//    @Test
-//    public void testQuery_lastYstrdyRecordReturnsLatestDate() {
-//        Date date = new Date();
-//        long delay = ((30) * 60 * 60 + 1) * 1000;
-//        date.setTime(date.getTime() - delay);
-//
-//        insertYstrdyRecord(5.0f, date, 0);
-//
-//        for (int i = 0; i < 12; i++) {
-//            delay = ((24 - i) * 60 * 60 + 1) * 1000;
-//            date.setTime(date.getTime() - delay);
-//            insertYstrdyRecord(20.0f, date, 0);
-//        }
-//
-//        DifferenceEG differenceEG = differenceEGI.getLatestDifferenceRecord();
-//        DifferenceEntity recordEntity = differenceEG.getEntity();
-//
-//        assertThat(recordEntity.difference).isEqualTo(5.0f);
-//    }
-//
-//    @Test
-//    public void testQuery_numYstrdyRecordsReturnsZero() {
-//        long numYstrdyRecords = differenceEGI.numDifferenceRecords();
-//        assertThat(numYstrdyRecords).isEqualTo(0);
-//    }
-//
-//    @Test
-//    public void testQuery_numYstrdyRecordsReturns12() {
-//        for (int i=0; i<12; i++) {
-//            insertYstrdyRecord(20.0f, new Date(), 0);
-//        }
-//        int numYstrdyRecords = differenceEGI.numDifferenceRecords();
-//        assertThat(numYstrdyRecords).isEqualTo(12);
-//    }
-//
-//    @Test
-//    public void testQuery_lastYstrdyRecordReturnsRecord() {
-//        long nowId = insertYstrdyRecord(20.0f, new Date(), 0);
-//        Integer nowIdInteger = Integer.parseInt(String.valueOf(nowId));
-//
-//        DifferenceEG differenceEG = differenceEGI.getLatestDifferenceRecord();
-//        DifferenceEntity recordEntity = differenceEG.getEntity();
-//        assertThat(nowId).isEqualTo(recordEntity.id);
-//    }
-//
-//
-//    public long insertYstrdyRecord(float difference, Date date, long nowId) {
-//        DifferenceEntity record = new DifferenceEntity();
-//        record.date = date;
-//        record.difference = difference;
-//        record.recordId = nowId;
-//
-//        long recordId = -1;
-//        DifferenceEG differenceEG = new DifferenceEG();
-//
-//        try {
-//            differenceEG.setEntity(record);
-//            recordId = differenceEGI.insertDifferenceRecord(differenceEG);
-//        } catch (InvalidPropertiesFormatException expected) {
-//
-//        }
-//        return recordId;
-//    }
+    @Test
+    public void testInsert_ystrdyRecord() {
+        DifferenceEntity difference = new DifferenceEntity();
+        difference.difference = 1.1f;
+        difference.recordId = 1;
+        difference.date = new Date();
+
+        differenceEG.setEntity(difference);
+
+        long rowid = 0;
+        try {
+            rowid = differenceEG.save();
+        } catch (Throwable expected) {
+        }
+
+        assertThat(rowid).isGreaterThan(0);
+    }
+
+    @Test
+    public void testQuery_lastYstrdyRecordReturnsNullWithNoRecord() {
+        DifferenceEntity difference = differenceEG.getLatestDifferenceRecord();
+        assertThat(difference).isNull();
+    }
+
+    @Test
+    public void testQuery_lastYstrdyRecordReturnsLatestDate() {
+        Date date = new Date();
+        long delay = ((30) * 60 * 60 + 1) * 1000;
+        date.setTime(date.getTime() - delay);
+
+        insertDifferenceRecord(5.0f, date, 0);
+
+        for (int i = 0; i < 12; i++) {
+            delay = ((24 - i) * 60 * 60 + 1) * 1000;
+            date.setTime(date.getTime() - delay);
+            insertDifferenceRecord(20.0f, date, 0);
+        }
+
+        DifferenceEntity recordEntity = differenceEG.getLatestDifferenceRecord();
+        assertThat(recordEntity.difference).isEqualTo(5.0f);
+    }
+
+    @Test
+    public void testQuery_numYstrdyRecordsReturnsZero() {
+        long numYstrdyRecords = differenceEG.numDifferenceRecords();
+        assertThat(numYstrdyRecords).isEqualTo(0);
+    }
+
+    @Test
+    public void testQuery_numYstrdyRecordsReturns12() {
+        for (int i=0; i<12; i++) {
+            insertDifferenceRecord(20.0f, new Date(), 0);
+        }
+        int numYstrdyRecords = differenceEG.numDifferenceRecords();
+        assertThat(numYstrdyRecords).isEqualTo(12);
+    }
+
+    @Test
+    public void testQuery_lastYstrdyRecordReturnsRecorded() {
+        long nowId = insertDifferenceRecord(20.0f, new Date(), 0);
+        int nowIdInt = (int)nowId;
+
+        DifferenceEntity recordEntity = differenceEG.getLatestDifferenceRecord();
+        assertThat(nowIdInt).isEqualTo(recordEntity.id);
+    }
+
+    public long insertDifferenceRecord(float difference, Date date, long nowId) {
+        DifferenceEntity differenceEntity = new DifferenceEntity();
+        differenceEntity.date = date;
+        differenceEntity.difference = difference;
+        differenceEntity.recordId = nowId;
+
+        differenceEG.setEntity(differenceEntity);
+
+        long rowid = -1;
+        try {
+            rowid = differenceEG.save();
+        } catch (Throwable expected) {
+        }
+        return rowid;
+    }
 //
 //    public long insertLocationRecord(float latitude, float longitude, Date date, float temp, String region) {
 //        RecordEntity record = new RecordEntity();

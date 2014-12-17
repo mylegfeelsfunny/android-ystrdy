@@ -23,10 +23,6 @@ public class TestRecordEG extends RecordEG {
     public Boolean isValidWasCalled;
     public Boolean mapFromCursorWasCalled;
 
-    public TestRecordEG() {
-        super();
-    }
-
     public Boolean hasDatabase() {
         return (entityGatewayImplementation != null);
     }

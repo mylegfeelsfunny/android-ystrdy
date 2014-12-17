@@ -2,6 +2,7 @@ package com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygatew
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.provider.BaseColumns;
 
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
@@ -80,6 +81,29 @@ public class DifferenceEG extends AbstractEntityGateway {
         return true;
     }
 
+    public long save() throws InvalidPropertiesFormatException {
+        reset();
+        long id = entityGatewayImplementation.insert(this);
+        return id;
+    }
+
+    public DifferenceEntity getLatestDifferenceRecord() {
+        reset();
+        projection = DifferenceEG.projectionMap;
+        orderBy = "date DESC";
+        limit = "1";
+        return (DifferenceEntity)entityGatewayImplementation.get(this).getEntity();
+    }
+
+    public int numDifferenceRecords() {
+        reset();
+        projection = new String[]{
+            DifferenceEntity.COLUMN_ID
+        };
+
+        return entityGatewayImplementation.count(this);
+    }
+
 //    public long insertDifferenceRecord(AbstractEntityGateway entityGateway) throws InvalidPropertiesFormatException {
 //        getDatabaseAPI().open();
 //
@@ -88,33 +112,7 @@ public class DifferenceEG extends AbstractEntityGateway {
 //        return  id;
 //    }
 //
-//    public DifferenceEG getLatestDifferenceRecord() {
-//        String orderBy = "date DESC";
 //
-//        getDatabaseAPI().open();
-//        Cursor c = databaseAPI.get(
-//                DifferenceEntity.TABLE_NAME,
-//                DifferenceEG.projection,
-//                null,
-//                orderBy,
-//                "1"
-//        );
-//        DifferenceEG ystrRecord = new DifferenceEG(c);
-//        databaseAPI.close();
-//        return ystrRecord;
-//    }
-//
-//    public int numDifferenceRecords() {
-//        getDatabaseAPI().open();
-//        String[] projection = {
-//                DifferenceEntity.COLUMN_ID
-//        };
-//
-//        Cursor c = databaseAPI.get(DifferenceEntity.TABLE_NAME, projection, null, null, null);
-//        int num = c.getCount();
-//        databaseAPI.close();
-//        return num;
-//    }
 //
 //    public void deleteExpiredDifferenceRecords() {
 //        getDatabaseAPI().open();

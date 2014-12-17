@@ -11,7 +11,6 @@ import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygatewa
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherRequestModel;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherResponseModel;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.RecordEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
 
 import java.util.Date;

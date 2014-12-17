@@ -24,6 +24,6 @@ public class RecordEntity {
     public String regionName;
     public String woeid;
     public String cityName;
-    public Integer id;
+    public int id;
 
 }

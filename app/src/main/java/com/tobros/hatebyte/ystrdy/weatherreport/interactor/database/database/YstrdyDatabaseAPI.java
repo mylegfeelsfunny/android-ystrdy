@@ -6,11 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.tobros.hatebyte.ystrdy.YstrdyApp;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.DifferenceEG;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 
 /**
  * Created by scott on 12/12/14.
@@ -27,7 +24,7 @@ public class YstrdyDatabaseAPI extends SQLiteOpenHelper implements IDatabaseAPI 
     public static final String DATABASE_NAME = "TemperatureRecords.db";
     public static final int DATA_VERSION = 1;
 
-    private static final String SQL_CREATE_NOW_RECORDS =
+    private static final String SQL_CREATE_RECORDS =
             "CREATE TABLE " +
                     RecordEntity.TABLE_NAME + " (" +
                     RecordEntity.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
@@ -38,17 +35,17 @@ public class YstrdyDatabaseAPI extends SQLiteOpenHelper implements IDatabaseAPI 
                     RecordEntity.COLUMN_CITY_NAME + TYPE_TEXT + COMMA_SEP +
                     RecordEntity.COLUMN_WOEID + TYPE_TEXT + COMMA_SEP +
                     RecordEntity.COLUMN_TEMPERATURE + TYPE_FLOAT + ")";
-    private static final String SQL_DELETE_NOW_RECORDS =
+    private static final String SQL_DELETE_RECORDS =
             "DROP TABLE IF EXISTS " + RecordEntity.TABLE_NAME;
 
-    private static final String SQL_CREATE_YSTRDY_RECORDS =
+    private static final String SQL_CREATE_DIFFERENCE_RECORDS =
             "CREATE TABLE " +
                     DifferenceEntity.TABLE_NAME + " (" +
                     DifferenceEntity.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
                     DifferenceEntity.COLUMN_DIFFERENCE + TYPE_FLOAT + COMMA_SEP +
                     DifferenceEntity.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
                     DifferenceEntity.COLUMN_NOW_RECORD_ID + TYPE_INTEGER + ")";
-    private static final String SQL_DELETE_YSTRDY_RECORDS =
+    private static final String SQL_DELETE_DIFFERENCE_RECORDS =
             "DROP TABLE IF EXISTS " + DifferenceEntity.TABLE_NAME;
 
     public SQLiteDatabase database;
@@ -59,14 +56,14 @@ public class YstrdyDatabaseAPI extends SQLiteOpenHelper implements IDatabaseAPI 
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_NOW_RECORDS);
-        db.execSQL(SQL_CREATE_YSTRDY_RECORDS);
+        db.execSQL(SQL_CREATE_RECORDS);
+        db.execSQL(SQL_CREATE_DIFFERENCE_RECORDS);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(SQL_DELETE_NOW_RECORDS);
-        db.execSQL(SQL_DELETE_YSTRDY_RECORDS);
+        db.execSQL(SQL_DELETE_RECORDS);
+        db.execSQL(SQL_DELETE_DIFFERENCE_RECORDS);
         onCreate(db);
     }
 

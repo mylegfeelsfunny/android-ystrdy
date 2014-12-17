@@ -3,6 +3,7 @@ package com.tobros.hatebyte.ystrdy.EGI.mock;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.DifferenceEG;
 
 /**
@@ -23,35 +24,42 @@ public class TestDifferenceEG extends DifferenceEG {
         return (entityGatewayImplementation != null);
     }
 
+    public void setEntityGatewayImplementation(EntityGatewayImplementation e) {
+        entityGatewayImplementation = e;
+    }
+    public EntityGatewayImplementation getEntityGatewayImplementation() {
+        return entityGatewayImplementation;
+    }
+
     @Override
     public String tableName() {
         getTableNameWasCalled = true;
-        return tableName;
+        return super.tableName();
     }
     @Override
     public String[] projection() {
         getProjectionWasCalled = true;
-        return projection;
+        return super.projection();
     }
     @Override
     public String orderBy() {
         getOrderByWasCalled = true;
-        return orderBy;
+        return super.orderBy();
     }
     @Override
     public String limit() {
         getLimitWasCalled = true;
-        return limit;
+        return super.limit();
     }
     @Override
     public String selectString() {
         getSelectStringWasCalled = true;
-        return selectString;
+        return super.selectString();
     }
     @Override
     public ContentValues contentValues() {
         getContentValues = true;
-        return contentValues;
+        return super.contentValues();
     }
     @Override
     public Boolean isValid() {

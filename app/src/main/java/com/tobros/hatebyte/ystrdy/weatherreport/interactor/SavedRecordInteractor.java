@@ -7,7 +7,6 @@ import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.Yst
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherRequestModel;
 import com.tobros.hatebyte.ystrdy.weatherreport.WeatherResponseModel;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.RecordEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.yahooweather.YahooAPI;
 
@@ -23,8 +22,6 @@ public abstract class SavedRecordInteractor {
 
     private WeatherRequestModel weatherRequest;
     private WeatherResponseModel weatherResponseModel;
-
-    RecordEGI recordEGI;
 
     public SavedRecordInteractor() {}
 

@@ -45,4 +45,12 @@ public abstract class AbstractEntityGateway implements EntityGatewayImplementati
         return contentValues;
     }
 
+    protected void reset() {
+        orderBy = null;
+        selectString = null;
+        limit = null;
+        projection = null;
+    }
+
+
 }
