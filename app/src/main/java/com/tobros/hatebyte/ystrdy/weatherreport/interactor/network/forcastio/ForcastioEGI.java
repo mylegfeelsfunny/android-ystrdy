@@ -24,7 +24,7 @@ import java.io.IOException;
 /**
  * Created by scott on 12/17/14.
  */
-public class ForcastioGatewayImplementation implements IJSONGatewayImplementation {
+public class ForcastioEGI implements IJSONGatewayImplementation {
 
     private static final String TAG = " ForcastioGatewayImplementation";
 
@@ -40,7 +40,7 @@ public class ForcastioGatewayImplementation implements IJSONGatewayImplementatio
     }
 
     OkHttpClient client = new OkHttpClient();
-    String fetch(String url) throws IOException {
+    protected String fetch(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .build();

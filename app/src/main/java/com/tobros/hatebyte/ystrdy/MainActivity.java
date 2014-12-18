@@ -19,7 +19,7 @@ import android.view.View;
 import com.tobros.hatebyte.ystrdy.alarm.AlarmReceiver;
 import com.tobros.hatebyte.ystrdy.weatherreport.boundary.IWeatherReportBoundary;
 import com.tobros.hatebyte.ystrdy.weatherreport.boundary.WeatherReportBoundary;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.forcastio.ForcastioGatewayImplementation;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.forcastio.ForcastioEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
 import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
@@ -38,7 +38,7 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
     private AlarmManager alarmManager;
     private PendingIntent pendingIntent;
     WeatherReportBoundary weatherReportBoundary;
-    ForcastioGatewayImplementation forcastioGatewayImplementation;
+    ForcastioEGI forcastioEGI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +65,7 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
 
 
 
-        forcastioGatewayImplementation = new ForcastioGatewayImplementation();
+        forcastioEGI = new ForcastioEGI();
 
         yahooAPI = new RecordYahooAPI();
         yahooAPI.configure(YstrdyApp.getContext());

@@ -60,16 +60,14 @@ public class ForcastioGatewayTest {
     @Test
     public void test_forcastIORequestReturnsWeatherResponse() {
         WeatherRequest weatherRequest = requestModel();
-        WeatherResponse weatherResponse = null;
-        weatherResponse = forcastioGateway.request(weatherRequest);
+        WeatherResponse weatherResponse = forcastioGateway.request(weatherRequest);
         assertThat(weatherResponse).isInstanceOf(WeatherResponse.class);
     }
 
     @Test
     public void test_forcastIOCanReturnSyncronousData() {
         WeatherRequest weatherRequest = requestModel();
-        WeatherResponse weatherResponse = null;
-        weatherResponse = forcastioGateway.request(weatherRequest);
+        WeatherResponse weatherResponse = forcastioGateway.request(weatherRequest);
         assertThat(weatherResponse.temperature).isEqualTo(45.9f);
         assertThat(weatherResponse.regionName).isEqualTo("America/New_York");
     }
@@ -91,6 +89,18 @@ public class ForcastioGatewayTest {
         weatherResponse.temperature = 100.f;
         weatherResponse.regionName = "newyork";
         assertThat(ForcastioGateway.isValid(weatherResponse)).isTrue();
+    }
+
+    @Test
+    public void test_weatherResponseIsInvalidValidWithIOException() {
+        FakeJSONEGI fakeJSONEGI = new FakeJSONEGI();
+        fakeJSONEGI.sendBackIOException = true;
+        forcastioGateway.setForcastioGateway(fakeJSONEGI);
+
+        WeatherRequest weatherRequest = requestModel();
+        WeatherResponse weatherResponse = forcastioGateway.request(weatherRequest);
+
+        assertThat(ForcastioGateway.isValid(weatherResponse)).isFalse();
     }
 
     public WeatherRequest requestModel() {

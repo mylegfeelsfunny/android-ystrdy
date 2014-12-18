@@ -15,8 +15,8 @@ import org.json.JSONObject;
 public class ForcastioGateway {
 
     private static final String TAG = " ForcastioGateway";
-    private static final String FORCAST_API_KEY         = "86557a3da6d70d397c20ca15a3447bfb";
-    IJSONGatewayImplementation jsonGatewayImp;
+    private static final String FORCAST_API_KEY = "86557a3da6d70d397c20ca15a3447bfb";
+    protected IJSONGatewayImplementation jsonGatewayImp;
 
     public static float parseForTemperature(String jsonString) {
         double temp = WeatherResponse.voidTemperature;
@@ -61,14 +61,16 @@ public class ForcastioGateway {
     }
 
     public IJSONGatewayImplementation getForcastioGateway() {
-        return new ForcastioGatewayImplementation();
+        return new ForcastioEGI();
     }
 
     public WeatherResponse request(WeatherRequest weatherRequest)  {
         String jsonString = jsonGatewayImp.get(ForcastioGateway.url(weatherRequest));
         WeatherResponse weatherResponse = new WeatherResponse();
-        weatherResponse.temperature = parseForTemperature(jsonString);
-        weatherResponse.regionName = parseForRegionName(jsonString);
+        if (jsonString != null) {
+            weatherResponse.temperature = parseForTemperature(jsonString);
+            weatherResponse.regionName = parseForRegionName(jsonString);
+        }
         return weatherResponse;
     }
 
