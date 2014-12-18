@@ -10,9 +10,9 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.tobros.hatebyte.ystrdy.EGI.mock.TestDifferenceEG;
+import com.tobros.hatebyte.ystrdy.egi.mock.TestDifferenceEG;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.DifferenceEG;
 
 import org.junit.After;

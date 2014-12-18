@@ -1,10 +1,8 @@
 package com.tobros.hatebyte.ystrdy.record;
 
-import android.content.ContentValues;
-
-import com.tobros.hatebyte.ystrdy.EGI.mock.TestRecordEG;
-import com.tobros.hatebyte.ystrdy.EGI.mock.TestEGI;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
+import com.tobros.hatebyte.ystrdy.egi.mock.TestEGI;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
 

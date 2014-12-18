@@ -2,16 +2,10 @@ package com.tobros.hatebyte.ystrdy.weatherreport.interactor;
 
 import android.os.AsyncTask;
 
-import com.tobros.hatebyte.ystrdy.YstrdyApp;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.DifferenceEGI;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.DifferenceEG;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
-import com.tobros.hatebyte.ystrdy.weatherreport.WeatherRequestModel;
-import com.tobros.hatebyte.ystrdy.weatherreport.WeatherResponseModel;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 
 import java.util.Date;
 
@@ -20,20 +14,23 @@ import java.util.Date;
  */
 public abstract class RecentDifferenceInteractor {
 
-    abstract void onWeatherResponse(WeatherResponseModel weatherResponseModel);
+    abstract void onWeatherResponse(WeatherResponse weatherResponse);
     abstract void onWeatherResponseFailed();
 
-    DifferenceEG differenceEG;
+    protected DifferenceEG differenceEG;
 
-    public RecentDifferenceInteractor() {}
+    public RecentDifferenceInteractor() {
+        differenceEG = new DifferenceEG();
+    }
 
     public void getReport() {
+        differenceEG = new DifferenceEG();
         new GetLatestDifferenceRecord().execute((Object[]) null);
     }
 
     public void completeRequest(DifferenceEntity differenceEntity) {
         if (RecentDifferenceInteractor.isDifferenceYoungEnoughToRepeat(differenceEntity.date)) {
-            WeatherResponseModel responseModel  = new WeatherResponseModel();
+            WeatherResponse responseModel  = new WeatherResponse();
             responseModel.difference            = differenceEntity.difference;
             onWeatherResponse(responseModel);
         } else {
@@ -48,7 +45,7 @@ public abstract class RecentDifferenceInteractor {
     private class GetLatestDifferenceRecord extends AsyncTask<Object, Object, DifferenceEntity> {
         @Override
         protected DifferenceEntity doInBackground(Object... params) {
-            return null;//DifferenceEG.getLatestDifferenceRecord();
+            return differenceEG.getLatestDifferenceRecord();
         }
         @Override
         protected void onPostExecute(DifferenceEntity differenceEntity) {

@@ -39,10 +39,15 @@ android {
 }
 
 dependencies {
-    compile 'com.mcxiaoke.volley:library:1.0.6@aar'
-    compile 'com.survivingwithandroid:weatherlib:1.5.3'
-    compile 'com.survivingwithandroid:weatherlib_volleyclient:1.5.2'
-
+    compile 'com.squareup.okhttp:okhttp:+'
+    compile 'com.squareup.okhttp:okhttp-urlconnection:+'
+    compile 'com.squareup.retrofit:retrofit:+'
+    compile ('com.googlecode.json-simple:json-simple:1.1.1') {
+        exclude module: 'junit'
+    }
+//    compile 'com.mcxiaoke.volley:library:1.0.6@aar'
+//    compile 'com.survivingwithandroid:weatherlib:1.5.3'
+//    compile 'com.survivingwithandroid:weatherlib_volleyclient:1.5.2'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('junit:junit:4.11') {
         exclude module: 'hamcrest-core'

@@ -4,10 +4,11 @@ import android.os.AsyncTask;
 
 import com.tobros.hatebyte.ystrdy.YstrdyApp;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
-import com.tobros.hatebyte.ystrdy.weatherreport.WeatherRequestModel;
-import com.tobros.hatebyte.ystrdy.weatherreport.WeatherResponseModel;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
+import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.yahooweather.YahooAPI;
 
 import java.util.Date;
@@ -17,19 +18,21 @@ import java.util.Date;
  */
 public abstract class SavedRecordInteractor {
 
-    abstract void onWeatherResponse(WeatherResponseModel weatherResponseModel);
+    abstract void onWeatherResponse(WeatherResponse weatherResponse);
     abstract void onWeatherResponseFailed();
 
-    private WeatherRequestModel weatherRequest;
-    private WeatherResponseModel weatherResponseModel;
+    private WeatherRequest weatherRequest;
+    private WeatherResponse weatherResponse;
+    protected RecordEG recordEG;
 
-    public SavedRecordInteractor() {}
+    public SavedRecordInteractor() {
+    }
 
-    public void getReport(WeatherRequestModel wr) {
+    public void getReport(WeatherRequest wr) {
         weatherRequest = wr;
-        weatherResponseModel = new WeatherResponseModel();
-//        recordEGI = new RecordEGI();
-//        new GetRecordFromYstrdy().execute((Object[]) null);
+        weatherResponse = new WeatherResponse();
+        recordEG = new RecordEG();
+        new GetRecordFromYstrdy().execute((Object[]) null);
     }
 
     public YstrdyDatabaseAPI getRecordDatabase() {
@@ -52,11 +55,11 @@ public abstract class SavedRecordInteractor {
     }
 
     private void fetchTemperatureForLocationId() {
-        yahooAPI.getTemperatureForLocationId(weatherResponseModel.woeid);
+        yahooAPI.getTemperatureForLocationId(weatherResponse.woeid);
     }
 
     private void completeRequest() {
-        onWeatherResponse(weatherResponseModel);
+        onWeatherResponse(weatherResponse);
     }
 
 
@@ -64,7 +67,7 @@ public abstract class SavedRecordInteractor {
     private class GetRecordFromYstrdy extends AsyncTask<Object, Object, RecordEntity> {
         @Override
         protected RecordEntity doInBackground(Object... params) {
-            return null;//recordEGI.getClosestRecordFromYstrdy().getEntity();
+            return recordEG.getClosestRecordFromYstrdy();
         }
         @Override
         protected void onPostExecute(RecordEntity recordEntity) {
@@ -77,9 +80,9 @@ public abstract class SavedRecordInteractor {
     class RecordYahooAPI extends YahooAPI {
         @Override
         protected void onYahooCityResponseReceived(YahooCityResponseModel responseModel) {
-            weatherResponseModel.cityName = responseModel.cityName;
-            weatherResponseModel.regionName = responseModel.regionName;
-            weatherResponseModel.woeid = responseModel.woeid;
+            weatherResponse.cityName = responseModel.cityName;
+            weatherResponse.regionName = responseModel.regionName;
+            weatherResponse.woeid = responseModel.woeid;
             fetchTemperatureForLocationId();
         }
 
@@ -90,8 +93,8 @@ public abstract class SavedRecordInteractor {
 
         @Override
         protected  void onWeatherResponseRecieved(YahooWeatherResponseModel responseModel) {
-            weatherResponseModel.temperature = responseModel.temperature;
-            weatherResponseModel.date = responseModel.date;
+            weatherResponse.temperature = responseModel.temperature;
+            weatherResponse.date = responseModel.date;
             completeRequest();
         }
 

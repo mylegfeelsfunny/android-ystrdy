@@ -10,9 +10,9 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.tobros.hatebyte.ystrdy.EGI.mock.TestRecordEG;
+import com.tobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 
 import org.junit.After;

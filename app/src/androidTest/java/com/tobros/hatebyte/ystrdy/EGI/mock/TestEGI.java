@@ -1,8 +1,7 @@
-package com.tobros.hatebyte.ystrdy.EGI.mock;
+package com.tobros.hatebyte.ystrdy.egi.mock;
 
 import android.content.Context;
 
-import com.tobros.hatebyte.ystrdy.YstrdyApp;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.IDatabaseAPI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;

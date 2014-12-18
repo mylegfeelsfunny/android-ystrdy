@@ -1,16 +1,16 @@
 package com.tobros.hatebyte.ystrdy.weatherreport.boundary;
 
-import com.tobros.hatebyte.ystrdy.weatherreport.WeatherRequestModel;
+import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
 
 /**
  * Created by scott on 12/12/14.
  */
 public class WeatherReportBoundary {
 
-    WeatherRequestModel weatherRequest;
+    WeatherRequest weatherRequest;
     IWeatherReportBoundary delegate;
 
-    public void fetchReport(IWeatherReportBoundary d,  WeatherRequestModel wr) {
+    public void fetchReport(IWeatherReportBoundary d,  WeatherRequest wr) {
         delegate = d;
         weatherRequest = wr;
         fromDifferenceData();

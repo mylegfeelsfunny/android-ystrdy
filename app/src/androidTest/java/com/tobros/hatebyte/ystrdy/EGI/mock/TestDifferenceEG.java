@@ -1,4 +1,4 @@
-package com.tobros.hatebyte.ystrdy.EGI.mock;
+package com.tobros.hatebyte.ystrdy.egi.mock;
 
 import android.content.ContentValues;
 import android.database.Cursor;

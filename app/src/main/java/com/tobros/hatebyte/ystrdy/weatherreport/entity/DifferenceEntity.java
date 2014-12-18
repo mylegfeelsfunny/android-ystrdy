@@ -1,4 +1,4 @@
-package com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity;
+package com.tobros.hatebyte.ystrdy.weatherreport.entity;
 
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 

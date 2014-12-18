@@ -2,10 +2,10 @@ package com.tobros.hatebyte.ystrdy.difference;
 
 import android.content.ContentValues;
 
-import com.tobros.hatebyte.ystrdy.EGI.mock.TestDifferenceEG;
-import com.tobros.hatebyte.ystrdy.EGI.mock.TestEGI;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.egi.mock.TestDifferenceEG;
+import com.tobros.hatebyte.ystrdy.egi.mock.TestEGI;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -154,7 +154,7 @@ public class DifferenceEGUseCasesTest {
         }
         return rowid;
     }
-//
+
 //    public long insertLocationRecord(float latitude, float longitude, Date date, float temp, String region) {
 //        RecordEntity record = new RecordEntity();
 //        record.latitude = latitude;

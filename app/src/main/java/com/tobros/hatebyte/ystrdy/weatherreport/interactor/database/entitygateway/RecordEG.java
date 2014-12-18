@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
 
 import java.util.Date;
@@ -143,6 +143,7 @@ public class RecordEG extends AbstractEntityGateway {
     public void deleteExpiredRecords() {
         Date now = new Date();
         selectString = YstrDate.threeDayTime() + " + date < " + now.getTime();
+
         entityGatewayImplementation.delete(this);
     }
 

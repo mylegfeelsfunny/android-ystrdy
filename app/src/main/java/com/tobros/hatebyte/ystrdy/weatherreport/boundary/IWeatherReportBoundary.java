@@ -1,12 +1,12 @@
 package com.tobros.hatebyte.ystrdy.weatherreport.boundary;
 
-import com.tobros.hatebyte.ystrdy.weatherreport.WeatherResponseModel;
+import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 
 /**
  * Created by scott on 12/13/14.
  */
 public interface IWeatherReportBoundary {
-    public void onWeatherReportReturned(WeatherResponseModel weatherResponseModel);
+    public void onWeatherReportReturned(WeatherResponse weatherResponse);
     public void onWeatherReportFailed();
 }
 

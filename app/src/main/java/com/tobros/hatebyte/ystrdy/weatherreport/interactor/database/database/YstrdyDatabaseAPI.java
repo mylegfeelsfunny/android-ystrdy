@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 
 /**
  * Created by scott on 12/12/14.

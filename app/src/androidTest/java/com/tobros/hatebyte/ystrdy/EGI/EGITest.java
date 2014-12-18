@@ -1,9 +1,9 @@
-package com.tobros.hatebyte.ystrdy.EGI;
+package com.tobros.hatebyte.ystrdy.egi;
 
-import com.tobros.hatebyte.ystrdy.EGI.mock.TestRecordEG;
-import com.tobros.hatebyte.ystrdy.EGI.mock.FakeYstrdyDBAPI;
+import com.tobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
+import com.tobros.hatebyte.ystrdy.egi.mock.FakeYstrdyDBAPI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 
 import org.junit.After;
@@ -29,7 +29,7 @@ import static org.fest.assertions.api.Assertions.*;
  */
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class EntityGatewayImplementationTest {
+public class EGITest {
 
     EntityGatewayImplementation egi;
 

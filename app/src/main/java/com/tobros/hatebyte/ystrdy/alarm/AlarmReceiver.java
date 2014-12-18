@@ -7,7 +7,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.forcastio.ForcastioAPI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.yahooweather.YahooAPI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
@@ -24,7 +23,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     private LocationManager locationManager;
     private Context context = null;
     YahooAPI temperatureNow = null;
-    ForcastioAPI temperatureYstrdy = null;
 
     @Override
     public void onReceive(Context c, Intent intent) {

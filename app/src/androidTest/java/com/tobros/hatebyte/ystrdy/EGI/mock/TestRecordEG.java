@@ -1,13 +1,10 @@
-package com.tobros.hatebyte.ystrdy.EGI.mock;
+package com.tobros.hatebyte.ystrdy.egi.mock;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.AbstractEntityGateway;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
-
-import java.util.InvalidPropertiesFormatException;
 
 /**
  * Created by scott on 12/16/14.

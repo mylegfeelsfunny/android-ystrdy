@@ -1,4 +1,4 @@
-package com.tobros.hatebyte.ystrdy.YstrdyDatabase;
+package com.tobros.hatebyte.ystrdy.sqldatabase;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -22,7 +22,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.fest.assertions.api.Assertions.*;
 
 /**
  * Created by scott on 12/14/14.

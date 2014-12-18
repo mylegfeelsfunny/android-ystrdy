@@ -2,12 +2,9 @@ package com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygatew
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.provider.BaseColumns;
 
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.DifferenceEntity;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entity.RecordEntity;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
+import com.tobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
@@ -92,6 +89,7 @@ public class DifferenceEG extends AbstractEntityGateway {
         projection = DifferenceEG.projectionMap;
         orderBy = "date DESC";
         limit = "1";
+
         return (DifferenceEntity)entityGatewayImplementation.get(this).getEntity();
     }
 
