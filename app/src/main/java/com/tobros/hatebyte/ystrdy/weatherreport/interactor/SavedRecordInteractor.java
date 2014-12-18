@@ -5,7 +5,7 @@ import android.os.AsyncTask;
 import com.tobros.hatebyte.ystrdy.YstrdyApp;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
+import com.tobros.hatebyte.ystrdy.date.YstrDate;
 import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
 import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;

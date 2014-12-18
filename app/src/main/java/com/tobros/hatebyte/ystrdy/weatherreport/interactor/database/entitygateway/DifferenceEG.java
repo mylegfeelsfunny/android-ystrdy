@@ -27,7 +27,7 @@ public class DifferenceEG extends AbstractEntityGateway {
     public DifferenceEG() {
         tableName = DifferenceEntity.TABLE_NAME;
         projection = DifferenceEG.projectionMap;
-        entityGatewayImplementation = new EntityGatewayImplementation();
+        entityGatewayImplementation = EntityGatewayImplementation.getInstance();
     }
 
     public DifferenceEG(Cursor c) {

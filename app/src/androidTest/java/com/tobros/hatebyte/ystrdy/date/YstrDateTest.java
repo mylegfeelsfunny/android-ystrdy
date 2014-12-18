@@ -1,6 +1,4 @@
-package com.tobros.hatebyte.ystrdy.weatherreport.interactor.date;
-
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
+package com.tobros.hatebyte.ystrdy.date;
 
 import org.junit.Before;
 import org.junit.Test;

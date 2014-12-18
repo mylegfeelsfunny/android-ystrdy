@@ -2,10 +2,12 @@ package com.tobros.hatebyte.ystrdy.difference;
 
 import android.content.ContentValues;
 
+import com.tobros.hatebyte.ystrdy.egi.mock.FakeYstrdyDBAPI;
 import com.tobros.hatebyte.ystrdy.egi.mock.TestDifferenceEG;
 import com.tobros.hatebyte.ystrdy.egi.mock.TestEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
+import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
 
 import org.junit.After;
 import org.junit.Before;
@@ -41,7 +43,8 @@ public class DifferenceEGUseCasesTest {
 
     @After
     public void teardown() {
-        testEGI.getDatabaseAPI().clear();
+        testEGI.getDataBaseAPI().clear();
+        testEGI.close();
         differenceEG = null;
     }
 
@@ -62,7 +65,6 @@ public class DifferenceEGUseCasesTest {
         DifferenceEntity difference = new DifferenceEntity();
         difference.difference = 1.1f;
         difference.recordId = 1;
-//        difference.date = new Date();
 
         differenceEG.setEntity(difference);
         try {

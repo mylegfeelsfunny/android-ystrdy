@@ -1,5 +1,6 @@
 package com.tobros.hatebyte.ystrdy.egi;
 
+import com.tobros.hatebyte.ystrdy.egi.mock.TestEGI;
 import com.tobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
 import com.tobros.hatebyte.ystrdy.egi.mock.FakeYstrdyDBAPI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
@@ -31,17 +32,18 @@ import static org.fest.assertions.api.Assertions.*;
 @RunWith(RobolectricTestRunner.class)
 public class EGITest {
 
-    EntityGatewayImplementation egi;
+    TestEGI egi;
 
     @Before
     public void setup() {
-        egi = new EntityGatewayImplementation();
-        egi.databaseAPI = new FakeYstrdyDBAPI();
+        egi = new TestEGI();
+        egi.setDataBaseAPI(new FakeYstrdyDBAPI());
     }
 
     @After
     public void teardown() {
-        egi.databaseAPI.close();
+        egi.close();
+        egi = null;
     }
 
     @Test

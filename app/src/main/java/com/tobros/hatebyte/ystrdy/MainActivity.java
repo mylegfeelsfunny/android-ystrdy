@@ -22,7 +22,7 @@ import com.tobros.hatebyte.ystrdy.weatherreport.boundary.WeatherReportBoundary;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.forcastio.ForcastioEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
 import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
+import com.tobros.hatebyte.ystrdy.date.YstrDate;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.yahooweather.YahooAPI;
 
 import org.json.JSONException;

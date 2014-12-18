@@ -9,7 +9,7 @@ import android.util.Log;
 
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.yahooweather.YahooAPI;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
+import com.tobros.hatebyte.ystrdy.date.YstrDate;
 
 import java.util.Date;
 

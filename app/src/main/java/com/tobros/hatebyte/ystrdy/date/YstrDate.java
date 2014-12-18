@@ -1,4 +1,4 @@
-package com.tobros.hatebyte.ystrdy.weatherreport.interactor.date;
+package com.tobros.hatebyte.ystrdy.date;
 
 import java.util.Date;
 

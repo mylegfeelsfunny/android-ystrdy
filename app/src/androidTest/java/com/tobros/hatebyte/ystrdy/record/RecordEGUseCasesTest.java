@@ -4,7 +4,7 @@ import com.tobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
 import com.tobros.hatebyte.ystrdy.egi.mock.TestEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
+import com.tobros.hatebyte.ystrdy.date.YstrDate;
 
 import org.junit.After;
 import org.junit.Before;
@@ -41,7 +41,8 @@ public class RecordEGUseCasesTest {
 
     @After
     public void teardown() {
-        testEGI.getDatabaseAPI().clear();
+        testEGI.getDataBaseAPI().clear();
+        testEGI.close();
         recordEG = null;
     }
 

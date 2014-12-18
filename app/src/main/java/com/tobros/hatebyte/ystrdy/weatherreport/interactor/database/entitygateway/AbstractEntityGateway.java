@@ -52,5 +52,4 @@ public abstract class AbstractEntityGateway implements EntityGatewayImplementati
         projection = null;
     }
 
-
 }

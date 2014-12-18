@@ -5,7 +5,7 @@ import android.database.Cursor;
 
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.database.EntityGatewayImplementation;
 import com.tobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
+import com.tobros.hatebyte.ystrdy.date.YstrDate;
 
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
@@ -31,7 +31,7 @@ public class RecordEG extends AbstractEntityGateway {
     public RecordEG() {
         tableName = RecordEntity.TABLE_NAME;
         projection = RecordEG.projectionMap;
-        entityGatewayImplementation = new EntityGatewayImplementation();
+        entityGatewayImplementation = EntityGatewayImplementation.getInstance();
     }
 
     public RecordEG(Cursor c) {

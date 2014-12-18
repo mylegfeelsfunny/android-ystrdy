@@ -6,11 +6,10 @@ import android.location.Location;
 import com.tobros.hatebyte.ystrdy.forcastio.mock.FakeForcastioGateway;
 import com.tobros.hatebyte.ystrdy.forcastio.mock.FakeJSONEGI;
 import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
-import com.tobros.hatebyte.ystrdy.weatherreport.interactor.date.YstrDate;
+import com.tobros.hatebyte.ystrdy.date.YstrDate;
 import com.tobros.hatebyte.ystrdy.weatherreport.interactor.network.forcastio.ForcastioGateway;
 import com.tobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 
-import org.json.JSONException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
