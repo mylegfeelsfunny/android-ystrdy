@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.tobros.hatebyte.ystrdy" >
+    package="com.twobros.hatebyte.ystrdy" >
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -11,7 +11,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.tobros.hatebyte.ystrdy.MainActivity"
+            android:name="com.twobros.hatebyte.ystrdy.MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +22,7 @@
 
 
         <service
-            android:name="com.tobros.hatebyte.ystrdy.location.GPSService"
+            android:name="com.twobros.hatebyte.ystrdy.location.GPSService"
             android:enabled="true"
             android:exported="true" >
             <intent-filter>
@@ -31,7 +31,7 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="com.tobros.hatebyte.ystrdy.alarm.AlarmReceiver"></receiver>
+        <receiver android:name="com.twobros.hatebyte.ystrdy.alarm.AlarmReceiver"></receiver>
 
     </application>
 
