@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
 
 import org.junit.After;
 import org.junit.Before;
@@ -58,50 +58,6 @@ public class YstrdyDatabaseAPITest {
         ystrdyDatabaseAPI.open();
         ystrdyDatabaseAPI.close();
         assertFalse(ystrdyDatabaseAPI.database.isOpen());
-    }
-
-    public ContentValues recordValues() {
-        ContentValues values = new ContentValues();
-        values.put("latitude", 0.1f);
-        values.put("longitude", 0.2f);
-        values.put("temperature", 0.3f);
-        values.put("region_name", "region");
-        values.put("city_name", "scottville");
-        values.put("woeid", "woeid");
-        values.put("date", new Date().getTime());
-        return values;
-    }
-
-    public ContentValues differenceValues() {
-        ContentValues values = new ContentValues();
-        values.put("difference", 4.f);
-        values.put("date", new Date().getTime());
-        return values;
-    }
-
-    public static String[] recordProjection = new String[]{
-            "latitude",
-            "longitude",
-            "temperature",
-            "region_name",
-            "city_name",
-            "woeid",
-            "date",
-            "_id"
-    };
-
-    public static String[] differenceProjection = new String[]{
-            "difference",
-            "date",
-            "record_id",
-            "_id"
-    };
-
-    public long insertRecord() {
-        return ystrdyDatabaseAPI.insert("record", recordValues());
-    }
-    public long insertDifference() {
-        return ystrdyDatabaseAPI.insert("difference", differenceValues());
     }
 
     @Test
@@ -181,5 +137,51 @@ public class YstrdyDatabaseAPITest {
         c = ystrdyDatabaseAPI.get("difference", differenceProjection, null, null, null);
         assertThat(c.getCount()).isEqualTo(0);
     }
+
+
+    public ContentValues recordValues() {
+        ContentValues values = new ContentValues();
+        values.put("latitude", 0.1f);
+        values.put("longitude", 0.2f);
+        values.put("temperature", 0.3f);
+        values.put("region_name", "region");
+        values.put("city_name", "scottville");
+        values.put("woeid", "woeid");
+        values.put("date", new Date().getTime());
+        return values;
+    }
+
+    public ContentValues differenceValues() {
+        ContentValues values = new ContentValues();
+        values.put("difference", 4.f);
+        values.put("date", new Date().getTime());
+        return values;
+    }
+
+    public static String[] recordProjection = new String[]{
+            "latitude",
+            "longitude",
+            "temperature",
+            "region_name",
+            "city_name",
+            "woeid",
+            "date",
+            "_id"
+    };
+
+    public static String[] differenceProjection = new String[]{
+            "difference",
+            "date",
+            "record_id",
+            "_id"
+    };
+
+    public long insertRecord() {
+        return ystrdyDatabaseAPI.insert("record", recordValues());
+    }
+    public long insertDifference() {
+        return ystrdyDatabaseAPI.insert("difference", differenceValues());
+    }
+
 
 }

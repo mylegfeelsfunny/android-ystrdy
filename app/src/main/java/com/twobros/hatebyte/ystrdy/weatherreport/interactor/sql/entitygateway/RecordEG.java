@@ -1,4 +1,4 @@
-package com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway;
+package com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -15,20 +15,30 @@ import java.util.InvalidPropertiesFormatException;
  */
 public class RecordEG extends AbstractEntityGateway {
 
+    public static final String TABLE_NAME                           = "record";
+    public static final String COLUMN_LATITUDE                      = "latitude";
+    public static final String COLUMN_LONGITUDE                     = "longitude";
+    public static final String COLUMN_DATE                          = "date";
+    public static final String COLUMN_TEMPERATURE                   = "temperature";
+    public static final String COLUMN_REGION_NAME                   = "region_name";
+    public static final String COLUMN_CITY_NAME                     = "city_name";
+    public static final String COLUMN_WOEID                         = "woeid";
+    public static final String COLUMN_ID                            = "_id";
+
     public static String[] projectionMap = new String[]{
-            RecordEntity.COLUMN_LATITUDE,
-            RecordEntity.COLUMN_LONGITUDE,
-            RecordEntity.COLUMN_DATE,
-            RecordEntity.COLUMN_TEMPERATURE,
-            RecordEntity.COLUMN_REGION_NAME,
-            RecordEntity.COLUMN_CITY_NAME,
-            RecordEntity.COLUMN_WOEID,
-            RecordEntity.COLUMN_ID
+            RecordEG.COLUMN_LATITUDE,
+            RecordEG.COLUMN_LONGITUDE,
+            RecordEG.COLUMN_DATE,
+            RecordEG.COLUMN_TEMPERATURE,
+            RecordEG.COLUMN_REGION_NAME,
+            RecordEG.COLUMN_CITY_NAME,
+            RecordEG.COLUMN_WOEID,
+            RecordEG.COLUMN_ID
     };
 
     private RecordEntity entity;
     public RecordEG() {
-        tableName = RecordEntity.TABLE_NAME;
+        tableName = RecordEG.TABLE_NAME;
         projection = RecordEG.projectionMap;
         SQLDatabaseEGI = SQLDatabaseEGI.getInstance();
     }
@@ -56,26 +66,26 @@ public class RecordEG extends AbstractEntityGateway {
         }
 
         entity = new RecordEntity();
-        entity.location.setLatitude(c.getFloat(c.getColumnIndex(RecordEntity.COLUMN_LATITUDE)));
-        entity.location.setLongitude(c.getFloat(c.getColumnIndex(RecordEntity.COLUMN_LONGITUDE)));
-        entity.temperature = c.getFloat(c.getColumnIndex(RecordEntity.COLUMN_TEMPERATURE));
-        entity.regionName = c.getString(c.getColumnIndex(RecordEntity.COLUMN_REGION_NAME));
-        entity.cityName = c.getString(c.getColumnIndex(RecordEntity.COLUMN_CITY_NAME));
-        entity.woeid = c.getString(c.getColumnIndex(RecordEntity.COLUMN_WOEID));
-        entity.date = new Date(c.getLong(c.getColumnIndex(RecordEntity.COLUMN_DATE)));
-        entity.id = c.getInt(c.getColumnIndex(RecordEntity.COLUMN_ID));
+        entity.location.setLatitude(c.getFloat(c.getColumnIndex(RecordEG.COLUMN_LATITUDE)));
+        entity.location.setLongitude(c.getFloat(c.getColumnIndex(RecordEG.COLUMN_LONGITUDE)));
+        entity.temperature = c.getFloat(c.getColumnIndex(RecordEG.COLUMN_TEMPERATURE));
+        entity.regionName = c.getString(c.getColumnIndex(RecordEG.COLUMN_REGION_NAME));
+        entity.cityName = c.getString(c.getColumnIndex(RecordEG.COLUMN_CITY_NAME));
+        entity.woeid = c.getString(c.getColumnIndex(RecordEG.COLUMN_WOEID));
+        entity.date = new Date(c.getLong(c.getColumnIndex(RecordEG.COLUMN_DATE)));
+        entity.id = c.getInt(c.getColumnIndex(RecordEG.COLUMN_ID));
     }
 
     @Override
     public ContentValues contentValues() {
         ContentValues values = new ContentValues();
-        values.put(RecordEntity.COLUMN_LATITUDE, entity.location.getLatitude());
-        values.put(RecordEntity.COLUMN_LONGITUDE, entity.location.getLongitude());
-        values.put(RecordEntity.COLUMN_TEMPERATURE, entity.temperature);
-        values.put(RecordEntity.COLUMN_REGION_NAME, entity.regionName);
-        values.put(RecordEntity.COLUMN_CITY_NAME, entity.cityName);
-        values.put(RecordEntity.COLUMN_WOEID, entity.woeid);
-        values.put(RecordEntity.COLUMN_DATE, entity.date.getTime());
+        values.put(RecordEG.COLUMN_LATITUDE, entity.location.getLatitude());
+        values.put(RecordEG.COLUMN_LONGITUDE, entity.location.getLongitude());
+        values.put(RecordEG.COLUMN_TEMPERATURE, entity.temperature);
+        values.put(RecordEG.COLUMN_REGION_NAME, entity.regionName);
+        values.put(RecordEG.COLUMN_CITY_NAME, entity.cityName);
+        values.put(RecordEG.COLUMN_WOEID, entity.woeid);
+        values.put(RecordEG.COLUMN_DATE, entity.date.getTime());
         return values;
     }
 
@@ -99,7 +109,7 @@ public class RecordEG extends AbstractEntityGateway {
     public int numRecords() {
         reset();
         projection = new String[]{
-            RecordEntity.COLUMN_ID
+            RecordEG.COLUMN_ID
         };
 
         return SQLDatabaseEGI.count(this);

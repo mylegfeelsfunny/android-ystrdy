@@ -9,7 +9,7 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database.IDatabaseAPI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.IDatabaseAPI;
 
 /**
  * Created by scott on 12/16/14.

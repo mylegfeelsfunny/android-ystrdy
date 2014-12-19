@@ -3,7 +3,7 @@ package com.twobros.hatebyte.ystrdy.record;
 import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
 import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 
 import org.junit.After;

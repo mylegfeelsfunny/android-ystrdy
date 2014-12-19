@@ -19,7 +19,7 @@ import android.view.View;
 import com.twobros.hatebyte.ystrdy.alarm.AlarmReceiver;
 import com.twobros.hatebyte.ystrdy.weatherreport.boundary.IWeatherReportBoundary;
 import com.twobros.hatebyte.ystrdy.weatherreport.boundary.WeatherReportBoundary;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.JSONEGI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.implementation.JSONEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
@@ -92,10 +92,10 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
 
         weatherRequest.date = ystrday;
 
-//        WeatherResponseModel weatherResponseModel = forcastioAPISema.request(weatherRequest);
+//        WeatherResponseModel weatherResponseModel = forcastioAPISema.requestWeatherData(weatherRequest);
 
         yahooAPI.getCityInLocation(weatherRequest.location);
-//        forcastioGatewayImplementation.request(weatherRequest);
+//        forcastioGatewayImplementation.requestWeatherData(weatherRequest);
 
         format();
 

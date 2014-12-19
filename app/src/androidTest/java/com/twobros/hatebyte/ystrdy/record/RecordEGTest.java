@@ -11,9 +11,9 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
 
 import org.junit.After;
 import org.junit.Before;
@@ -69,9 +69,7 @@ public class RecordEGTest {
 
     @Test
     public void test_mapFromCursorWithPopulatedCursor() {
-        // add a record
         insertRecord();
-
         RecordEG recordEG = new RecordEG();
         Cursor c = ystrdyDatabaseAPI.get("record", recordEG.projection(), null, null, "1");
         c.moveToFirst();
@@ -313,6 +311,7 @@ public class RecordEGTest {
         public Bundle respond(Bundle bundle) {
             return null;
         }
+
     };
 
 }

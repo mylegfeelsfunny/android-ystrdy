@@ -8,7 +8,7 @@ import android.location.LocationManager;
 import android.util.Log;
 
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.yahooweather.YahooAPI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 
 import java.util.Date;
@@ -38,10 +38,10 @@ public class AlarmReceiver extends BroadcastReceiver {
         Log.i(TAG, location.getLatitude()+","+location.getLongitude()+","+yesterday.getTime()/1000);
 
 //        temperatureNow = new YahooAPI(context, this);
-        //temperatureNow.request();
+        //temperatureNow.requestWeatherData();
 
 //        temperatureYstrdy = new ForcastioAPI(context, this);
-//        temperatureYstrdy.request();
+//        temperatureYstrdy.requestWeatherData();
 
 
 //        try {

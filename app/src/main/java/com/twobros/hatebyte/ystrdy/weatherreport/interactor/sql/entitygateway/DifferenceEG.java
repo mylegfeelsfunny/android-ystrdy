@@ -1,4 +1,4 @@
-package com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway;
+package com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -14,17 +14,23 @@ import java.util.InvalidPropertiesFormatException;
  */
 public class DifferenceEG extends AbstractEntityGateway {
 
+    public static final String TABLE_NAME                           = "difference";
+    public static final String COLUMN_NOW_RECORD_ID                 = "record_id";
+    public static final String COLUMN_DIFFERENCE                    = "difference";
+    public static final String COLUMN_DATE                          = "date";
+    public static final String COLUMN_ID                            = "_id";
+
     public static String[] projectionMap = new String[]{
-                DifferenceEntity.COLUMN_DIFFERENCE,
-                DifferenceEntity.COLUMN_DATE,
-                DifferenceEntity.COLUMN_NOW_RECORD_ID,
-                DifferenceEntity.COLUMN_ID
+        DifferenceEG.COLUMN_DIFFERENCE,
+        DifferenceEG.COLUMN_DATE,
+        DifferenceEG.COLUMN_NOW_RECORD_ID,
+        DifferenceEG.COLUMN_ID
     };
 
     private DifferenceEntity entity;
 
     public DifferenceEG() {
-        tableName = DifferenceEntity.TABLE_NAME;
+        tableName = DifferenceEG.TABLE_NAME;
         projection = DifferenceEG.projectionMap;
         SQLDatabaseEGI = SQLDatabaseEGI.getInstance();
     }
@@ -39,10 +45,10 @@ public class DifferenceEG extends AbstractEntityGateway {
             return;
         }
         entity = new DifferenceEntity();
-        entity.difference = c.getFloat(c.getColumnIndex(DifferenceEntity.COLUMN_DIFFERENCE));
-        entity.date = new Date(c.getLong(c.getColumnIndex(DifferenceEntity.COLUMN_DATE)));
-        entity.recordId = c.getInt(c.getColumnIndex(DifferenceEntity.COLUMN_NOW_RECORD_ID));
-        entity.id = c.getInt(c.getColumnIndex(DifferenceEntity.COLUMN_ID));
+        entity.difference = c.getFloat(c.getColumnIndex(DifferenceEG.COLUMN_DIFFERENCE));
+        entity.date = new Date(c.getLong(c.getColumnIndex(DifferenceEG.COLUMN_DATE)));
+        entity.recordId = c.getInt(c.getColumnIndex(DifferenceEG.COLUMN_NOW_RECORD_ID));
+        entity.id = c.getInt(c.getColumnIndex(DifferenceEG.COLUMN_ID));
     }
 
     @Override
@@ -60,9 +66,9 @@ public class DifferenceEG extends AbstractEntityGateway {
     @Override
     public ContentValues contentValues() {
         ContentValues values = new ContentValues();
-        values.put(DifferenceEntity.COLUMN_DIFFERENCE, entity.difference);
-        values.put(DifferenceEntity.COLUMN_NOW_RECORD_ID, entity.recordId);
-        values.put(DifferenceEntity.COLUMN_DATE, entity.date.getTime());
+        values.put(DifferenceEG.COLUMN_DIFFERENCE, entity.difference);
+        values.put(DifferenceEG.COLUMN_NOW_RECORD_ID, entity.recordId);
+        values.put(DifferenceEG.COLUMN_DATE, entity.date.getTime());
         return values;
     }
 
@@ -95,7 +101,7 @@ public class DifferenceEG extends AbstractEntityGateway {
     public int numDifferenceRecords() {
         reset();
         projection = new String[]{
-            DifferenceEntity.COLUMN_ID
+            DifferenceEG.COLUMN_ID
         };
 
         return SQLDatabaseEGI.count(this);

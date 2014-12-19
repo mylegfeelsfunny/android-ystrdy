@@ -3,13 +3,12 @@ package com.twobros.hatebyte.ystrdy.weatherreport.interactor;
 import android.os.AsyncTask;
 
 import com.twobros.hatebyte.ystrdy.YstrdyApp;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.yahooweather.YahooAPI;
 
 import java.util.Date;
 

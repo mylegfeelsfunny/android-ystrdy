@@ -1,9 +1,9 @@
-package com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway;
+package com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.SQLDatabaseEGI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation.SQLDatabaseEGI;
 
 /**
  * Created by scott on 12/14/14.

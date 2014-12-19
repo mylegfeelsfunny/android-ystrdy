@@ -5,7 +5,7 @@ import android.content.ContentValues;
 import com.twobros.hatebyte.ystrdy.egi.mock.TestDifferenceEG;
 import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
 
 import org.junit.After;
 import org.junit.Before;
@@ -48,13 +48,13 @@ public class DifferenceEGUseCasesTest {
 
     public ContentValues recordValues() {
         ContentValues values = new ContentValues();
-        values.put(RecordEntity.COLUMN_LATITUDE, 0.1f);
-        values.put(RecordEntity.COLUMN_LONGITUDE, 0.2f);
-        values.put(RecordEntity.COLUMN_TEMPERATURE, 0.3f);
-        values.put(RecordEntity.COLUMN_REGION_NAME, "region");
-        values.put(RecordEntity.COLUMN_CITY_NAME, "scottville");
-        values.put(RecordEntity.COLUMN_WOEID, "woeid");
-        values.put(RecordEntity.COLUMN_DATE, new Date().getTime());
+        values.put(RecordEG.COLUMN_LATITUDE, 0.1f);
+        values.put(RecordEG.COLUMN_LONGITUDE, 0.2f);
+        values.put(RecordEG.COLUMN_TEMPERATURE, 0.3f);
+        values.put(RecordEG.COLUMN_REGION_NAME, "region");
+        values.put(RecordEG.COLUMN_CITY_NAME, "scottville");
+        values.put(RecordEG.COLUMN_WOEID, "woeid");
+        values.put(RecordEG.COLUMN_DATE, new Date().getTime());
         return values;
     }
 

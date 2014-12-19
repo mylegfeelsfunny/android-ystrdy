@@ -1,7 +1,5 @@
-package com.twobros.hatebyte.ystrdy.weatherreport.interactor.network;
+package com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.implementation;
 
-import android.content.ContentValues;
-import android.database.Cursor;
 import android.util.Log;
 
 //import com.android.volley.Request;
@@ -14,6 +12,9 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 /**
@@ -23,28 +24,41 @@ public class JSONEGI {
 
     private static final String TAG = " JSONEGI";
 
+    OkHttpClient client = new OkHttpClient();
+
     public interface IJSONEntityGateway {
         public String url();
+        public void mapFromJSON(JSONObject json);
     }
 
-    public String get(IJSONEntityGateway eg) {
-        String result = null;
+    public JSONObject get(IJSONEntityGateway eg) {
+        String jsonString = null;
         try {
-            result = fetch(eg.url());
+            jsonString = fetch(eg.url());
         } catch (IOException e) {
             Log.e(TAG, "IOException : " + e);
         } finally {
-            return result;
+            return JSONEGI.parseJSONString(jsonString);
         }
     }
 
-    OkHttpClient client = new OkHttpClient();
     protected String fetch(String url) throws IOException {
         Request request = new Request.Builder()
                 .url(url)
                 .build();
         Response response = client.newCall(request).execute();
         return response.body().string();
+    }
+
+    public static JSONObject parseJSONString(String jsonString) {
+        JSONObject json = null;
+        try {
+            json = new JSONObject(jsonString);
+        } catch (JSONException e) {
+            Log.e(TAG, "JSONException : parseForRegionName" + e);
+        } finally {
+            return json;
+        }
     }
 
 }

@@ -1,5 +1,9 @@
-package com.twobros.hatebyte.ystrdy.yahoo;
+package com.twobros.hatebyte.ystrdy.network;
 
+import com.twobros.hatebyte.ystrdy.network.historical.mock.BadForcastIO;
+import com.twobros.hatebyte.ystrdy.network.mock.FakeJSONEGI;
+
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,21 +20,27 @@ import static org.junit.Assert.assertTrue;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class YahooEGTest {
+public class JSONEGITest {
 
+    FakeJSONEGI fakeJSONEGI;
 
     @Before
     public void setup() {
+        fakeJSONEGI = new FakeJSONEGI();
     }
 
     @After
     public void teardown() {
-
+        fakeJSONEGI = null;
     }
 
     @Test
-    public void test_vaid() {
-        assertThat(true).isTrue();
+    public void test_IOExceptionSendsNullString() {
+        fakeJSONEGI.sendBackIOException = true;
+
+        JSONObject json = fakeJSONEGI.get(new BadForcastIO());
+        assertThat(json).isNull();
     }
+
 
 }

@@ -3,8 +3,8 @@ package com.twobros.hatebyte.ystrdy.egi.mock;
 import android.content.ContentValues;
 import android.database.Cursor;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.SQLDatabaseEGI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation.SQLDatabaseEGI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
 
 /**
  * Created by scott on 12/16/14.

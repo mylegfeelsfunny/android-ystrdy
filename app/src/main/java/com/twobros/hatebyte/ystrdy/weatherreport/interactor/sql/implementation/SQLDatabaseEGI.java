@@ -1,11 +1,11 @@
-package com.twobros.hatebyte.ystrdy.weatherreport.interactor.database;
+package com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.twobros.hatebyte.ystrdy.YstrdyApp;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database.IDatabaseAPI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.IDatabaseAPI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
 
 import java.util.InvalidPropertiesFormatException;
 
@@ -29,10 +29,6 @@ public class SQLDatabaseEGI {
     }
 
     protected IDatabaseAPI databaseAPI;
-
-//    protected IDatabaseAPI getDatabaseAPI() {
-//        return databaseAPI;
-//    }
 
     private static SQLDatabaseEGI instance = null;
     public SQLDatabaseEGI() {
@@ -90,7 +86,5 @@ public class SQLDatabaseEGI {
         databaseAPI.delete(entityGateway.tableName(), entityGateway.selectString());
         databaseAPI.close();
     }
-
-
 
 }

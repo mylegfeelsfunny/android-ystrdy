@@ -1,4 +1,4 @@
-package com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database;
+package com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi;
 
 import android.content.ContentValues;
 import android.database.Cursor;

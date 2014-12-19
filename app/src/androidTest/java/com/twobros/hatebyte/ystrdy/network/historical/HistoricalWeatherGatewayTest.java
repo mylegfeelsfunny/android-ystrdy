@@ -1,17 +1,16 @@
-package com.twobros.hatebyte.ystrdy.forcastio;
+package com.twobros.hatebyte.ystrdy.network.historical;
 
 
 import android.location.Location;
 
-import com.twobros.hatebyte.ystrdy.forcastio.mock.FakeForcastioGateway;
-import com.twobros.hatebyte.ystrdy.forcastio.mock.FakeJSONEGI;
-import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
+import com.twobros.hatebyte.ystrdy.network.historical.mock.FakeHistoricalWeatherGateway;
+import com.twobros.hatebyte.ystrdy.network.mock.FakeJSONEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.implementation.JSONEGI;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.forcastio.ForcastioGateway;
-import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.HistoricalWeatherGateway;
 
+import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -33,21 +32,24 @@ import static org.junit.Assert.assertTrue;
  */
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class ForcastioGatewayTest {
+public class HistoricalWeatherGatewayTest {
 
-    FakeForcastioGateway forcastioGateway;
-
+    FakeHistoricalWeatherGateway forcastioGateway;
     RecordEntity recordEntity;
-//    DifferenceEntity differenceEntity;
+    FakeJSONEGI jsonEGI;
 
     @Before
     public void setup() {
-        forcastioGateway = new FakeForcastioGateway();
+        jsonEGI = new FakeJSONEGI();
+        forcastioGateway = new FakeHistoricalWeatherGateway();
+        forcastioGateway.setEntityGateway(jsonEGI);
+        jsonEGI.sendHistorical = true;
         recordEntity = new RecordEntity();
     }
 
     @After
     public void teardown() {
+        jsonEGI = null;
         recordEntity = null;
         forcastioGateway = null;
     }
@@ -56,21 +58,22 @@ public class ForcastioGatewayTest {
     @Test
     public void test_parseForTemperature() {
         Float temperature = 0f;
-        temperature  = ForcastioGateway.parseForTemperature(FakeJSONEGI.forcastioResponseString());
+        JSONObject json = JSONEGI.parseJSONString(FakeJSONEGI.historicalResponseString());
+        temperature  = HistoricalWeatherGateway.parseForTemperature(json);
         assertThat(temperature).isEqualTo(45.9f);
     }
 
     @Test
-    public void test_forcastIORequestReturnsWeatherResponse() {
+    public void test_forcastIORequestReturnsRecordEntity() {
         RecordEntity wr = requestModel();
-        wr = forcastioGateway.request(wr);
+        wr = forcastioGateway.requestData(wr);
         assertThat(wr).isInstanceOf(RecordEntity.class);
     }
 
     @Test
-    public void test_forcastIOCanReturnSyncronousData() {
+    public void test_forcastIOCanPopulateFromJSON() {
         RecordEntity wr = requestModel();
-        wr = forcastioGateway.request(wr);
+        wr = forcastioGateway.requestData(wr);
         assertThat(wr.temperature).isEqualTo(45.9f);
         assertThat(wr.regionName).isEqualTo("America/New_York");
     }
@@ -78,32 +81,31 @@ public class ForcastioGatewayTest {
     @Test
     public void test_weatherResponseIsInvalidWithoutValidTemperature() {
         RecordEntity wr = requestModel();
-        assertThat(ForcastioGateway.isValid(wr)).isFalse();
+        forcastioGateway.setRecord(wr);
+        assertThat(forcastioGateway.isValid()).isFalse();
     }
 
     @Test
     public void test_weatherResponseIsInvalidWithoutValidRegionName() {
         recordEntity.temperature = 100.f;
-        assertThat(ForcastioGateway.isValid(recordEntity)).isFalse();
+        forcastioGateway.setRecord(recordEntity);
+        assertThat(forcastioGateway.isValid()).isFalse();
     }
 
     @Test
-    public void test_weatherResponseIsInvalidValid() {
+    public void test_weatherResponseIsdValid() {
         recordEntity.temperature = 100.f;
         recordEntity.regionName = "newyork";
-        assertThat(ForcastioGateway.isValid(recordEntity)).isTrue();
+        forcastioGateway.setRecord(recordEntity);
+        assertThat(forcastioGateway.isValid()).isTrue();
     }
 
     @Test
     public void test_weatherResponseIsInvalidValidWithIOException() {
-        FakeJSONEGI fakeJSONEGI = new FakeJSONEGI();
-        fakeJSONEGI.sendBackIOException = true;
-        forcastioGateway.setForcastioGateway(fakeJSONEGI);
-
+        jsonEGI.sendBackIOException = true;
         RecordEntity wr = requestModel();
-        wr = forcastioGateway.request(wr);
-
-        assertThat(ForcastioGateway.isValid(wr)).isFalse();
+        wr = forcastioGateway.requestData(wr);
+        assertThat(forcastioGateway.isValid()).isFalse();
     }
 
     public RecordEntity requestModel() {

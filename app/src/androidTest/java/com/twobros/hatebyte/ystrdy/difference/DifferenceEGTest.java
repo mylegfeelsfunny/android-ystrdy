@@ -11,9 +11,9 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.twobros.hatebyte.ystrdy.egi.mock.TestDifferenceEG;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.DifferenceEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceEG;
 
 import org.junit.After;
 import org.junit.Before;

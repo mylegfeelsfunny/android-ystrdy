@@ -2,7 +2,7 @@ package com.twobros.hatebyte.ystrdy.weatherreport.interactor;
 
 import android.os.AsyncTask;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.DifferenceEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceEG;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;

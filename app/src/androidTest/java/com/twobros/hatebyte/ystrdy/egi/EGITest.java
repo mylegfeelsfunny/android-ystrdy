@@ -4,7 +4,7 @@ import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
 import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
 import com.twobros.hatebyte.ystrdy.egi.mock.FakeYstrdyDBAPI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
 
 import org.junit.After;
 import org.junit.Before;

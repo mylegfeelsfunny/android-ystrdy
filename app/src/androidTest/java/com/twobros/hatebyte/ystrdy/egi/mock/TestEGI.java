@@ -2,9 +2,9 @@ package com.twobros.hatebyte.ystrdy.egi.mock;
 
 import android.content.Context;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.SQLDatabaseEGI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database.IDatabaseAPI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.database.database.YstrdyDatabaseAPI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation.SQLDatabaseEGI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.IDatabaseAPI;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
 
 import org.robolectric.Robolectric;
 
