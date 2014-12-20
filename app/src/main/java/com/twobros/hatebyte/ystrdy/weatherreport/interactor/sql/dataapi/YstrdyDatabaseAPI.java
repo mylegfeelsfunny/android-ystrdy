@@ -6,8 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceEG;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 
 /**
  * Created by scott on 12/12/14.
@@ -26,27 +26,27 @@ public class YstrdyDatabaseAPI extends SQLiteOpenHelper implements IDatabaseAPI 
 
     private static final String SQL_CREATE_RECORDS =
             "CREATE TABLE " +
-                    RecordEG.TABLE_NAME + " (" +
-                    RecordEG.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
-                    RecordEG.COLUMN_LATITUDE + TYPE_FLOAT + COMMA_SEP +
-                    RecordEG.COLUMN_LONGITUDE + TYPE_FLOAT + COMMA_SEP +
-                    RecordEG.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
-                    RecordEG.COLUMN_REGION_NAME + TYPE_TEXT + COMMA_SEP +
-                    RecordEG.COLUMN_CITY_NAME + TYPE_TEXT + COMMA_SEP +
-                    RecordEG.COLUMN_WOEID + TYPE_TEXT + COMMA_SEP +
-                    RecordEG.COLUMN_TEMPERATURE + TYPE_FLOAT + ")";
+                    RecordGateway.TABLE_NAME + " (" +
+                    RecordGateway.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
+                    RecordGateway.COLUMN_LATITUDE + TYPE_FLOAT + COMMA_SEP +
+                    RecordGateway.COLUMN_LONGITUDE + TYPE_FLOAT + COMMA_SEP +
+                    RecordGateway.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
+                    RecordGateway.COLUMN_REGION_NAME + TYPE_TEXT + COMMA_SEP +
+                    RecordGateway.COLUMN_CITY_NAME + TYPE_TEXT + COMMA_SEP +
+                    RecordGateway.COLUMN_WOEID + TYPE_TEXT + COMMA_SEP +
+                    RecordGateway.COLUMN_TEMPERATURE + TYPE_FLOAT + ")";
     private static final String SQL_DELETE_RECORDS =
-            "DROP TABLE IF EXISTS " + RecordEG.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + RecordGateway.TABLE_NAME;
 
     private static final String SQL_CREATE_DIFFERENCE_RECORDS =
             "CREATE TABLE " +
-                    DifferenceEG.TABLE_NAME + " (" +
-                    DifferenceEG.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
-                    DifferenceEG.COLUMN_DIFFERENCE + TYPE_FLOAT + COMMA_SEP +
-                    DifferenceEG.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
-                    DifferenceEG.COLUMN_NOW_RECORD_ID + TYPE_INTEGER + ")";
+                    DifferenceGateway.TABLE_NAME + " (" +
+                    DifferenceGateway.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
+                    DifferenceGateway.COLUMN_DIFFERENCE + TYPE_FLOAT + COMMA_SEP +
+                    DifferenceGateway.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
+                    DifferenceGateway.COLUMN_NOW_RECORD_ID + TYPE_INTEGER + ")";
     private static final String SQL_DELETE_DIFFERENCE_RECORDS =
-            "DROP TABLE IF EXISTS " + DifferenceEG.TABLE_NAME;
+            "DROP TABLE IF EXISTS " + DifferenceGateway.TABLE_NAME;
 
     public SQLiteDatabase database;
 

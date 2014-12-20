@@ -24,7 +24,7 @@ public class JSONEGI {
 
     private static final String TAG = " JSONEGI";
 
-    OkHttpClient client = new OkHttpClient();
+    private OkHttpClient client = new OkHttpClient();
 
     public interface IJSONEntityGateway {
         public String url();

@@ -4,7 +4,7 @@ import android.os.AsyncTask;
 
 import com.twobros.hatebyte.ystrdy.YstrdyApp;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
@@ -22,7 +22,7 @@ public abstract class SavedRecordInteractor {
 
     private WeatherRequest weatherRequest;
     private WeatherResponse weatherResponse;
-    protected RecordEG recordEG;
+    protected RecordGateway recordGateway;
 
     public SavedRecordInteractor() {
     }
@@ -30,7 +30,7 @@ public abstract class SavedRecordInteractor {
     public void getReport(WeatherRequest wr) {
         weatherRequest = wr;
         weatherResponse = new WeatherResponse();
-        recordEG = new RecordEG();
+        recordGateway = new RecordGateway();
         new GetRecordFromYstrdy().execute((Object[]) null);
     }
 
@@ -61,7 +61,7 @@ public abstract class SavedRecordInteractor {
     private class GetRecordFromYstrdy extends AsyncTask<Object, Object, RecordEntity> {
         @Override
         protected RecordEntity doInBackground(Object... params) {
-            return recordEG.getClosestRecordFromYstrdy();
+            return recordGateway.getClosestRecordFromYstrdy();
         }
         @Override
         protected void onPostExecute(RecordEntity recordEntity) {

@@ -2,10 +2,10 @@ package com.twobros.hatebyte.ystrdy.difference;
 
 import android.content.ContentValues;
 
-import com.twobros.hatebyte.ystrdy.egi.mock.TestDifferenceEG;
+import com.twobros.hatebyte.ystrdy.egi.mock.TestDifferenceGateway;
 import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,14 +27,14 @@ import static org.mockito.Mockito.mock;
  */
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class DifferenceEGUseCasesTest {
+public class DifferenceGatewayUseCasesTest {
 
-    TestDifferenceEG differenceEG;
+    TestDifferenceGateway differenceEG;
     TestEGI testEGI;
 
     @Before
     public void setup() {
-        differenceEG = new TestDifferenceEG();
+        differenceEG = new TestDifferenceGateway();
         testEGI = new TestEGI();
         differenceEG.setEntityGatewayImplementation(testEGI);
     }
@@ -48,13 +48,13 @@ public class DifferenceEGUseCasesTest {
 
     public ContentValues recordValues() {
         ContentValues values = new ContentValues();
-        values.put(RecordEG.COLUMN_LATITUDE, 0.1f);
-        values.put(RecordEG.COLUMN_LONGITUDE, 0.2f);
-        values.put(RecordEG.COLUMN_TEMPERATURE, 0.3f);
-        values.put(RecordEG.COLUMN_REGION_NAME, "region");
-        values.put(RecordEG.COLUMN_CITY_NAME, "scottville");
-        values.put(RecordEG.COLUMN_WOEID, "woeid");
-        values.put(RecordEG.COLUMN_DATE, new Date().getTime());
+        values.put(RecordGateway.COLUMN_LATITUDE, 0.1f);
+        values.put(RecordGateway.COLUMN_LONGITUDE, 0.2f);
+        values.put(RecordGateway.COLUMN_TEMPERATURE, 0.3f);
+        values.put(RecordGateway.COLUMN_REGION_NAME, "region");
+        values.put(RecordGateway.COLUMN_CITY_NAME, "scottville");
+        values.put(RecordGateway.COLUMN_WOEID, "woeid");
+        values.put(RecordGateway.COLUMN_DATE, new Date().getTime());
         return values;
     }
 

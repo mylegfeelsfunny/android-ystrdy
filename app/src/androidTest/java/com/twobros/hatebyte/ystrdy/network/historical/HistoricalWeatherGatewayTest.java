@@ -3,12 +3,12 @@ package com.twobros.hatebyte.ystrdy.network.historical;
 
 import android.location.Location;
 
-import com.twobros.hatebyte.ystrdy.network.historical.mock.FakeHistoricalWeatherGateway;
+import com.twobros.hatebyte.ystrdy.date.YstrDate;
+import com.twobros.hatebyte.ystrdy.network.historical.mock.FakeHistoricalGateway;
 import com.twobros.hatebyte.ystrdy.network.mock.FakeJSONEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.implementation.JSONEGI;
-import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.HistoricalWeatherGateway;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.implementation.JSONEGI;
 
 import org.json.JSONObject;
 import org.junit.After;
@@ -21,11 +21,6 @@ import org.robolectric.annotation.Config;
 import java.util.Date;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by scott on 12/16/14.
@@ -34,14 +29,14 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public class HistoricalWeatherGatewayTest {
 
-    FakeHistoricalWeatherGateway forcastioGateway;
+    FakeHistoricalGateway forcastioGateway;
     RecordEntity recordEntity;
     FakeJSONEGI jsonEGI;
 
     @Before
     public void setup() {
         jsonEGI = new FakeJSONEGI();
-        forcastioGateway = new FakeHistoricalWeatherGateway();
+        forcastioGateway = new FakeHistoricalGateway();
         forcastioGateway.setEntityGateway(jsonEGI);
         jsonEGI.sendHistorical = true;
         recordEntity = new RecordEntity();

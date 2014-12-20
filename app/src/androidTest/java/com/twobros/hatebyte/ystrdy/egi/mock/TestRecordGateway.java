@@ -4,12 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation.SQLDatabaseEGI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 
 /**
  * Created by scott on 12/16/14.
  */
-public class TestRecordEG extends RecordEG {
+public class TestRecordGateway extends RecordGateway {
 
     public Boolean getTableNameWasCalled;
     public Boolean getProjectionWasCalled;
@@ -21,14 +21,14 @@ public class TestRecordEG extends RecordEG {
     public Boolean mapFromCursorWasCalled;
 
     public Boolean hasDatabase() {
-        return (SQLDatabaseEGI != null);
+        return (sqlDatabaseEGI != null);
     }
 
     public void setEntityGatewayImplementation(SQLDatabaseEGI e) {
-        SQLDatabaseEGI = e;
+        sqlDatabaseEGI = e;
     }
     public SQLDatabaseEGI getEntityGatewayImplementation() {
-        return SQLDatabaseEGI;
+        return sqlDatabaseEGI;
     }
 
     @Override

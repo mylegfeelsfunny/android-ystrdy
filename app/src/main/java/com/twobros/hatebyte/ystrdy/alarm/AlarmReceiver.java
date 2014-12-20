@@ -7,9 +7,8 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.util.Log;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.yahooweather.YahooAPI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 
 import java.util.Date;
 
@@ -21,7 +20,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = "AlarmReceiver";
 
     private Context context = null;
-    YahooAPI temperatureNow = null;
 
     @Override
     public void onReceive(Context c, Intent intent) {
@@ -51,7 +49,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 //        }
     }
 
-    public void onCurrentTemperatureRecieved(RecordEG record) {
+    public void onCurrentTemperatureRecieved(RecordGateway record) {
 //        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
 //        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
     }
@@ -60,8 +58,7 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     }
 
-
-    public void onYstrdyTemperatureRecieved(RecordEG record) {
+    public void onYstrdyTemperatureRecieved(RecordGateway record) {
 //        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
 //        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
     }
@@ -69,7 +66,6 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onYstrdytTemperatureError() {
 
     }
-
 
     private Location currentLocation() {
         boolean gpsEnabled = false;
@@ -83,20 +79,19 @@ public class AlarmReceiver extends BroadcastReceiver {
         Location gpsLoc = null;
         Location finalLoc = null;
 
-        if (gpsEnabled)
+        if (gpsEnabled) {
             gpsLoc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        if (networkEnabled)
+        }
+        if (networkEnabled) {
             netLoc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
+        }
         if (gpsLoc != null && netLoc != null) {
-
-            if (gpsLoc.getAccuracy() >= netLoc.getAccuracy())
+            if (gpsLoc.getAccuracy() >= netLoc.getAccuracy()) {
                 finalLoc = gpsLoc;
-            else
+            } else {
                 finalLoc = netLoc;
-
+            }
         } else {
-
             if (gpsLoc != null) {
                 finalLoc = netLoc;
             } else if (netLoc != null) {

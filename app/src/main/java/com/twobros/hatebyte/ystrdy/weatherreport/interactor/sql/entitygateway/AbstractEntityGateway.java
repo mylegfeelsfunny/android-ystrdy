@@ -10,7 +10,7 @@ import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation.S
  */
 public abstract class AbstractEntityGateway implements SQLDatabaseEGI.ISQLEntityGateway {
 
-    protected SQLDatabaseEGI SQLDatabaseEGI;
+    protected SQLDatabaseEGI sqlDatabaseEGI = SQLDatabaseEGI.getInstance();
 
     protected String tableName;
     protected String[] projection;

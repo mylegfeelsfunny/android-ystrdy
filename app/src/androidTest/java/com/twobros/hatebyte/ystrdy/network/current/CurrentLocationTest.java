@@ -6,8 +6,6 @@ import com.twobros.hatebyte.ystrdy.network.current.mock.FakeCurrentLocationGatew
 import com.twobros.hatebyte.ystrdy.network.mock.FakeJSONEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.CurrentLocationGateway;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.CurrentWeatherGateway;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.HistoricalWeatherGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.implementation.JSONEGI;
 
 import org.json.JSONObject;
@@ -19,11 +17,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by scott on 12/16/14.
@@ -32,15 +25,15 @@ import static org.junit.Assert.assertTrue;
 @RunWith(RobolectricTestRunner.class)
 public class CurrentLocationTest {
 
-    FakeCurrentLocationGateway currentWeatherGateway;
+    FakeCurrentLocationGateway currentLocationGateway;
     RecordEntity recordEntity;
     FakeJSONEGI jsonEGI;
 
     @Before
     public void setup() {
         jsonEGI = new FakeJSONEGI();
-        currentWeatherGateway = new FakeCurrentLocationGateway();
-        currentWeatherGateway.setEntityGateway(jsonEGI);
+        currentLocationGateway = new FakeCurrentLocationGateway();
+        currentLocationGateway.setEntityGateway(jsonEGI);
         recordEntity = new RecordEntity();
     }
 
@@ -48,7 +41,7 @@ public class CurrentLocationTest {
     public void teardown() {
         jsonEGI = null;
         recordEntity = null;
-        currentWeatherGateway = null;
+        currentLocationGateway = null;
     }
 
     @Test
@@ -82,7 +75,7 @@ public class CurrentLocationTest {
     public void test_currentWeatherGateway_requestLocationData_recordEntity() {
         jsonEGI.sendCurrentsLocation = true;
         RecordEntity wr = requestModel();
-        wr = currentWeatherGateway.requestData(wr);
+        wr = currentLocationGateway.requestData(wr);
         assertThat(wr).isInstanceOf(RecordEntity.class);
     }
 
@@ -90,59 +83,56 @@ public class CurrentLocationTest {
     public void test_currentWeatherGateway_requestLocationData_returnsRecordEntityWithLocationData() {
         jsonEGI.sendCurrentsLocation = true;
         RecordEntity wr = requestModel();
-        wr = currentWeatherGateway.requestData(wr);
+        wr = currentLocationGateway.requestData(wr);
         assertThat(wr.cityName).isEqualTo("New York");
-        assertThat(wr.regionName).isEqualTo("Soho");
-        assertThat(wr.woeid).isEqualTo("12761344");
     }
 
     @Test
     public void test_weatherResponseIsInvalidWithoutNoData() {
         RecordEntity wr = requestModel();
-        currentWeatherGateway.setRecord(wr);
-        assertThat(currentWeatherGateway.isValid()).isFalse();
+        currentLocationGateway.setRecord(wr);
+        assertThat(currentLocationGateway.isValid()).isFalse();
     }
 
     @Test
     public void test_weatherResponseIsInvalidWithoutValidRegionName() {
         recordEntity.cityName = "burbank";
         recordEntity.woeid = "112343";
-        currentWeatherGateway.setRecord(recordEntity);
-        assertThat(currentWeatherGateway.isValid()).isFalse();
+        currentLocationGateway.setRecord(recordEntity);
+        assertThat(currentLocationGateway.isValid()).isFalse();
     }
 
     @Test
     public void test_weatherResponseIsInvalidWithoutValidCityName() {
         recordEntity.regionName = "upper middle barf";
         recordEntity.woeid = "112343";
-        currentWeatherGateway.setRecord(recordEntity);
-        assertThat(currentWeatherGateway.isValid()).isFalse();
+        currentLocationGateway.setRecord(recordEntity);
+        assertThat(currentLocationGateway.isValid()).isFalse();
     }
 
     @Test
     public void test_weatherResponseIsInvalidWithoutValidWoeid() {
         recordEntity.regionName = "upper middle barf";
         recordEntity.cityName = "burbank";
-        currentWeatherGateway.setRecord(recordEntity);
-        assertThat(currentWeatherGateway.isValid()).isFalse();
+        currentLocationGateway.setRecord(recordEntity);
+        assertThat(currentLocationGateway.isValid()).isFalse();
     }
 
     @Test
-    public void test_weatherResponseIsInvalidWithData() {
+    public void test_weatherResponseIsValidWithData() {
         recordEntity.regionName = "upper middle barf";
         recordEntity.cityName = "burbank";
         recordEntity.woeid = "112343";
-        currentWeatherGateway.setRecord(recordEntity);
-        assertThat(currentWeatherGateway.isValid()).isTrue();
+        currentLocationGateway.setRecord(recordEntity);
+        assertThat(currentLocationGateway.isValid()).isTrue();
     }
 
     @Test
     public void test_weatherResponseIsInvalidValidWithIOException() {
         jsonEGI.sendBackIOException = true;
-        RecordEntity wr = requestModel();
-        wr = currentWeatherGateway.requestData(wr);
+        RecordEntity wr = currentLocationGateway.requestData(requestModel());
 
-        assertThat(currentWeatherGateway.isValid()).isFalse();
+        assertThat(currentLocationGateway.isValid()).isFalse();
     }
 
 
@@ -153,7 +143,6 @@ public class CurrentLocationTest {
 
         RecordEntity rm = new RecordEntity();
         rm.location = location;
-
         return rm;
     }
 

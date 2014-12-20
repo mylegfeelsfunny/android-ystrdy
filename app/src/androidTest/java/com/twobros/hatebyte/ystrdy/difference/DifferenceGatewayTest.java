@@ -1,4 +1,4 @@
-package com.twobros.hatebyte.ystrdy.record;
+package com.twobros.hatebyte.ystrdy.difference;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -10,10 +10,10 @@ import android.database.DataSetObserver;
 import android.net.Uri;
 import android.os.Bundle;
 
-import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
+import com.twobros.hatebyte.ystrdy.egi.mock.TestDifferenceGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
-import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
 
 import org.junit.After;
 import org.junit.Before;
@@ -26,15 +26,15 @@ import org.robolectric.annotation.Config;
 import java.util.Date;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-
+/**
+ * Created by scott on 12/11/14.
+ */
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class RecordEGTest {
+public class DifferenceGatewayTest {
 
     YstrdyDatabaseAPI ystrdyDatabaseAPI;
 
@@ -54,64 +54,62 @@ public class RecordEGTest {
 
     @Test
     public void test_defaultProperties() {
-        TestRecordEG recordEG = new TestRecordEG();
-        assertThat(recordEG.hasDatabase()).isTrue();
-        assertThat(recordEG.tableName()).isEqualTo("record");
-        assertThat(recordEG.projection()).isEqualTo(RecordEG.projectionMap);
+        TestDifferenceGateway differenceEG = new TestDifferenceGateway();
+        assertThat(differenceEG.hasDatabase()).isTrue();
+        assertThat(differenceEG.tableName()).isEqualTo("difference");
+        assertThat(differenceEG.projection()).isEqualTo(DifferenceGateway.projectionMap);
     }
 
     @Test
     public void test_mapFromCursorWithEmptyCursor() {
-        RecordEG recordEG = new RecordEG();
-        recordEG.mapFromCursor(emptyCursor);
-        assertThat(recordEG.getEntity()).isNull();
+        DifferenceGateway differenceGateway = new DifferenceGateway();
+        differenceGateway.mapFromCursor(emptyCursor);
+        assertThat(differenceGateway.getEntity()).isNull();
     }
 
     @Test
     public void test_mapFromCursorWithPopulatedCursor() {
+        // add a record
         insertRecord();
-        RecordEG recordEG = new RecordEG();
-        Cursor c = ystrdyDatabaseAPI.get("record", recordEG.projection(), null, null, "1");
+
+        DifferenceGateway differenceGateway = new DifferenceGateway();
+        Cursor c = ystrdyDatabaseAPI.get("difference", differenceGateway.projection(), null, null, "1");
         c.moveToFirst();
-        recordEG.mapFromCursor(c);
-        assertThat(recordEG.getEntity()).isNotNull();
+        differenceGateway.mapFromCursor(c);
+        assertThat(differenceGateway.getEntity()).isNotNull();
     }
 
     @Test
     public void test_isNotValidWhenEntityIsNull() {
-        RecordEG recordEG = new RecordEG();
-        assertThat(recordEG.isValid()).isFalse();
+        DifferenceGateway differenceGateway = new DifferenceGateway();
+        assertThat(differenceGateway.isValid()).isFalse();
     }
 
     @Test
     public void test_isNotValidWhenEntityDateNull() {
-        RecordEG recordEG = new RecordEG();
-        RecordEntity recordEntity = new RecordEntity();
-        recordEG.setEntity(recordEntity);
-        assertThat(recordEG.isValid()).isFalse();
+        DifferenceGateway differenceGateway = new DifferenceGateway();
+        DifferenceEntity differenceEntity = new DifferenceEntity();
+        differenceGateway.setEntity(differenceEntity);
+        assertThat(differenceGateway.isValid()).isFalse();
     }
 
     @Test
     public void test_isValid() {
-        RecordEG recordEG = new RecordEG();
-        RecordEntity recordEntity = new RecordEntity();
-        recordEntity.date = new Date();
-        recordEG.setEntity(recordEntity);
-        assertThat(recordEG.isValid()).isTrue();
+        DifferenceGateway differenceGateway = new DifferenceGateway();
+        DifferenceEntity differenceEntity = new DifferenceEntity();
+        differenceEntity.date = new Date();
+        differenceGateway.setEntity(differenceEntity);
+        assertThat(differenceGateway.isValid()).isTrue();
     }
+
 
     public void insertRecord() {
-        ystrdyDatabaseAPI.insert("record", recordValues());
+        ystrdyDatabaseAPI.insert("difference", differenceValues());
     }
 
-    public ContentValues recordValues() {
+    public ContentValues differenceValues() {
         ContentValues values = new ContentValues();
-        values.put("latitude", 0.1f);
-        values.put("longitude", 0.2f);
-        values.put("temperature", 0.3f);
-        values.put("region_name", "region");
-        values.put("city_name", "scottville");
-        values.put("woeid", "woeid");
+        values.put("difference", 4.f);
         values.put("date", new Date().getTime());
         return values;
     }
@@ -311,7 +309,6 @@ public class RecordEGTest {
         public Bundle respond(Bundle bundle) {
             return null;
         }
-
     };
 
 }

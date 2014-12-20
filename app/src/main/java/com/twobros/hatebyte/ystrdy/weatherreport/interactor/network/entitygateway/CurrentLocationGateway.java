@@ -2,8 +2,6 @@ package com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygatew
 
 import android.util.Log;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

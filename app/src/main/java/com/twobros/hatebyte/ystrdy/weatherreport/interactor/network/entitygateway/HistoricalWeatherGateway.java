@@ -3,7 +3,6 @@ package com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygatew
 import android.util.Log;
 
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.implementation.JSONEGI;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,14 +16,14 @@ public class HistoricalWeatherGateway extends AbstractWeatherGateway {
     private static final String FORCAST_API_KEY = "86557a3da6d70d397c20ca15a3447bfb";
 
     public static float parseForTemperature(JSONObject json) {
-        double temp = RecordEntity.voidTemperature;
+        float temp = RecordEntity.voidTemperature;
         try {
             JSONObject currently = (JSONObject) json.get("currently");
-            temp = (Double) currently.get("temperature");
+            temp = ((Double) currently.get("temperature")).floatValue();
         } catch (JSONException e) {
             Log.e(TAG, "JSONException "+TAG+": parseForTemperature" + e);
         }
-        return (float)temp;
+        return temp;
     }
 
     public static String parseForRegionName(JSONObject json) {

@@ -2,11 +2,9 @@ package com.twobros.hatebyte.ystrdy.network.current;
 
 import android.location.Location;
 
-import com.twobros.hatebyte.ystrdy.network.current.mock.FakeCurrentLocationGateway;
 import com.twobros.hatebyte.ystrdy.network.current.mock.FakeCurrentWeatherGateway;
 import com.twobros.hatebyte.ystrdy.network.mock.FakeJSONEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.CurrentLocationGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.CurrentWeatherGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.implementation.JSONEGI;
 
@@ -19,11 +17,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by scott on 12/16/14.
@@ -52,17 +45,50 @@ public class CurrentWeatherTest {
     }
 
     @Test
-    public void test_valid() {
-        assertThat(true).isTrue();
+    public void test_parseForTemperature() {
+        JSONObject json = JSONEGI.parseJSONString(FakeJSONEGI.currentWeatherResponseString());
+        float temperature = CurrentWeatherGateway.parseForTemperature(json);
+
+        assertThat(temperature).isEqualTo(51);
     }
 
-//    @Test
-//    public void test_parseForTemperature() {
-//        JSONObject json = JSONEGI.parseJSONString(FakeJSONEGI.currentWeatherResponseString());
-//        float temperture = CurrentWeatherGateway.parseForTemperature(json);
-//
-//        assertThat(temperture).isEqualTo(51f);
-//    }
+    @Test
+    public void test_currentWeatherGateway_requestWeatherDate_recordEntity() {
+        jsonEGI.sendCurrentWeather = true;
+        RecordEntity wr = currentWeatherGateway.requestData(requestModel());
+        assertThat(wr).isInstanceOf(RecordEntity.class);
+    }
 
+    @Test
+    public void test_currentWeatherGateway_requestWeatherData_populatesRecordEntity() {
+        jsonEGI.sendCurrentWeather = true;
+        RecordEntity wr = currentWeatherGateway.requestData(requestModel());
+        assertThat(wr.temperature).isEqualTo(51);
+    }
+
+    @Test
+    public void test_weatherResponseIsValidWithData() {
+        recordEntity.temperature = 51;
+        currentWeatherGateway.setRecord(recordEntity);
+        assertThat(currentWeatherGateway.isValid()).isTrue();
+    }
+
+    @Test
+    public void test_weatherResponseIsInvalidValidWithIOException() {
+        jsonEGI.sendBackIOException = true;
+        RecordEntity wr = currentWeatherGateway.requestData(requestModel());
+
+        assertThat(currentWeatherGateway.isValid()).isFalse();
+    }
+
+    public RecordEntity requestModel() {
+        Location location = new Location("dummyprovider");
+        location.setLatitude(40.7143528);
+        location.setLongitude(-74.0059731);
+
+        RecordEntity rm = new RecordEntity();
+        rm.location = location;
+        return rm;
+    }
 
 }

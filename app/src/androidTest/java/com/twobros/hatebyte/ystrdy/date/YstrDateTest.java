@@ -8,10 +8,7 @@ import org.robolectric.annotation.Config;
 
 import java.util.Date;
 
-import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 
@@ -53,8 +50,7 @@ public class YstrDateTest {
     @Test
     public void test_isOlderThanEighteenHours_ReturnTrueWhenOlder() {
         Date oldDate = new Date();
-        long twentyFourHours = (24 * 60 * 60 + 1) * 1000;
-        oldDate.setTime(oldDate.getTime() - twentyFourHours);
+        oldDate.setTime(oldDate.getTime() - YstrDate.twentyFourHours());
 
         assertTrue(YstrDate.isOlderThanEighteenHours(oldDate));
     }
@@ -72,7 +68,7 @@ public class YstrDateTest {
     public void test_isYoungerThanThirtyHours_ReturnTrueWhenYounger() {
         Date oldDate = new Date();
         long twentyFourHours = (24 * 60 * 60 + 1) * 1000;
-        oldDate.setTime(oldDate.getTime() - twentyFourHours);
+        oldDate.setTime(oldDate.getTime() - YstrDate.twentyFourHours());
 
         assertTrue(YstrDate.isYoungerThanThirtyHours(oldDate));
     }
@@ -80,8 +76,7 @@ public class YstrDateTest {
     @Test
     public void test_isYoungerThanThirtyHours_ReturnFalseWhenOlder() {
         Date oldDate = new Date();
-        long thirtyHours = (30 * 60 * 60 + 1) * 1000;
-        oldDate.setTime(oldDate.getTime() - (thirtyHours + 1));
+        oldDate.setTime(oldDate.getTime() - (YstrDate.thirtyHours() + YstrDate.thirtyHours()));
 
         assertFalse(YstrDate.isYoungerThanThirtyHours(oldDate));
     }

@@ -1,9 +1,9 @@
 package com.twobros.hatebyte.ystrdy.record;
 
-import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
+import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordGateway;
 import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 
 import org.junit.After;
@@ -27,14 +27,14 @@ import static org.fest.assertions.api.Assertions.*;
 
 @Config(emulateSdk = 18)
 @RunWith(RobolectricTestRunner.class)
-public class RecordEGUseCasesTest {
+public class RecordGatewayUseCasesTest {
 
-    TestRecordEG recordEG;
+    TestRecordGateway recordEG;
     TestEGI testEGI;
 
     @Before
     public void setup() {
-        recordEG = new TestRecordEG();
+        recordEG = new TestRecordGateway();
         testEGI = new TestEGI();
         recordEG.setEntityGatewayImplementation(testEGI);
     }
@@ -195,7 +195,7 @@ public class RecordEGUseCasesTest {
         record.temperature = temp;
         record.regionName = region;
 
-        RecordEG r = new RecordEG();
+        RecordGateway r = new RecordGateway();
         r.setEntity(record);
         try {
             testEGI.insert(r);

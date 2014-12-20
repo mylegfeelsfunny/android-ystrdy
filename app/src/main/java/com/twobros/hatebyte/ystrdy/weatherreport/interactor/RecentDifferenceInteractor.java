@@ -2,7 +2,7 @@ package com.twobros.hatebyte.ystrdy.weatherreport.interactor;
 
 import android.os.AsyncTask;
 
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
@@ -17,14 +17,14 @@ public abstract class RecentDifferenceInteractor {
     abstract void onWeatherResponse(WeatherResponse weatherResponse);
     abstract void onWeatherResponseFailed();
 
-    protected DifferenceEG differenceEG;
+    protected DifferenceGateway differenceGateway;
 
     public RecentDifferenceInteractor() {
-        differenceEG = new DifferenceEG();
+        differenceGateway = new DifferenceGateway();
     }
 
     public void getReport() {
-        differenceEG = new DifferenceEG();
+        differenceGateway = new DifferenceGateway();
         new GetLatestDifferenceRecord().execute((Object[]) null);
     }
 
@@ -45,7 +45,7 @@ public abstract class RecentDifferenceInteractor {
     private class GetLatestDifferenceRecord extends AsyncTask<Object, Object, DifferenceEntity> {
         @Override
         protected DifferenceEntity doInBackground(Object... params) {
-            return differenceEG.getLatestDifferenceRecord();
+            return differenceGateway.getLatestDifferenceRecord();
         }
         @Override
         protected void onPostExecute(DifferenceEntity differenceEntity) {

@@ -18,9 +18,13 @@ public class CurrentWeatherGateway extends AbstractWeatherGateway {
     public static float parseForTemperature(JSONObject json) {
         float temp = RecordEntity.voidTemperature;
         try {
-            JSONObject currently = (JSONObject) json.get("currently");
-            Double tempDouble = (Double) currently.get("temperature");
-            temp = tempDouble.floatValue();
+            JSONObject query = (JSONObject) json.get("query");
+            JSONObject results = (JSONObject) query.get("results");
+            JSONObject channel = (JSONObject) results.get("channel");
+            JSONObject item = (JSONObject) channel.get("item");
+            JSONObject condition = (JSONObject) item.get("condition");
+            String tempDouble = (String) condition.get("temp");
+            temp = Float.parseFloat(tempDouble);
         } catch (JSONException e) {
             Log.e(TAG, "JSONException " + TAG + ": parseForTemperature" + e);
         } finally {
@@ -29,9 +33,22 @@ public class CurrentWeatherGateway extends AbstractWeatherGateway {
     }
 
     @Override
+    public void mapFromJSON(JSONObject json) {
+        recordEntity.temperature = CurrentWeatherGateway.parseForTemperature(json);
+    }
+
+    @Override
     public String url() {
         return "https://query.yahooapis.com/v1/public/yql?q=select%20item.condition%20from%20weather.forecast%20where%20woeid%20%3D%20" +
                 recordEntity.woeid+"&format=json";
     }
+
+    public Boolean isValid() {
+        if (recordEntity.temperature == RecordEntity.voidTemperature) {
+            return false;
+        }
+        return true;
+    }
+
 
 }

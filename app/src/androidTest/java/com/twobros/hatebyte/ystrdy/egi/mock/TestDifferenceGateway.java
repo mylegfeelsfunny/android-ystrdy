@@ -4,12 +4,12 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation.SQLDatabaseEGI;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
 
 /**
  * Created by scott on 12/16/14.
  */
-public class TestDifferenceEG extends DifferenceEG {
+public class TestDifferenceGateway extends DifferenceGateway {
 
     public Boolean getTableNameWasCalled;
     public Boolean getProjectionWasCalled;
@@ -21,14 +21,14 @@ public class TestDifferenceEG extends DifferenceEG {
     public Boolean mapFromCursorWasCalled;
 
     public Boolean hasDatabase() {
-        return (SQLDatabaseEGI != null);
+        return (sqlDatabaseEGI != null);
     }
 
     public void setEntityGatewayImplementation(SQLDatabaseEGI e) {
-        SQLDatabaseEGI = e;
+        sqlDatabaseEGI = e;
     }
     public SQLDatabaseEGI getEntityGatewayImplementation() {
-        return SQLDatabaseEGI;
+        return sqlDatabaseEGI;
     }
 
     @Override

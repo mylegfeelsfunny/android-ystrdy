@@ -7,33 +7,35 @@ import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.CurrentLocationGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.CurrentWeatherGateway;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.HistoricalWeatherGateway;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceEG;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 
 /**
  * Created by scott on 12/12/14.
  */
-public abstract class ForcastioInteractor {
+public class HistoricalInteractor {
 
     private static final String TAG = " ForcastioInteractor";
 
-    abstract void onWeatherResponse(WeatherResponse weatherResponse);
-    abstract void onWeatherResponseFailed();
+    protected HistoricalWeatherGateway historicalGateway;
+    protected CurrentLocationGateway currentLocationGateway;
+    protected CurrentWeatherGateway currentWeatherGateway;
+    protected RecordGateway recordGateway;
+    protected DifferenceGateway differenceGateway;
 
-    private HistoricalWeatherGateway forcastioGateway;
-    private CurrentLocationGateway currentLocationGateway;
-    private CurrentWeatherGateway currentWeatherGateway;
-
-    public ForcastioInteractor() {
-        forcastioGateway                        = new HistoricalWeatherGateway();
+    public HistoricalInteractor() {
+        historicalGateway = new HistoricalWeatherGateway();
         currentLocationGateway                  = new CurrentLocationGateway();
         currentWeatherGateway                   = new CurrentWeatherGateway();
+        recordGateway                           = new RecordGateway();
+        differenceGateway                       = new DifferenceGateway();
     }
 
     public WeatherResponse getReport(WeatherRequest weatherRequest) {
@@ -45,7 +47,7 @@ public abstract class ForcastioInteractor {
         ystrdyEntity.date                       = YstrDate.ystrdy();
 
         // populate historical data - temperature, regionName
-        ystrdyEntity                            = forcastioGateway.requestData(ystrdyEntity);
+        ystrdyEntity                            = historicalGateway.requestData(ystrdyEntity);
         if (ystrdyEntity == null) {
             return null;
         }
@@ -74,11 +76,10 @@ public abstract class ForcastioInteractor {
         // save records
         long recordId                           = 0;
         try {
-            RecordEG recordEG                   = new RecordEG();
-            recordEG.setEntity(ystrdyEntity);
-            recordId                            = recordEG.save();
-            recordEG.setEntity(todayEntity);
-            recordEG.save();
+            recordGateway.setEntity(ystrdyEntity);
+            recordId                            = recordGateway.save();
+            recordGateway.setEntity(todayEntity);
+            recordGateway.save();
         } catch (InvalidPropertiesFormatException e) {
             Log.e(TAG, "InvalidPropertiesFormatException " + TAG + ": recordEG" + e);
             return null;
@@ -86,13 +87,15 @@ public abstract class ForcastioInteractor {
 
         // save difference
         DifferenceEntity differenceEntity       = new DifferenceEntity();
-        differenceEntity.difference             = ystrdyEntity.temperature - todayEntity.temperature;
+        BigDecimal tTemp                        = new BigDecimal(todayEntity.temperature);
+        BigDecimal yTemp                        = new BigDecimal(ystrdyEntity.temperature);
+        BigDecimal diff                         = tTemp.subtract(yTemp);
+        differenceEntity.difference             = diff.setScale(3, BigDecimal.ROUND_CEILING).floatValue();
         differenceEntity.recordId               = recordId;
         differenceEntity.date                   = todayEntity.date;
         try {
-            DifferenceEG differenceEG           = new DifferenceEG();
-            differenceEG.setEntity(ystrdyEntity);
-            differenceEG.save();
+            differenceGateway.setEntity(differenceEntity);
+            differenceGateway.save();
         } catch (InvalidPropertiesFormatException e) {
             Log.e(TAG, "InvalidPropertiesFormatException " + TAG + ": differenceEntity" + e);
             return null;

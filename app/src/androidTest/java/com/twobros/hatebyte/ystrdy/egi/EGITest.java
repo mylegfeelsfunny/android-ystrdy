@@ -1,10 +1,10 @@
 package com.twobros.hatebyte.ystrdy.egi;
 
-import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
-import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordEG;
 import com.twobros.hatebyte.ystrdy.egi.mock.FakeYstrdyDBAPI;
+import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
+import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordEG;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,12 +17,8 @@ import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.fail;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.fest.assertions.api.Assertions.*;
 
 /**
  * Created by scott on 12/16/14.
@@ -47,11 +43,11 @@ public class EGITest {
 
     @Test
     public void test_insertRecordThrowsExceptionWhenInvalid() {
-        RecordEG recordEG = new RecordEG();
+        RecordGateway recordGateway = new RecordGateway();
 
         long rowid;
         try {
-            rowid = egi.insert(recordEG);
+            rowid = egi.insert(recordGateway);
             fail("Should fail with InvalidPropertiesFormatException");
         } catch (Throwable expected) {
             assertEquals(InvalidPropertiesFormatException.class, expected.getClass());
@@ -60,7 +56,7 @@ public class EGITest {
 
     @Test
     public void test_insertCallsInterfaceMethod() {
-        TestRecordEG testRecordEG = insertFakeRecord();
+        TestRecordGateway testRecordEG = insertFakeRecord();
 
         assertThat(testRecordEG.isValid()).isTrue();
         assertThat(testRecordEG.getTableNameWasCalled).isTrue();
@@ -69,9 +65,9 @@ public class EGITest {
 
     @Test
     public void test_getCallsInterfaceMethod() {
-        TestRecordEG testRecordEG = insertFakeRecord();
+        TestRecordGateway testRecordEG = insertFakeRecord();
 
-        TestRecordEG retrieveRecord = new TestRecordEG();
+        TestRecordGateway retrieveRecord = new TestRecordGateway();
         egi.get(retrieveRecord);
 
         assertThat(retrieveRecord.getTableNameWasCalled).isTrue();
@@ -84,18 +80,18 @@ public class EGITest {
 
     @Test
     public void test_deleteCallsInterfaceMethod() {
-        TestRecordEG testRecordEG = insertFakeRecord();
+        TestRecordGateway testRecordEG = insertFakeRecord();
 
         egi.delete(testRecordEG);
         assertThat(testRecordEG.getTableNameWasCalled).isTrue();
         assertThat(testRecordEG.getSelectStringWasCalled).isTrue();
     }
 
-    public TestRecordEG insertFakeRecord() {
+    public TestRecordGateway insertFakeRecord() {
         RecordEntity record = new RecordEntity();
         record.date = new Date();
 
-        TestRecordEG testRecordEG = new TestRecordEG();
+        TestRecordGateway testRecordEG = new TestRecordGateway();
         testRecordEG.setEntity(record);
 
         long rowid = 0;
