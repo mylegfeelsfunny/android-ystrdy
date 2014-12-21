@@ -17,10 +17,7 @@ import org.robolectric.annotation.Config;
 import java.util.Date;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -138,7 +135,6 @@ public class YstrdyDatabaseAPITest {
         assertThat(c.getCount()).isEqualTo(0);
     }
 
-
     public ContentValues recordValues() {
         ContentValues values = new ContentValues();
         values.put("latitude", 0.1f);
@@ -172,7 +168,8 @@ public class YstrdyDatabaseAPITest {
     public static String[] differenceProjection = new String[]{
             "difference",
             "date",
-            "record_id",
+            "today_record_id",
+            "ystrdy_record_id",
             "_id"
     };
 

@@ -11,8 +11,8 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import com.twobros.hatebyte.ystrdy.egi.mock.TestDifferenceGateway;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.dataapi.YstrdyDatabaseAPI;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
 
 import org.junit.After;
@@ -26,8 +26,6 @@ import org.robolectric.annotation.Config;
 import java.util.Date;
 
 import static org.fest.assertions.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by scott on 12/11/14.
@@ -70,7 +68,7 @@ public class DifferenceGatewayTest {
     @Test
     public void test_mapFromCursorWithPopulatedCursor() {
         // add a record
-        insertRecord();
+        insertDifference();
 
         DifferenceGateway differenceGateway = new DifferenceGateway();
         Cursor c = ystrdyDatabaseAPI.get("difference", differenceGateway.projection(), null, null, "1");
@@ -103,7 +101,7 @@ public class DifferenceGatewayTest {
     }
 
 
-    public void insertRecord() {
+    public void insertDifference() {
         ystrdyDatabaseAPI.insert("difference", differenceValues());
     }
 
@@ -111,6 +109,8 @@ public class DifferenceGatewayTest {
         ContentValues values = new ContentValues();
         values.put("difference", 4.f);
         values.put("date", new Date().getTime());
+        values.put("today_record_id", 1);
+        values.put("ystrdy_record_id", 2);
         return values;
     }
 

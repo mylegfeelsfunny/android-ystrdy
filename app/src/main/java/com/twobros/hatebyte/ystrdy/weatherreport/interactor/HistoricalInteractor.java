@@ -31,15 +31,18 @@ public class HistoricalInteractor {
     protected DifferenceGateway differenceGateway;
 
     public HistoricalInteractor() {
-        historicalGateway = new HistoricalWeatherGateway();
+        historicalGateway                       = new HistoricalWeatherGateway();
         currentLocationGateway                  = new CurrentLocationGateway();
         currentWeatherGateway                   = new CurrentWeatherGateway();
         recordGateway                           = new RecordGateway();
         differenceGateway                       = new DifferenceGateway();
     }
 
-    public WeatherResponse getReport(WeatherRequest weatherRequest) {
-        RecordEntity ystrdyEntity               = new RecordEntity();
+    public WeatherResponse getReport(WeatherRequest wr) {
+        WeatherRequest weatherRequest = wr;
+
+        // send back response difference
+        RecordEntity ystrdyEntity                            = new RecordEntity();
 
         // HISTORICAL
         // create record - date(ystrdy), latitude, longitude
@@ -52,7 +55,7 @@ public class HistoricalInteractor {
             return null;
         }
 
-        RecordEntity todayEntity                = new RecordEntity();
+        RecordEntity todayEntity                             = new RecordEntity();
         todayEntity.location                    = weatherRequest.location;
         todayEntity.date                        = new Date();
 
@@ -74,12 +77,13 @@ public class HistoricalInteractor {
         ystrdyEntity.woeid                      = todayEntity.woeid;
 
         // save records
-        long recordId                           = 0;
+        long todayId                            = 0;
+        long ystrdyId                           = 0;
         try {
             recordGateway.setEntity(ystrdyEntity);
-            recordId                            = recordGateway.save();
+            ystrdyId                            = recordGateway.save();
             recordGateway.setEntity(todayEntity);
-            recordGateway.save();
+            todayId                             = recordGateway.save();
         } catch (InvalidPropertiesFormatException e) {
             Log.e(TAG, "InvalidPropertiesFormatException " + TAG + ": recordEG" + e);
             return null;
@@ -91,7 +95,8 @@ public class HistoricalInteractor {
         BigDecimal yTemp                        = new BigDecimal(ystrdyEntity.temperature);
         BigDecimal diff                         = tTemp.subtract(yTemp);
         differenceEntity.difference             = diff.setScale(3, BigDecimal.ROUND_CEILING).floatValue();
-        differenceEntity.recordId               = recordId;
+        differenceEntity.todayRecordId          = (int)todayId;
+        differenceEntity.ystrdyRecordId         = (int)ystrdyId;
         differenceEntity.date                   = todayEntity.date;
         try {
             differenceGateway.setEntity(differenceEntity);
@@ -101,12 +106,13 @@ public class HistoricalInteractor {
             return null;
         }
 
-        // send back response difference
         WeatherResponse weatherResponse         = new WeatherResponse();
         weatherResponse.difference              = differenceEntity.difference;
         weatherResponse.ystrday                 = ystrdyEntity;
         weatherResponse.today                   = todayEntity;
+
         return weatherResponse;
     }
+
 
 }

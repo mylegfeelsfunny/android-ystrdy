@@ -136,18 +136,14 @@ public class RecordGateway extends AbstractEntityGateway {
         return (RecordEntity) sqlDatabaseEGI.get(this).getEntity();
     }
 
-//
-//    public RecordEG getRecordById(long id) {
-//        getDatabaseAPI().open();
-//        String selectStatement = RecordEntity.COLUMN_ID + " = ?";
-//        String[] selectArgs = { id + "" };
-//        Cursor c = databaseAPI.get(RecordEntity.TABLE_NAME, RecordEG.projection, selectStatement, null, null);
-//
-//        RecordEG recordEG = new RecordEG(c);
-//        databaseAPI.close();
-//        return recordEG;
-//    }
-//
+    public RecordEntity getRecordById(long id) {
+        reset();
+        selectString = RecordGateway.COLUMN_ID + " = " + id;
+        limit = "1";
+
+        return (RecordEntity) sqlDatabaseEGI.get(this).getEntity();
+    }
+
     public void deleteExpiredRecords() {
         Date now = new Date();
         selectString = YstrDate.threeDayTime() + " + date < " + now.getTime();

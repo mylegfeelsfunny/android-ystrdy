@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
-import android.util.Log;
+import android.os.AsyncTask;
+import android.widget.Toast;
 
-import com.twobros.hatebyte.ystrdy.date.YstrDate;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
-
-import java.util.Date;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.SaveARecordInteractor;
+import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
 
 /**
  * Created by scott on 12/8/14.
@@ -20,51 +19,33 @@ public class AlarmReceiver extends BroadcastReceiver {
     private static final String TAG = "AlarmReceiver";
 
     private Context context = null;
+    private SaveARecordInteractor saveARecordInteractor;
 
     @Override
     public void onReceive(Context c, Intent intent) {
         context = c;
-//        databaseHelper = new RecordDatabaseAPI(context.getApplicationContext(), "LocationRecord.db");
-//        databaseAPI = new RecordDatabaseAPI(databaseHelper);
 
-
-
-
-        Location location = currentLocation();
-
-        Date yesterday = YstrDate.ystrdy();
-        Log.i(TAG, location.getLatitude()+","+location.getLongitude()+","+yesterday.getTime()/1000);
-
-//        temperatureNow = new YahooAPI(context, this);
-        //temperatureNow.requestWeatherData();
-
-//        temperatureYstrdy = new ForcastioAPI(context, this);
-//        temperatureYstrdy.requestWeatherData();
-
-
-//        try {
-//            databaseAPI.insertRecord(location.getLatitude(), location.getLongitude(), new Date(), 32.3f, "bridgewater",  false);
-//        } catch (InvalidPropertiesFormatException e) {
-//            Log.e(TAG, "InvalidPropertiesFormatException : " + e);
-//        }
+        new SaveRecordTask().execute((Object[]) null);
     }
 
-    public void onCurrentTemperatureRecieved(RecordGateway record) {
-//        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
-//        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
-    }
+    private class SaveRecordTask extends AsyncTask<Object, Object, Boolean> {
+        @Override
+        protected Boolean doInBackground(Object... params) {
+            WeatherRequest weatherRequest = new WeatherRequest();
+            weatherRequest.location = currentLocation();
 
-    public void onCurrentTemperatureError() {
-
-    }
-
-    public void onYstrdyTemperatureRecieved(RecordGateway record) {
-//        String toastMess = "City ["+ record.cityName +"] Region["+record.regionName+"] Current temp ["+record.temperature+"] id["+record.woeid+"]";
-//        Toast.makeText(context, toastMess, Toast.LENGTH_SHORT).show();
-    }
-
-    public void onYstrdytTemperatureError() {
-
+            saveARecordInteractor = new SaveARecordInteractor();
+            return saveARecordInteractor.saveRecord(weatherRequest);
+        }
+        @Override
+        protected void onPostExecute(Boolean saveComplete) {
+            // send back response difference
+            if (!saveComplete) {
+                Toast.makeText(context, "Save Failed in Background", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(context, "Save Complete", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private Location currentLocation() {

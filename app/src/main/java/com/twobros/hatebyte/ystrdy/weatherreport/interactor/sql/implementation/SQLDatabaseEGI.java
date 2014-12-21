@@ -14,6 +14,8 @@ import java.util.InvalidPropertiesFormatException;
  */
 public class SQLDatabaseEGI {
 
+    private static final String TAG = " SQLDatabaseEGI";
+
     public interface ISQLEntityGateway {
         public String tableName();
         public String[] projection();

@@ -1,14 +1,13 @@
-package com.twobros.hatebyte.ystrdy.interactor.mock;
+package com.twobros.hatebyte.ystrdy.interactor.mockgateways;
 
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
-import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.CurrentWeatherGateway;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.CurrentLocationGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.implementation.JSONEGI;
 
 /**
  * Created by scott on 12/19/14.
  */
-public class FakeCurrentWeatherInteractorGateway extends CurrentWeatherGateway {
-
+public class FakeCurrentLocationInteractorGateway extends CurrentLocationGateway {
     public boolean shouldReturnNull = false;
 
     public void setEntityGateway(JSONEGI implementation) {
@@ -24,8 +23,9 @@ public class FakeCurrentWeatherInteractorGateway extends CurrentWeatherGateway {
         if (shouldReturnNull) {
             return null;
         }
-        re.temperature = 51.0f;
-        re.regionName = "soho do";
+        re.regionName = "Soho";
+        re.cityName   = "New York";
+        re.woeid      = "12761344";
         return re;
     }
 

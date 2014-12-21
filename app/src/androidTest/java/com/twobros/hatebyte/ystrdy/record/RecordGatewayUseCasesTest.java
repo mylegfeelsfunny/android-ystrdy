@@ -1,10 +1,10 @@
 package com.twobros.hatebyte.ystrdy.record;
 
-import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordGateway;
+import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
+import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
-import com.twobros.hatebyte.ystrdy.date.YstrDate;
 
 import org.junit.After;
 import org.junit.Before;
@@ -17,12 +17,9 @@ import java.util.Date;
 import java.util.InvalidPropertiesFormatException;
 
 import static org.fest.assertions.api.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.fail;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-import static org.fest.assertions.api.Assertions.*;
 
 
 @Config(emulateSdk = 18)
@@ -45,13 +42,6 @@ public class RecordGatewayUseCasesTest {
         testEGI.close();
         recordEG = null;
     }
-
-//    public ContentValues differenceValues() {
-//        ContentValues values = new ContentValues();
-//        values.put(DifferenceEntity.COLUMN_DIFFERENCE, 4.f);
-//        values.put(DifferenceEntity.COLUMN_DATE, new Date().getTime());
-//        return values;
-//    }
 
     @Test
     public void testInsert_throwsExceptionWithInvalidDate() {
@@ -187,7 +177,21 @@ public class RecordGatewayUseCasesTest {
         assertThat(newnumrecords).isEqualTo(23);
     }
 
-    public void insertLocationRecord(float latitude, float longitude, Date date, float temp, String region) {
+    @Test
+    public void testQuery_getRecordById() {
+        Date d = new Date();
+        long thirtyDaysAgo = (long) 30 * ((24 * 60 * 60 + 1) * 1000);
+        d.setTime(d.getTime() - thirtyDaysAgo);
+
+        long recordId = insertLocationRecord((float)0, (float)0, d, 32.3f, "RetrieveRecord");
+        RecordEntity record = recordEG.getRecordById(recordId);
+
+        assertThat(recordId).isEqualTo(record.id);
+        assertThat("RetrieveRecord").isEqualTo(record.regionName);
+        assertThat(d.getTime()).isEqualTo(record.date.getTime());
+    }
+
+    public long insertLocationRecord(float latitude, float longitude, Date date, float temp, String region) {
         RecordEntity record = new RecordEntity();
         record.location.setLatitude(latitude);
         record.location.setLongitude(longitude);
@@ -197,12 +201,17 @@ public class RecordGatewayUseCasesTest {
 
         RecordGateway r = new RecordGateway();
         r.setEntity(record);
+
+        long rId = 0;
         try {
-            testEGI.insert(r);
+            rId = testEGI.insert(r);
         } catch (InvalidPropertiesFormatException expected) {
 
         }
+        return rId;
     }
+
+
 
 
     public void populateDbWithBunchOfYstrDates() {

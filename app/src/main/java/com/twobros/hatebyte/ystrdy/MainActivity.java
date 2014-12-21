@@ -14,16 +14,18 @@ import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.twobros.hatebyte.ystrdy.alarm.AlarmReceiver;
-import com.twobros.hatebyte.ystrdy.date.YstrDate;
+import com.twobros.hatebyte.ystrdy.weatherreport.boundary.IWeatherReportBoundary;
 import com.twobros.hatebyte.ystrdy.weatherreport.boundary.WeatherReportBoundary;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation.SQLDatabaseEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
+import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 
-import java.util.Date;
 
-
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements IWeatherReportBoundary {
     private static final String TAG = " MainActivity";
 
     private LocationManager locationManager;
@@ -31,39 +33,39 @@ public class MainActivity extends Activity {
     private PendingIntent pendingIntent;
     WeatherReportBoundary weatherReportBoundary;
 
+    private TextView tempView;
+    private SQLDatabaseEGI sqlDatabaseEGI = SQLDatabaseEGI.getInstance();
+    private RecordGateway recordGateway = new RecordGateway();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tempView = (TextView) findViewById(R.id.tempView);
 
         // getTempDifference
             // is there a record less than 2 hours -> YES -> fetch YstrdyRecord -> return YstrdyRecord
                 // is there a record older than 24 hours -> YES - fetch NowRecord from 24 hours -> hit Yahoo -> save Yahoo NowRecord -> create YstrdyRecord -> return YstrdyRecord
                     // hit Yahoo -> -> save Yahoo NowRecord -> hit forcast.io -> create forcast.io NowRecord -> YstrdyRecord -> return YstrdyRecord
 
-
         // Retrieve a PendingIntent to perform a broadcast
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent = new Intent(this, AlarmReceiver.class);
-        pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-//        long threeHours = (3 * 60 * 60 + 1) * 1000;
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), threeHours, pendingIntent);
-
-        //RecordDatabase recordDatabase = new RecordDatabase(getApplicationContext(), "testLocationRecord.db");
-
-//        mockRecordEGI = mock(RecordEGI.class);
-        //recordEGI = new RecordEGI(recordDatabase);
-
+        alarmManager                    = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent alarmIntent              = new Intent(this, AlarmReceiver.class);
+        pendingIntent                   = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+        long oneHour                    = (60 * 60 + 1) * 1000;
+        oneHour                         = 10 * 1000;
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), oneHour, pendingIntent);
     }
 
     public void resetDB(View view) {
-        //recordEGI.clearDatabase();
-        //Toast.makeText(this, "I'm running. + \n" + recordEGI.numRecords() + " records", Toast.LENGTH_SHORT).show();
+        tempView.setText("numRecords = " + recordGateway.numRecords());
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        tempView.setText("fetching...");
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -71,15 +73,8 @@ public class MainActivity extends Activity {
         WeatherRequest weatherRequest = new WeatherRequest();
         weatherRequest.location = location;
 
-        Date ystrday = new Date();
-        ystrday.setTime(ystrday.getTime() - YstrDate.twentyFourHours());
-
-        weatherRequest.date = ystrday;
-
-//        WeatherResponseModel weatherResponseModel = forcastioAPISema.requestWeatherData(weatherRequest);
-
-//        forcastioGatewayImplementation.requestWeatherData(weatherRequest);
-
+        weatherReportBoundary = new WeatherReportBoundary();
+        //weatherReportBoundary.fetchReport(this, weatherRequest);
 
 //        Intent service = new Intent(this, GPSService.class);
 //        service.putExtra(GPSService.UPDATE_RATE, 5000);
@@ -87,6 +82,13 @@ public class MainActivity extends Activity {
 //        bindService(new Intent(ILocationRecordInterface.class.getName()), serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
+    public void onWeatherReportReturned(WeatherResponse weatherResponse) {
+        tempView.setText("difference = "+weatherResponse.difference);
+    }
+
+    public void onWeatherReportFailed() {
+        tempView.setText("FAILED!!");
+    }
 
 
     // service connect interface

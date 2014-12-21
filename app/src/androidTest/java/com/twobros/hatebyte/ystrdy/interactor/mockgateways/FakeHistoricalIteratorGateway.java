@@ -1,4 +1,4 @@
-package com.twobros.hatebyte.ystrdy.interactor.mock;
+package com.twobros.hatebyte.ystrdy.interactor.mockgateways;
 
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.network.entitygateway.HistoricalWeatherGateway;

@@ -55,7 +55,7 @@ public class JSONEGI {
         try {
             json = new JSONObject(jsonString);
         } catch (JSONException e) {
-            Log.e(TAG, "JSONException : parseForRegionName" + e);
+            Log.e(TAG, "JSONException : parseForRegionName " + e);
         } finally {
             return json;
         }

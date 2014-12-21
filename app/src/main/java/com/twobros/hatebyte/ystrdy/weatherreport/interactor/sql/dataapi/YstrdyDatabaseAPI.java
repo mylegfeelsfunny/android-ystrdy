@@ -44,7 +44,8 @@ public class YstrdyDatabaseAPI extends SQLiteOpenHelper implements IDatabaseAPI 
                     DifferenceGateway.COLUMN_ID + TYPE_INTEGER + " primary key autoincrement" + COMMA_SEP +
                     DifferenceGateway.COLUMN_DIFFERENCE + TYPE_FLOAT + COMMA_SEP +
                     DifferenceGateway.COLUMN_DATE + TYPE_LONG + COMMA_SEP +
-                    DifferenceGateway.COLUMN_NOW_RECORD_ID + TYPE_INTEGER + ")";
+                    DifferenceGateway.COLUMN_YSTRDY_RECORD_ID + TYPE_INTEGER + COMMA_SEP +
+                    DifferenceGateway.COLUMN_TODAY_RECORD_ID + TYPE_INTEGER + ")";
     private static final String SQL_DELETE_DIFFERENCE_RECORDS =
             "DROP TABLE IF EXISTS " + DifferenceGateway.TABLE_NAME;
 

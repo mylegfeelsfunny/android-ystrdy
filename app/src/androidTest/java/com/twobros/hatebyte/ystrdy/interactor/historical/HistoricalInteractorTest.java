@@ -4,12 +4,12 @@ import android.location.Location;
 
 import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
 import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordGateway;
-import com.twobros.hatebyte.ystrdy.interactor.mock.FakeCurrentLocationInteractorGateway;
-import com.twobros.hatebyte.ystrdy.interactor.mock.FakeCurrentWeatherInteractorGateway;
-import com.twobros.hatebyte.ystrdy.interactor.mock.FakeDifferenceInteratorGateway;
-import com.twobros.hatebyte.ystrdy.interactor.mock.FakeHistoricalInteractor;
-import com.twobros.hatebyte.ystrdy.interactor.mock.FakeHistoricalIteratorGateway;
-import com.twobros.hatebyte.ystrdy.interactor.mock.FakeRecordInteratorGateway;
+import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeCurrentLocationInteractorGateway;
+import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeCurrentWeatherInteractorGateway;
+import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeDifferenceInteratorGateway;
+import com.twobros.hatebyte.ystrdy.interactor.historical.mock.FakeHistoricalInteractor;
+import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeHistoricalIteratorGateway;
+import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeRecordInteratorGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
@@ -95,6 +95,15 @@ public class HistoricalInteractorTest {
 
         assertThat(response).isNull();
     }
+
+    @Test
+    public void test_responseIsNullWhenCurrentWeatherGatewayFails() {
+        currentWeatherGateway.shouldReturnNull = true;
+        WeatherResponse response = historicalInteractor.getReport(weatherRequest);
+
+        assertThat(response).isNull();
+    }
+
 
     @Test
     public void test_responseIsNullWhenRecordSaveFails() {

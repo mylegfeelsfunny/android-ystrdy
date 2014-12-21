@@ -15,7 +15,8 @@ import java.util.InvalidPropertiesFormatException;
 public class DifferenceGateway extends AbstractEntityGateway {
 
     public static final String TABLE_NAME                           = "difference";
-    public static final String COLUMN_NOW_RECORD_ID                 = "record_id";
+    public static final String COLUMN_TODAY_RECORD_ID               = "today_record_id";
+    public static final String COLUMN_YSTRDY_RECORD_ID              = "ystrdy_record_id";
     public static final String COLUMN_DIFFERENCE                    = "difference";
     public static final String COLUMN_DATE                          = "date";
     public static final String COLUMN_ID                            = "_id";
@@ -23,7 +24,8 @@ public class DifferenceGateway extends AbstractEntityGateway {
     public static String[] projectionMap = new String[]{
         DifferenceGateway.COLUMN_DIFFERENCE,
         DifferenceGateway.COLUMN_DATE,
-        DifferenceGateway.COLUMN_NOW_RECORD_ID,
+        DifferenceGateway.COLUMN_TODAY_RECORD_ID,
+        DifferenceGateway.COLUMN_YSTRDY_RECORD_ID,
         DifferenceGateway.COLUMN_ID
     };
 
@@ -46,7 +48,8 @@ public class DifferenceGateway extends AbstractEntityGateway {
         entity = new DifferenceEntity();
         entity.difference = c.getFloat(c.getColumnIndex(DifferenceGateway.COLUMN_DIFFERENCE));
         entity.date = new Date(c.getLong(c.getColumnIndex(DifferenceGateway.COLUMN_DATE)));
-        entity.recordId = c.getInt(c.getColumnIndex(DifferenceGateway.COLUMN_NOW_RECORD_ID));
+        entity.todayRecordId = c.getInt(c.getColumnIndex(DifferenceGateway.COLUMN_TODAY_RECORD_ID));
+        entity.ystrdyRecordId = c.getInt(c.getColumnIndex(DifferenceGateway.COLUMN_YSTRDY_RECORD_ID));
         entity.id = c.getInt(c.getColumnIndex(DifferenceGateway.COLUMN_ID));
     }
 
@@ -66,7 +69,8 @@ public class DifferenceGateway extends AbstractEntityGateway {
     public ContentValues contentValues() {
         ContentValues values = new ContentValues();
         values.put(DifferenceGateway.COLUMN_DIFFERENCE, entity.difference);
-        values.put(DifferenceGateway.COLUMN_NOW_RECORD_ID, entity.recordId);
+        values.put(DifferenceGateway.COLUMN_TODAY_RECORD_ID, entity.todayRecordId);
+        values.put(DifferenceGateway.COLUMN_YSTRDY_RECORD_ID, entity.ystrdyRecordId);
         values.put(DifferenceGateway.COLUMN_DATE, entity.date.getTime());
         return values;
     }

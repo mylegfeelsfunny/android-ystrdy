@@ -8,7 +8,8 @@ import java.util.Date;
 public class DifferenceEntity {
 
     public float difference;
-    public long recordId;
+    public int todayRecordId;
+    public int ystrdyRecordId;
     public Date date;
     public int id;
 
