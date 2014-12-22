@@ -1,10 +1,9 @@
-package com.twobros.hatebyte.ystrdy.interactor.SaveARecordInteractor;
+package com.twobros.hatebyte.ystrdy.interactor.savearecordinteractor;
 
 import android.location.Location;
 
 import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
-import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordGateway;
-import com.twobros.hatebyte.ystrdy.interactor.SaveARecordInteractor.mock.FakeSaveARecordInteractor;
+import com.twobros.hatebyte.ystrdy.interactor.savearecordinteractor.mock.FakeSaveARecordInteractor;
 import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeCurrentLocationInteractorGateway;
 import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeCurrentWeatherInteractorGateway;
 import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeRecordInteratorGateway;
@@ -31,7 +30,6 @@ public class SaveARecordInteractorTest {
     FakeRecordInteratorGateway recordInteratorGateway;
 
     WeatherRequest weatherRequest;
-    TestRecordGateway recordEG;
     TestEGI testEGI;
 
     FakeSaveARecordInteractor saveARecordInteractor;
@@ -41,7 +39,6 @@ public class SaveARecordInteractorTest {
         currentLocationGateway                  = new FakeCurrentLocationInteractorGateway();
         currentWeatherGateway                   = new FakeCurrentWeatherInteractorGateway();
         recordInteratorGateway                  = new FakeRecordInteratorGateway();
-        recordEG                                = new TestRecordGateway();
         testEGI                                 = new TestEGI();
         recordInteratorGateway.setEntityGatewayImplementation(testEGI);
 
@@ -96,6 +93,9 @@ public class SaveARecordInteractorTest {
         Boolean response = saveARecordInteractor.saveRecord(weatherRequest);
 
         assertThat(response).isTrue();
+
+        int numRecords = recordInteratorGateway.numRecords();
+        assertThat(numRecords).isEqualTo(1);
     }
 
 

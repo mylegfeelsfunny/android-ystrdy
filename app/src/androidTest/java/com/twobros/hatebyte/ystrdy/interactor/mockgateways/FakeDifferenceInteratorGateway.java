@@ -1,5 +1,6 @@
 package com.twobros.hatebyte.ystrdy.interactor.mockgateways;
 
+import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation.SQLDatabaseEGI;
 
@@ -11,10 +12,12 @@ import java.util.InvalidPropertiesFormatException;
 public class FakeDifferenceInteratorGateway extends DifferenceGateway {
 
     public Boolean shouldSendException = false;
+    public Boolean shouldSendNullYoungRecordEntity = false;
 
     public void setEntityGatewayImplementation(SQLDatabaseEGI e) {
         sqlDatabaseEGI = e;
     }
+
     public SQLDatabaseEGI getEntityGatewayImplementation() {
         return sqlDatabaseEGI;
     }
@@ -26,4 +29,10 @@ public class FakeDifferenceInteratorGateway extends DifferenceGateway {
         return super.save();
     }
 
+    public DifferenceEntity getLatestDifferenceRecord() {
+        if (shouldSendNullYoungRecordEntity) {
+            return null;
+        }
+        return super.getLatestDifferenceRecord();
+    }
 }

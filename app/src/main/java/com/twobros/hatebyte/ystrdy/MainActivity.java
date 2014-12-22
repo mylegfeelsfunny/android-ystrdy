@@ -54,7 +54,6 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
         Intent alarmIntent              = new Intent(this, AlarmReceiver.class);
         pendingIntent                   = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         long oneHour                    = (60 * 60 + 1) * 1000;
-        oneHour                         = 10 * 1000;
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), oneHour, pendingIntent);
     }
 

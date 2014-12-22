@@ -29,20 +29,17 @@ public class SaveARecordInteractor {
     }
 
     public Boolean saveRecord(WeatherRequest wr) {
-        // send back response difference
-        RecordEntity nowEntity                      = new RecordEntity();
 
-        // HISTORICAL
-        // create record - date(ystrdy), latitude, longitude
+        // create record for now
+        RecordEntity nowEntity                      = new RecordEntity();
+        // create record - date(now), latitude, longitude
         nowEntity.location                          = wr.location;
         nowEntity.date                              = new Date();
-
         // populate record with cityName, regionName, woied
         nowEntity                                   = currentLocationGateway.requestData(nowEntity);
         if (nowEntity == null) {
             return false;
         }
-
         // record with temperature, regionName
         nowEntity                                   = currentWeatherGateway.requestData(nowEntity);
         if (nowEntity == null) {
@@ -59,6 +56,7 @@ public class SaveARecordInteractor {
             return false;
         }
 
+        // send back success
         return recordId > 0;
     }
 

@@ -36,7 +36,6 @@ public class YstrDate {
         return now;
     }
 
-
     public static long firstDayTime() {
         return (18 * 60 * 60 + 1) * 1000;
     }

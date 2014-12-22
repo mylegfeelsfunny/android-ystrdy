@@ -11,7 +11,10 @@ import java.util.InvalidPropertiesFormatException;
 public class FakeRecordInteratorGateway extends RecordGateway {
 
     public Boolean shouldSendException = false;
-//    public void setEntityGatewayImplementation(SQLDatabaseEGI e) {
+    public Boolean shouldReturnTooYoungRecord = false;
+    public Boolean shouldReturnTooOldRecord = false;
+
+    //    public void setEntityGatewayImplementation(SQLDatabaseEGI e) {
 //        sqlDatabaseEGI = e;
 //    }
 //    public SQLDatabaseEGI getEntityGatewayImplementation() {
@@ -30,5 +33,22 @@ public class FakeRecordInteratorGateway extends RecordGateway {
         }
         return super.save();
     }
+
+//    public RecordEntity getClosestRecordFromYstrdy() {
+//        RecordEntity re = new RecordEntity();
+//        if (shouldReturnTooOldRecord) {
+//            Date d = new Date();
+//            d.setTime(d.getTime() - (YstrDate.thirtyHours() + 1));
+//            re.date = d;
+//            return re;
+//        }
+//        if (shouldReturnTooYoungRecord) {
+//            Date d = new Date();
+//            d.setTime(d.getTime() - (YstrDate.eighteenHours() - 1));
+//            re.date = d;
+//            return re;
+//        }
+//        return super.getClosestRecordFromYstrdy();
+//    }
 
 }

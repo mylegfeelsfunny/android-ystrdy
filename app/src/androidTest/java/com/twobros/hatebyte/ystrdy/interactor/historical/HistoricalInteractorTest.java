@@ -3,11 +3,10 @@ package com.twobros.hatebyte.ystrdy.interactor.historical;
 import android.location.Location;
 
 import com.twobros.hatebyte.ystrdy.egi.mock.TestEGI;
-import com.twobros.hatebyte.ystrdy.egi.mock.TestRecordGateway;
+import com.twobros.hatebyte.ystrdy.interactor.historical.mock.FakeHistoricalInteractor;
 import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeCurrentLocationInteractorGateway;
 import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeCurrentWeatherInteractorGateway;
 import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeDifferenceInteratorGateway;
-import com.twobros.hatebyte.ystrdy.interactor.historical.mock.FakeHistoricalInteractor;
 import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeHistoricalIteratorGateway;
 import com.twobros.hatebyte.ystrdy.interactor.mockgateways.FakeRecordInteratorGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
@@ -39,7 +38,6 @@ public class HistoricalInteractorTest {
 
     FakeHistoricalInteractor historicalInteractor;
     WeatherRequest weatherRequest;
-    TestRecordGateway recordEG;
     TestEGI testEGI;
 
     @Before
@@ -49,7 +47,6 @@ public class HistoricalInteractorTest {
         historicalWeatherGateway                = new FakeHistoricalIteratorGateway();
         recordInteratorGateway                  = new FakeRecordInteratorGateway();
         differenceInteratorGateway              = new FakeDifferenceInteratorGateway();
-        recordEG                                = new TestRecordGateway();
         testEGI                                 = new TestEGI();
         recordInteratorGateway.setEntityGatewayImplementation(testEGI);
         differenceInteratorGateway.setEntityGatewayImplementation(testEGI);

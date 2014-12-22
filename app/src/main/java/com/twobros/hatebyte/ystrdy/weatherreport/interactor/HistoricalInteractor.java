@@ -1,7 +1,9 @@
 package com.twobros.hatebyte.ystrdy.weatherreport.interactor;
 
 import android.util.Log;
+import android.widget.Toast;
 
+import com.twobros.hatebyte.ystrdy.YstrdyApp;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
@@ -41,32 +43,29 @@ public class HistoricalInteractor {
     public WeatherResponse getReport(WeatherRequest wr) {
         WeatherRequest weatherRequest = wr;
 
-        // send back response difference
+        // create record for ystrdy
         RecordEntity ystrdyEntity                            = new RecordEntity();
-
-        // HISTORICAL
-        // create record - date(ystrdy), latitude, longitude
+        // populate record with date(ystrdy), latitude, longitude
         ystrdyEntity.location                   = weatherRequest.location;
         ystrdyEntity.date                       = YstrDate.ystrdy();
-
         // populate historical data - temperature, regionName
         ystrdyEntity                            = historicalGateway.requestData(ystrdyEntity);
         if (ystrdyEntity == null) {
             return null;
         }
 
-        RecordEntity todayEntity                             = new RecordEntity();
-        todayEntity.location                    = weatherRequest.location;
-        todayEntity.date                        = new Date();
-
-        // populate current data - cityName, regionName, woied
-        todayEntity                             = currentLocationGateway.requestData(todayEntity);
+        // create record for now
+        RecordEntity todayEntity                      = new RecordEntity();
+        // populate record with date(now), latitude, longitude
+        todayEntity.location                          = wr.location;
+        todayEntity.date                              = new Date();
+        // populate record with cityName, regionName, woied
+        todayEntity                                   = currentLocationGateway.requestData(todayEntity);
         if (todayEntity == null) {
             return null;
         }
-
-        // populate current data - temperature, regionName
-        todayEntity                             = currentWeatherGateway.requestData(todayEntity);
+        // populate record with temperature, regionName
+        todayEntity                                   = currentWeatherGateway.requestData(todayEntity);
         if (todayEntity == null) {
             return null;
         }
@@ -106,11 +105,13 @@ public class HistoricalInteractor {
             return null;
         }
 
+        Toast.makeText(YstrdyApp.getContext(), "HistoricalInteractor NEEDED", Toast.LENGTH_SHORT).show();
+
+        // send back response
         WeatherResponse weatherResponse         = new WeatherResponse();
         weatherResponse.difference              = differenceEntity.difference;
         weatherResponse.ystrday                 = ystrdyEntity;
         weatherResponse.today                   = todayEntity;
-
         return weatherResponse;
     }
 
