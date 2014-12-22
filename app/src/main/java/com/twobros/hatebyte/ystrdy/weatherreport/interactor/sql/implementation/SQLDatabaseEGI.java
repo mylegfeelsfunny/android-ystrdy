@@ -43,6 +43,10 @@ public class SQLDatabaseEGI {
         return instance;
     }
 
+    public void clear() {
+        databaseAPI.clear();
+    }
+
     public long insert(ISQLEntityGateway entityGateway) throws InvalidPropertiesFormatException {
         if (entityGateway.isValid() == false) {
             throw new InvalidPropertiesFormatException("Invalid Entity");

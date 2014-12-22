@@ -11,14 +11,17 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.twobros.hatebyte.ystrdy.alarm.AlarmReceiver;
 import com.twobros.hatebyte.ystrdy.weatherreport.boundary.IWeatherReportBoundary;
 import com.twobros.hatebyte.ystrdy.weatherreport.boundary.WeatherReportBoundary;
+import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.implementation.SQLDatabaseEGI;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
@@ -33,16 +36,22 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
     private PendingIntent pendingIntent;
     WeatherReportBoundary weatherReportBoundary;
 
-    private TextView tempView;
+    private TextView tempTextView;
+    private TextView numRecordsTextView;
+    private TextView numDifferencesTextView;
+
     private SQLDatabaseEGI sqlDatabaseEGI = SQLDatabaseEGI.getInstance();
     private RecordGateway recordGateway = new RecordGateway();
+    private DifferenceGateway differenceGateway = new DifferenceGateway();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        tempView = (TextView) findViewById(R.id.tempView);
+        tempTextView = (TextView) findViewById(R.id.tempTextView);
+        numRecordsTextView = (TextView) findViewById(R.id.numRecordsTextView);
+        numDifferencesTextView = (TextView) findViewById(R.id.numDifferencesTextView);
 
         // getTempDifference
             // is there a record less than 2 hours -> YES -> fetch YstrdyRecord -> return YstrdyRecord
@@ -54,17 +63,29 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
         Intent alarmIntent              = new Intent(this, AlarmReceiver.class);
         pendingIntent                   = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
         long oneHour                    = (60 * 60 + 1) * 1000;
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), oneHour, pendingIntent);
+
+        alarmManager.cancel(pendingIntent); // cancel any existing alarms
+        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                SystemClock.elapsedRealtime() + 1000,
+                oneHour, pendingIntent);
+
+
+
+//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), oneHour, pendingIntent);
     }
 
     public void resetDB(View view) {
-        tempView.setText("numRecords = " + recordGateway.numRecords());
+        sqlDatabaseEGI.clear();
+        numRecordsTextView.setText("numRecords = " + recordGateway.numRecords());
+        numDifferencesTextView.setText("numRecords = " + differenceGateway.numDifferenceRecords());
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        tempView.setText("fetching...");
+        numRecordsTextView.setText("numRecords = " + recordGateway.numRecords());
+        numDifferencesTextView.setText("numRecords = " + differenceGateway.numDifferenceRecords());
+        tempTextView.setText("fetching...");
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -73,20 +94,19 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
         weatherRequest.location = location;
 
         weatherReportBoundary = new WeatherReportBoundary();
-        //weatherReportBoundary.fetchReport(this, weatherRequest);
+        weatherReportBoundary.fetchReport(this, weatherRequest);
 
-//        Intent service = new Intent(this, GPSService.class);
-//        service.putExtra(GPSService.UPDATE_RATE, 5000);
-//        startService(service);
-//        bindService(new Intent(ILocationRecordInterface.class.getName()), serviceConnection, Context.BIND_AUTO_CREATE);
     }
 
     public void onWeatherReportReturned(WeatherResponse weatherResponse) {
-        tempView.setText("difference = "+weatherResponse.difference);
+        tempTextView.setText("difference = "+weatherResponse.difference);
+        Toast.makeText(this, weatherResponse.logString, Toast.LENGTH_SHORT).show();
+        numRecordsTextView.setText("numRecords = " + recordGateway.numRecords());
+        numDifferencesTextView.setText("numDifferences = " + differenceGateway.numDifferenceRecords());
     }
 
     public void onWeatherReportFailed() {
-        tempView.setText("FAILED!!");
+        tempTextView.setText("FAILED!!");
     }
 
 

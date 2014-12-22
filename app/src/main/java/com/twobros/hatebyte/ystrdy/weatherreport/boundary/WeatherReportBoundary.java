@@ -27,19 +27,19 @@ public class WeatherReportBoundary {
     public WeatherResponse fetchReports() {
         RecentDifferenceInteractor recentDifferenceInteractor = new RecentDifferenceInteractor();
         WeatherResponse wr = recentDifferenceInteractor.getReport(weatherRequest);
-
-        if (wr == null) {
-            SavedRecordInteractor savedRecordInteractor = new SavedRecordInteractor();
-            wr = savedRecordInteractor.getReport(weatherRequest);
+        if (wr != null) {
+            return wr;
         }
 
-        if (wr == null) {
-            HistoricalInteractor differenceDataInteractor = new HistoricalInteractor();
-            wr = differenceDataInteractor.getReport(weatherRequest);
+        SavedRecordInteractor savedRecordInteractor = new SavedRecordInteractor();
+        wr = savedRecordInteractor.getReport(weatherRequest);
+        if (wr != null) {
+            return wr;
         }
 
+        HistoricalInteractor differenceDataInteractor = new HistoricalInteractor();
+        wr = differenceDataInteractor.getReport(weatherRequest);
         return wr;
-
     }
 
     private class GetLatestDifferenceRecord extends AsyncTask<Object, Object, WeatherResponse> {

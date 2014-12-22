@@ -16,10 +16,29 @@
         />
 
     <TextView
-        android:id="@+id/tempView"
+        android:id="@+id/tempTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="100dp"
+
+        />
+
+    <TextView
+        android:id="@+id/numRecordsTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         />
+
+    <TextView
+        android:id="@+id/numDifferencesTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        />
+
+
+
 
 </LinearLayout>

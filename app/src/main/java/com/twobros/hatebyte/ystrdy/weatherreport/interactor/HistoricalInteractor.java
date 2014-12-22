@@ -1,9 +1,7 @@
 package com.twobros.hatebyte.ystrdy.weatherreport.interactor;
 
 import android.util.Log;
-import android.widget.Toast;
 
-import com.twobros.hatebyte.ystrdy.YstrdyApp;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
@@ -105,15 +103,13 @@ public class HistoricalInteractor {
             return null;
         }
 
-        Toast.makeText(YstrdyApp.getContext(), "HistoricalInteractor NEEDED", Toast.LENGTH_SHORT).show();
-
         // send back response
         WeatherResponse weatherResponse         = new WeatherResponse();
         weatherResponse.difference              = differenceEntity.difference;
         weatherResponse.ystrday                 = ystrdyEntity;
         weatherResponse.today                   = todayEntity;
+        weatherResponse.logString               = "HistoricalInteractor NEEDED";
         return weatherResponse;
     }
-
 
 }

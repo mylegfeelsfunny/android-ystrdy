@@ -1,8 +1,5 @@
 package com.twobros.hatebyte.ystrdy.weatherreport.interactor;
 
-import android.widget.Toast;
-
-import com.twobros.hatebyte.ystrdy.YstrdyApp;
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
@@ -33,9 +30,9 @@ public class RecentDifferenceInteractor {
 
         WeatherResponse responseModel               = null;
         if (RecentDifferenceInteractor.isDifferenceYoungEnoughToRepeat(differenceEntity.date)) {
-            Toast.makeText(YstrdyApp.getContext(), "RecentDifferenceInteractor NEEDED", Toast.LENGTH_SHORT).show();
             responseModel                           = new WeatherResponse();
             responseModel.difference                = differenceEntity.difference;
+            responseModel.logString                 = "RecentDifferenceInteractor NEEDED";
             return responseModel;
         } else {
             return null;
