@@ -1,4 +1,4 @@
 android-ystrdy
 ==============
 
-Ystrdy for Android
+Ystrdy FAR  Android
