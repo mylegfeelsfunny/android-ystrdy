@@ -3,15 +3,12 @@ package com.twobros.hatebyte.ystrdy;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -52,22 +49,6 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
         tempTextView = (TextView) findViewById(R.id.tempTextView);
         numRecordsTextView = (TextView) findViewById(R.id.numRecordsTextView);
         numDifferencesTextView = (TextView) findViewById(R.id.numDifferencesTextView);
-
-        // getTempDifference
-            // is there a record less than 2 hours -> YES -> fetch YstrdyRecord -> return YstrdyRecord
-                // is there a record older than 24 hours -> YES - fetch NowRecord from 24 hours -> hit Yahoo -> save Yahoo NowRecord -> create YstrdyRecord -> return YstrdyRecord
-                    // hit Yahoo -> -> save Yahoo NowRecord -> hit forcast.io -> create forcast.io NowRecord -> YstrdyRecord -> return YstrdyRecord
-
-        // Retrieve a PendingIntent to perform a broadcast
-//        alarmManager                    = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-//        Intent alarmIntent              = new Intent(this, AlarmReceiver.class);
-//        pendingIntent                   = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-//        long oneHour                    = (60 * 60 + 1) * 1000;
-////        oneHour = (60 + 1) * 1000;
-//        alarmManager.cancel(pendingIntent); // cancel any existing alarms
-//        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1000, oneHour, pendingIntent);
-
-
     }
 
     public void resetDB(View view) {
@@ -128,31 +109,6 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
     public void onWeatherReportFailed() {
         tempTextView.setText("FAILED!!");
     }
-
-
-    // service connect interface
-    ILocationRecordInterface locationRecordInterface = null;
-    private ServiceConnection serviceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            locationRecordInterface = ILocationRecordInterface.Stub.asInterface(service);
-
-//            try {
-//                Location l = locationRecordInterface.getLastLocation();
-//                Log.i(TAG, l.getLatitude() + ", " + l.getLongitude());
-//            } catch (RemoteException e) {
-//                Log.e(TAG, "RemoteException : "+e);
-//            } catch (NullPointerException nulle) {
-//                Log.e(TAG, "NullPointerException : "+nulle);
-//            }
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            locationRecordInterface = null;
-        }
-    };
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
