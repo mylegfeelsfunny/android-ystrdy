@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:screenOrientation="portrait"
         android:name="com.twobros.hatebyte.ystrdy.YstrdyApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
@@ -32,7 +33,11 @@
             </intent-filter>
         </service>
 
-        <receiver android:name="com.twobros.hatebyte.ystrdy.alarm.AlarmReceiver"></receiver>
+        <receiver android:name="com.twobros.hatebyte.ystrdy.alarm.AlarmReceiver">
+            <intent-filter>
+                <action android:name="com.twobros.hatebyte.ystrdy.MY_TIMER"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

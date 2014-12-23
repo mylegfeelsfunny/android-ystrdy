@@ -7,18 +7,17 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.twobros.hatebyte.ystrdy.alarm.AlarmReceiver;
 import com.twobros.hatebyte.ystrdy.weatherreport.boundary.IWeatherReportBoundary;
 import com.twobros.hatebyte.ystrdy.weatherreport.boundary.WeatherReportBoundary;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
@@ -30,6 +29,7 @@ import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherResponse;
 
 public class MainActivity extends Activity implements IWeatherReportBoundary {
     private static final String TAG = " MainActivity";
+    private static final String HAS_SET_ALARM = "MainActivity has_set_alarm";
 
     private LocationManager locationManager;
     private AlarmManager alarmManager;
@@ -59,19 +59,15 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
                     // hit Yahoo -> -> save Yahoo NowRecord -> hit forcast.io -> create forcast.io NowRecord -> YstrdyRecord -> return YstrdyRecord
 
         // Retrieve a PendingIntent to perform a broadcast
-        alarmManager                    = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent alarmIntent              = new Intent(this, AlarmReceiver.class);
-        pendingIntent                   = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
-        long oneHour                    = (60 * 60 + 1) * 1000;
-
-        alarmManager.cancel(pendingIntent); // cancel any existing alarms
-        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + 1000,
-                oneHour, pendingIntent);
+//        alarmManager                    = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+//        Intent alarmIntent              = new Intent(this, AlarmReceiver.class);
+//        pendingIntent                   = PendingIntent.getBroadcast(this, 0, alarmIntent, 0);
+//        long oneHour                    = (60 * 60 + 1) * 1000;
+////        oneHour = (60 + 1) * 1000;
+//        alarmManager.cancel(pendingIntent); // cancel any existing alarms
+//        alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + 1000, oneHour, pendingIntent);
 
 
-
-//        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(), oneHour, pendingIntent);
     }
 
     public void resetDB(View view) {
@@ -83,6 +79,11 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
     @Override
     public void onResume() {
         super.onResume();
+
+        if (!hasTriggeredAlarm()) {
+            triggerAlarm();
+        }
+
         numRecordsTextView.setText("numRecords = " + recordGateway.numRecords());
         numDifferencesTextView.setText("numRecords = " + differenceGateway.numDifferenceRecords());
         tempTextView.setText("fetching...");
@@ -95,11 +96,30 @@ public class MainActivity extends Activity implements IWeatherReportBoundary {
 
         weatherReportBoundary = new WeatherReportBoundary();
         weatherReportBoundary.fetchReport(this, weatherRequest);
+    }
 
+    private void triggerAlarm() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();  // Put the values from the UI
+        editor.putBoolean(HAS_SET_ALARM, true); // value to store
+        editor.commit();
+
+        Intent intent = new Intent("com.twobros.hatebyte.ystrdy.MY_TIMER");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0, intent, 0);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        long now = System.currentTimeMillis();
+        long interval = 60 * 60 * 1000; // 1 hour
+        alarmManager.cancel(pendingIntent); // cancel any existing alarms
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, now, interval, pendingIntent); // Schedule timer for one hour from now and every hour after that
+    }
+
+    private Boolean hasTriggeredAlarm() {
+        SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        return preferences.getBoolean(HAS_SET_ALARM, false);
     }
 
     public void onWeatherReportReturned(WeatherResponse weatherResponse) {
-        tempTextView.setText("difference = "+weatherResponse.difference);
+        tempTextView.setText("difference = "+weatherResponse.difference + "\n\n" + weatherResponse.today.toString() + "\n\n" + weatherResponse.ystrday.toString());
         Toast.makeText(this, weatherResponse.logString, Toast.LENGTH_SHORT).show();
         numRecordsTextView.setText("numRecords = " + recordGateway.numRecords());
         numDifferencesTextView.setText("numDifferences = " + differenceGateway.numDifferenceRecords());

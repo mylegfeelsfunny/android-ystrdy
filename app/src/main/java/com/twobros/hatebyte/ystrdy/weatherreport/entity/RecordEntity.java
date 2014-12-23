@@ -2,6 +2,7 @@ package com.twobros.hatebyte.ystrdy.weatherreport.entity;
 
 import android.location.Location;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -22,6 +23,21 @@ public class RecordEntity {
     public RecordEntity() {
         temperature = RecordEntity.voidTemperature;
         location = new Location("nil provider");
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("City : ");
+        sb.append(cityName);
+        sb.append("\n");
+        sb.append("Temperature : ");
+        sb.append(temperature);
+        sb.append("\n");
+        sb.append("At : ");
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+        sb.append(DATE_FORMAT.format(date));
+        return sb.toString();
     }
 
 }

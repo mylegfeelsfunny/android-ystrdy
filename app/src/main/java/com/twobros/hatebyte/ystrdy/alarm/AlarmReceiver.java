@@ -43,9 +43,9 @@ public class AlarmReceiver extends BroadcastReceiver {
             if (!saveComplete) {
                 Toast.makeText(context, "Save Failed in Background", Toast.LENGTH_SHORT).show();
             }
-//            else {
-//                Toast.makeText(context, "Save Complete", Toast.LENGTH_SHORT).show();
-//            }
+            else {
+                Toast.makeText(context, "Save Complete", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

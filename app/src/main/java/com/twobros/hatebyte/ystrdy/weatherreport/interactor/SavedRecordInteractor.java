@@ -41,50 +41,47 @@ public class SavedRecordInteractor {
         RecordEntity ystrdyEntity                   = new RecordEntity();
         // populate record with ystrdy data from db
         recordGateway.setEntity(ystrdyEntity);
-        ystrdyEntity = recordGateway.getClosestRecordFromYstrdy();
+        ystrdyEntity                                = recordGateway.getClosestRecordFromYstrdy();
 
-        if (ystrdyEntity == null || SavedRecordInteractor.fitsInTimeWindow(ystrdyEntity.date) == false) {
+        if (ystrdyEntity.date == null || SavedRecordInteractor.fitsInTimeWindow(ystrdyEntity.date) == false)
             return null;
-        }
 
         // create record for now
-        RecordEntity todayEntity                      = new RecordEntity();
+        RecordEntity todayEntity                    = new RecordEntity();
         // populate record with date(ystrdy), latitude, longitude
-        todayEntity.location                          = wr.location;
-        todayEntity.date                              = new Date();
+        todayEntity.location                        = wr.location;
+        todayEntity.date                            = new Date();
         // populate record with cityName, regionName, woied
-        todayEntity                                   = currentLocationGateway.requestData(todayEntity);
-        if (todayEntity == null) {
+        todayEntity                                 = currentLocationGateway.requestData(todayEntity);
+        if (todayEntity == null)
             return null;
-        }
         // populate record with temperature, regionName
-        todayEntity                                   = currentWeatherGateway.requestData(todayEntity);
-        if (todayEntity == null) {
+        todayEntity                                 = currentWeatherGateway.requestData(todayEntity);
+        if (todayEntity == null)
             return null;
-        }
+
 
         // save record to db
         recordGateway.setEntity(todayEntity);
-        long todayRecordId = 0;
+        long todayRecordId                          = 0;
         try {
-            todayRecordId = recordGateway.save();
+            todayRecordId                           = recordGateway.save();
         } catch (InvalidPropertiesFormatException e) {
             Log.e(TAG, "InvalidPropertiesFormatException : SaveARecordInteractor :" + e);
             return null;
         }
-        if (todayRecordId == 0) {
+        if (todayRecordId == 0)
             return null;
-        }
 
         // save difference
-        DifferenceEntity differenceEntity       = new DifferenceEntity();
-        BigDecimal tTemp                        = new BigDecimal(todayEntity.temperature);
-        BigDecimal yTemp                        = new BigDecimal(ystrdyEntity.temperature);
-        BigDecimal diff                         = tTemp.subtract(yTemp);
-        differenceEntity.difference             = diff.setScale(3, BigDecimal.ROUND_CEILING).floatValue();
-        differenceEntity.todayRecordId          = (int)todayRecordId;
-        differenceEntity.ystrdyRecordId         = ystrdyEntity.id;
-        differenceEntity.date                   = todayEntity.date;
+        DifferenceEntity differenceEntity           = new DifferenceEntity();
+        BigDecimal tTemp                            = new BigDecimal(todayEntity.temperature);
+        BigDecimal yTemp                            = new BigDecimal(ystrdyEntity.temperature);
+        BigDecimal diff                             = tTemp.subtract(yTemp);
+        differenceEntity.difference                 = diff.setScale(3, BigDecimal.ROUND_CEILING).floatValue();
+        differenceEntity.todayRecordId              = (int)todayRecordId;
+        differenceEntity.ystrdyRecordId             = ystrdyEntity.id;
+        differenceEntity.date                       = todayEntity.date;
         try {
             differenceGateway.setEntity(differenceEntity);
             differenceGateway.save();
@@ -94,18 +91,15 @@ public class SavedRecordInteractor {
         }
 
         // send back response
-        WeatherResponse weatherResponse         = new WeatherResponse();
-        weatherResponse.difference              = differenceEntity.difference;
-        weatherResponse.ystrday                 = ystrdyEntity;
-        weatherResponse.today                   = todayEntity;
-        weatherResponse.logString = "SavedRecordInteractor NEEDED";
+        WeatherResponse weatherResponse             = new WeatherResponse();
+        weatherResponse.difference                  = differenceEntity.difference;
+        weatherResponse.ystrday                     = ystrdyEntity;
+        weatherResponse.today                       = todayEntity;
+        weatherResponse.logString                   = "SavedRecordInteractor NEEDED";
         return weatherResponse;
     }
 
     private static Boolean fitsInTimeWindow(Date date) {
-        if (date == null) {
-            return false;
-        }
         return (YstrDate.isOlderThanEighteenHours(date) && YstrDate.isYoungerThanThirtyHours(date));
     }
 

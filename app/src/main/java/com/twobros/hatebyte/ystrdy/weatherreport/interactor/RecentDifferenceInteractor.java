@@ -2,6 +2,7 @@ package com.twobros.hatebyte.ystrdy.weatherreport.interactor;
 
 import com.twobros.hatebyte.ystrdy.date.YstrDate;
 import com.twobros.hatebyte.ystrdy.weatherreport.entity.DifferenceEntity;
+import com.twobros.hatebyte.ystrdy.weatherreport.entity.RecordEntity;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.DifferenceGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.interactor.sql.entitygateway.RecordGateway;
 import com.twobros.hatebyte.ystrdy.weatherreport.request.WeatherRequest;
@@ -28,10 +29,15 @@ public class RecentDifferenceInteractor {
             return null;
         }
 
+        RecordEntity todayEntity                    = recordGateway.getRecordById(differenceEntity.todayRecordId);
+        RecordEntity ystrdyEntity                   = recordGateway.getRecordById(differenceEntity.ystrdyRecordId);
+
         WeatherResponse responseModel               = null;
         if (RecentDifferenceInteractor.isDifferenceYoungEnoughToRepeat(differenceEntity.date)) {
             responseModel                           = new WeatherResponse();
             responseModel.difference                = differenceEntity.difference;
+            responseModel.today                     = todayEntity;
+            responseModel.ystrday                   = ystrdyEntity;
             responseModel.logString                 = "RecentDifferenceInteractor NEEDED";
             return responseModel;
         } else {

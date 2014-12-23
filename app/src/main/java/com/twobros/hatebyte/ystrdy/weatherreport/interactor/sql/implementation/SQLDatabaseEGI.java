@@ -25,18 +25,18 @@ public class SQLDatabaseEGI {
         public ContentValues contentValues();
         public Boolean isValid();
         public void mapFromCursor(Cursor c);
-
         public void setEntity(Object e);
         public Object getEntity();
     }
 
     protected IDatabaseAPI databaseAPI;
-
     private static SQLDatabaseEGI instance = null;
+
     public SQLDatabaseEGI() {
         databaseAPI = new YstrdyDatabaseAPI(YstrdyApp.getContext(), YstrdyDatabaseAPI.DATABASE_NAME);
     }
-    public static SQLDatabaseEGI getInstance() {
+
+    public static synchronized SQLDatabaseEGI getInstance() {
         if(instance == null) {
             instance = new SQLDatabaseEGI();
         }

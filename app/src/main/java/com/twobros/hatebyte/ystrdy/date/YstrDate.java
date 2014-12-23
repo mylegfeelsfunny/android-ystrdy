@@ -28,6 +28,7 @@ public class YstrDate {
         Date now = new Date();
         long diff = now.getTime() - date.getTime();
         return Math.abs(diff) < YstrDate.twoHours();
+//        return Math.abs(diff) < (5 * 60 + 1) * 1000;
     }
 
     public static Date ystrdy() {
